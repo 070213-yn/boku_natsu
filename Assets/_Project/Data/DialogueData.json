@@ -1,0 +1,44 @@
+{
+  "dialogues": [
+    {
+      "id": "heroine_distant_1",
+      "npcId": "heroine",
+      "npcName": "少女",
+      "stage": "distant",
+      "lines": [
+        { "speaker": "少女", "text": "……。", "emotion": "neutral" },
+        { "speaker": "少女", "text": "……夕焼け、きれいだよね。", "emotion": "gentle" }
+      ]
+    },
+    {
+      "id": "heroine_friendly_1",
+      "npcId": "heroine",
+      "npcName": "少女",
+      "stage": "friendly",
+      "lines": [
+        { "speaker": "少女", "text": "あ、来た。", "emotion": "happy" },
+        { "speaker": "少女", "text": "今日もここで見る？", "emotion": "gentle" }
+      ]
+    },
+    {
+      "id": "heroine_close_1",
+      "npcId": "heroine",
+      "npcName": "少女",
+      "stage": "close",
+      "lines": [
+        { "speaker": "少女", "text": "待ってた。", "emotion": "happy" },
+        { "speaker": "少女", "text": "……ねぇ、ずっとこうしてたいね。", "emotion": "gentle" }
+      ]
+    },
+    {
+      "id": "fisherman_1",
+      "npcId": "fisherman",
+      "npcName": "釣り老人",
+      "stage": "distant",
+      "lines": [
+        { "speaker": "釣り老人", "text": "おう、少年か。", "emotion": "neutral" },
+        { "speaker": "釣り老人", "text": "この島はな、昔はもっと賑やかだったんだよ。", "emotion": "nostalgic" }
+      ]
+    }
+  ]
+}

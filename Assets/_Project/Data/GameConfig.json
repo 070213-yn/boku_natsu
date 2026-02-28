@@ -1,0 +1,19 @@
+{
+  "gameName": "なつのしま",
+  "maxDays": 30,
+  "timePhases": [
+    { "id": "morning", "label": "朝", "startHour": 6, "endHour": 12 },
+    { "id": "noon", "label": "昼", "startHour": 12, "endHour": 17 },
+    { "id": "evening", "label": "夕方", "startHour": 17, "endHour": 20 },
+    { "id": "night", "label": "夜", "startHour": 20, "endHour": 6 }
+  ],
+  "heroineAbsentDays": [16, 17, 18, 19],
+  "radioExerciseDeadline": 22,
+  "settings": {
+    "autoSaveInterval": 5000,
+    "textSpeed": 50,
+    "bgmVolume": 0.3,
+    "sfxVolume": 0.7,
+    "ambientVolume": 0.7
+  }
+}

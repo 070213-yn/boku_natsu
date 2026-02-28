@@ -1,0 +1,23 @@
+{
+  "flags": [
+    { "key": "unlock_shrine_back_gate", "label": "神社裏門", "description": "神社掃除を3回手伝うと裏門が開く", "defaultValue": false },
+    { "key": "unlock_fallen_tree", "label": "倒木撤去", "description": "配達バイト中に倒木を発見、後日撤去される", "defaultValue": false },
+    { "key": "unlock_mountain_shortcut", "label": "山頂ショートカット", "description": "山を探索中に発見する近道", "defaultValue": false },
+    { "key": "unlock_sea_tunnel", "label": "海底トンネル", "description": "素潜りスキルが上がると発見できる", "defaultValue": false },
+    { "key": "unlock_old_well", "label": "古井戸", "description": "ヒロインと一緒に岩を動かして発見", "defaultValue": false },
+    { "key": "unlock_sea_ruins", "label": "海底遺構", "description": "海底トンネルの先にある遺構", "defaultValue": false }
+  ],
+  "counters": [
+    { "key": "radio_stamp_count", "label": "ラジオ体操スタンプ", "description": "ラジオ体操に参加した日数", "defaultValue": 0, "maxValue": 30 },
+    { "key": "cat_friendship", "label": "猫なつき度", "description": "野良猫への餌やり回数", "defaultValue": 0, "maxValue": 30 },
+    { "key": "heroine_conversation", "label": "ヒロイン会話回数", "description": "ヒロインと会話した回数", "defaultValue": 0 }
+  ],
+  "explorationUnlocks": [
+    { "id": "shrine_gate", "locationName": "神社裏門の奥", "description": "古い祠がある森の奥", "requiredFlags": ["unlock_shrine_back_gate"], "unlockFlag": "unlock_shrine_back_gate" },
+    { "id": "deep_forest", "locationName": "森の奥", "description": "倒木の先に広がる森", "requiredFlags": ["unlock_fallen_tree"], "unlockFlag": "unlock_fallen_tree" },
+    { "id": "mountain_top", "locationName": "山頂", "description": "島を一望できる山頂", "requiredFlags": ["unlock_mountain_shortcut"], "unlockFlag": "unlock_mountain_shortcut" },
+    { "id": "sea_tunnel", "locationName": "海底トンネル", "description": "岩の隙間を抜けるトンネル", "requiredFlags": ["unlock_sea_tunnel"], "unlockFlag": "unlock_sea_tunnel" },
+    { "id": "old_well", "locationName": "古井戸の中", "description": "ヒロインと見つけた秘密の場所", "requiredFlags": ["unlock_old_well"], "requiredCounters": [{ "key": "heroine_conversation", "minValue": 5 }], "unlockFlag": "unlock_old_well" },
+    { "id": "sea_ruins", "locationName": "海底遺構", "description": "海底トンネルの奥にある謎の遺構", "requiredFlags": ["unlock_sea_tunnel", "unlock_sea_ruins"], "unlockFlag": "unlock_sea_ruins" }
+  ]
+}

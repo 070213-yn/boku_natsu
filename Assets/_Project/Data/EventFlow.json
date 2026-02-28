@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    { "id": "start", "type": "event", "position": { "x": 250, "y": 0 }, "data": { "label": "ゲーム開始", "description": "8月1日 朝", "category": "routine" } },
+    { "id": "radio_1", "type": "event", "position": { "x": 250, "y": 150 }, "data": { "label": "ラジオ体操 初日", "description": "広場でラジオ体操に参加", "category": "routine", "day": 1, "timePhase": "morning" } },
+    { "id": "explore_village", "type": "event", "position": { "x": 100, "y": 300 }, "data": { "label": "村を探索", "description": "島の各所を歩き回る", "category": "explore", "day": 1, "timePhase": "noon" } },
+    { "id": "heroine_meet", "type": "event", "position": { "x": 400, "y": 300 }, "data": { "label": "ヒロインとの出会い", "description": "堤防で夕焼けを見ている少女", "category": "heroine", "day": 1, "timePhase": "evening" } },
+    { "id": "branch_1", "type": "branch", "position": { "x": 250, "y": 450 }, "data": { "label": "話しかける？", "description": "ヒロインに話しかけるかどうか" } },
+    { "id": "talk_yes", "type": "dialogue", "position": { "x": 100, "y": 600 }, "data": { "label": "話しかける", "description": "たわいのない会話" } },
+    { "id": "talk_no", "type": "event", "position": { "x": 400, "y": 600 }, "data": { "label": "通り過ぎる", "description": "何も言わず帰る" } }
+  ],
+  "edges": [
+    { "id": "e-start-radio", "source": "start", "target": "radio_1" },
+    { "id": "e-radio-explore", "source": "radio_1", "target": "explore_village" },
+    { "id": "e-radio-heroine", "source": "radio_1", "target": "heroine_meet" },
+    { "id": "e-heroine-branch", "source": "heroine_meet", "target": "branch_1" },
+    { "id": "e-branch-yes", "source": "branch_1", "target": "talk_yes", "label": "はい" },
+    { "id": "e-branch-no", "source": "branch_1", "target": "talk_no", "label": "いいえ" }
+  ]
+}

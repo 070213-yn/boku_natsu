@@ -1,0 +1,15 @@
+{
+  "actions": [
+    { "tag": "radio_exercise", "label": "ラジオ体操", "priority": 3, "diaryTexts": ["朝、広場でラジオ体操をした。眠かったけど、気持ちよかった。", "今日もラジオ体操に参加した。少しずつ体が覚えてきた。"], "category": "routine" },
+    { "tag": "fishing", "label": "釣り", "priority": 4, "diaryTexts": ["防波堤で釣りをした。おじいさんが横で昔の話をしてくれた。", "今日も釣りをした。海の色が昨日と少し違った気がする。"], "category": "social" },
+    { "tag": "bug_catching", "label": "虫取り", "priority": 5, "diaryTexts": ["山で虫を追いかけた。汗だくになった。", "今日はすごいカブトムシを見つけた。"], "category": "bug" },
+    { "tag": "diving", "label": "素潜り", "priority": 6, "diaryTexts": ["海に潜った。水の中は静かで、別の世界みたいだった。", "深いところまで潜れるようになってきた。"], "category": "sea" },
+    { "tag": "delivery", "label": "配達バイト", "priority": 2, "diaryTexts": ["島中を自転車で走り回った。知らない道を見つけた。"], "category": "social" },
+    { "tag": "shrine_cleaning", "label": "神社掃除", "priority": 2, "diaryTexts": ["神社の掃除を手伝った。落ち葉がたくさんあった。"], "category": "social" },
+    { "tag": "cat_feeding", "label": "猫に餌やり", "priority": 4, "diaryTexts": ["野良猫に餌をあげた。少しだけ近づいてくれた。", "猫がすり寄ってきた。もう友達かもしれない。"], "category": "social" },
+    { "tag": "heroine_talk", "label": "ヒロインと会話", "priority": 8, "diaryTexts": ["堤防であの子と話した。夕焼けがきれいだった。", "今日もあの子と話した。少しずつ、名前を呼べるようになってきた。"], "category": "heroine" },
+    { "tag": "explore_new", "label": "新しい場所を発見", "priority": 7, "diaryTexts": ["知らない場所を見つけた。この島にはまだ秘密がありそうだ。"], "category": "explore" },
+    { "tag": "night_dive", "label": "夜潜水", "priority": 9, "diaryTexts": ["夜の海に潜った。月の光が水面から差し込んで、幻想的だった。"], "category": "sea" }
+  ],
+  "defaultText": "今日は静かな一日だった。"
+}

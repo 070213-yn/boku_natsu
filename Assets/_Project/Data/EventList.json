@@ -1,0 +1,88 @@
+{
+  "events": [
+    {
+      "id": "evt_radio_exercise",
+      "name": "ラジオ体操",
+      "category": "routine",
+      "description": "毎朝広場で行われるラジオ体操。前日22時までに就寝すると参加可能。",
+      "trigger": { "timePhase": ["morning"], "day": { "min": 1, "max": 30 } },
+      "actions": [
+        { "type": "play_animation", "params": { "clip": "radio_exercise" } },
+        { "type": "increment_counter", "params": { "key": "radio_stamp_count" } },
+        { "type": "show_dialogue", "params": { "dialogueId": "radio_morning" } }
+      ],
+      "scriptName": "Event_RadioExercise",
+      "isImplemented": false,
+      "priority": 10
+    },
+    {
+      "id": "evt_evening_chime",
+      "name": "夕方チャイム",
+      "category": "routine",
+      "description": "毎日17時に鳴る島放送のチャイム。ゲームの核心演出。",
+      "trigger": { "timePhase": ["evening"], "day": { "min": 1, "max": 30 } },
+      "actions": [
+        { "type": "play_sound", "params": { "clip": "evening_chime" } }
+      ],
+      "scriptName": "Event_EveningChime",
+      "isImplemented": false,
+      "priority": 10
+    },
+    {
+      "id": "evt_heroine_evening",
+      "name": "ヒロイン夕方堤防",
+      "category": "heroine",
+      "description": "毎日夕方、堤防で夕焼けを見ているヒロイン。",
+      "trigger": { "timePhase": ["evening"], "flags": [{ "key": "heroine_absent", "value": false }] },
+      "actions": [
+        { "type": "show_dialogue", "params": { "dialogueId": "heroine_evening" } },
+        { "type": "increment_counter", "params": { "key": "heroine_conversation" } }
+      ],
+      "scriptName": "Event_HeroineEvening",
+      "isImplemented": false,
+      "priority": 8
+    },
+    {
+      "id": "evt_cat_feeding",
+      "name": "野良猫に餌やり",
+      "category": "social",
+      "description": "夜、野良猫に餌をあげる。なつき度が上がる。",
+      "trigger": { "timePhase": ["night"] },
+      "actions": [
+        { "type": "increment_counter", "params": { "key": "cat_friendship" } },
+        { "type": "show_dialogue", "params": { "dialogueId": "cat_feed" } }
+      ],
+      "scriptName": "Event_CatFeeding",
+      "isImplemented": false,
+      "priority": 5
+    },
+    {
+      "id": "evt_shrine_unlock",
+      "name": "神社裏門解放",
+      "category": "explore",
+      "description": "神社掃除を3回行うと裏門が開く。",
+      "trigger": { "counters": [{ "key": "shrine_clean_count", "operator": ">=", "value": 3 }] },
+      "actions": [
+        { "type": "set_flag", "params": { "key": "unlock_shrine_back_gate", "value": true } },
+        { "type": "show_dialogue", "params": { "dialogueId": "shrine_unlock" } }
+      ],
+      "scriptName": "Event_ShrineUnlock",
+      "isImplemented": false,
+      "priority": 7
+    },
+    {
+      "id": "evt_deep_shadow",
+      "name": "深海の巨大影",
+      "category": "sea",
+      "description": "深場で泳いでいるとき、巨大な影を目撃する。",
+      "trigger": { "day": { "min": 10 }, "flags": [{ "key": "can_deep_dive", "value": true }] },
+      "actions": [
+        { "type": "play_animation", "params": { "clip": "deep_shadow" } },
+        { "type": "show_dialogue", "params": { "dialogueId": "deep_shadow" } }
+      ],
+      "scriptName": "Event_DeepShadow",
+      "isImplemented": false,
+      "priority": 9
+    }
+  ]
+}
