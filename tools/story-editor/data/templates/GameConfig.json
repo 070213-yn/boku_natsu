@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "lastModified": "",
+  "general": {
+    "maxDay": 30,
+    "startMonth": 8,
+    "startDay": 1,
+    "gameName": "なつのしま"
+  },
+  "timePhases": {
+    "Morning": { "startHour": 6, "endHour": 12, "label": "朝" },
+    "Noon": { "startHour": 12, "endHour": 17, "label": "昼" },
+    "Evening": { "startHour": 17, "endHour": 20, "label": "夕方" },
+    "Night": { "startHour": 20, "endHour": 6, "label": "夜" }
+  },
+  "timeSystem": {
+    "timeScale": 60,
+    "defaultStartHour": 6.0
+  },
+  "heroine": {
+    "absenceStartDay": 16,
+    "absenceEndDay": 19,
+    "intimacyThresholds": {
+      "distant": { "min": 0, "max": 3 },
+      "friendly": { "min": 4, "max": 10 },
+      "close": { "min": 11, "max": -1 }
+    },
+    "appearTimePhase": "Evening",
+    "leaveTimePhase": "Night"
+  },
+  "audio": {
+    "eveningChimeHour": 17,
+    "bgmVolume": 0.3,
+    "ambientVolume": 0.7
+  }
+}

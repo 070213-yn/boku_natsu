@@ -1,4 +1,4 @@
-import type { DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData, EventFlowData } from '../types'
+import type { DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData, EventFlowData, EventListData } from '../types'
 
 export function createDefaultDialogueData(): DialogueFileData {
   return {
@@ -83,6 +83,118 @@ export function createDefaultGameConfig(): GameConfigData {
     timeSystem: { timeScale: 60, defaultStartHour: 6.0 },
     heroine: { absenceStartDay: 16, absenceEndDay: 19, intimacyThresholds: { distant: { min: 0, max: 3 }, friendly: { min: 4, max: 10 }, close: { min: 11, max: -1 } }, appearTimePhase: 'Evening', leaveTimePhase: 'Night' },
     audio: { eveningChimeHour: 17, bgmVolume: 0.3, ambientVolume: 0.7 },
+  }
+}
+
+export function createDefaultEventList(): EventListData {
+  return {
+    version: '1.0',
+    lastModified: new Date().toISOString(),
+    events: [
+      {
+        id: 'evt_radio_exercise',
+        name: 'ラジオ体操',
+        description: '毎朝広場で行われるラジオ体操。スタンプが集まると景品がもらえる。',
+        category: 'routine',
+        triggers: [{ type: 'timePhase', timePhase: 'Morning' }],
+        actions: [
+          { type: 'dialogue', speakerName: '体操のおじさん', dialogueLines: ['さあ、今日も元気にいくぞー！'] },
+          { type: 'incrementInt', intKey: 'radio_stamp_count', intValue: 1 },
+          { type: 'logAction', actionTag: 'RadioExercise' },
+        ],
+        scriptName: 'Event_RadioExercise',
+        isRepeatable: true,
+        priority: 20,
+        enabled: true,
+      },
+      {
+        id: 'evt_heroine_first_meet',
+        name: 'ヒロインとの出会い',
+        description: '堤防で夕焼けを見ている少女と初めて出会う。',
+        category: 'heroine',
+        triggers: [
+          { type: 'day', day: 1, dayOperator: '==' },
+          { type: 'timePhase', timePhase: 'Evening' },
+        ],
+        actions: [
+          { type: 'dialogue', speakerName: 'ヒナ', dialogueLines: ['......あ、こんにちは。', 'ここ、夕焼けがきれいなんです。'] },
+          { type: 'incrementInt', intKey: 'heroine_conversation', intValue: 1 },
+          { type: 'logAction', actionTag: 'TalkHeroine' },
+        ],
+        scriptName: 'Event_HeroineFirstMeet',
+        isRepeatable: false,
+        priority: 90,
+        enabled: true,
+      },
+      {
+        id: 'evt_shrine_clean',
+        name: '神社掃除',
+        description: '神社の掃除を手伝う。3回以上で裏門が解放される。',
+        category: 'exploration',
+        triggers: [{ type: 'timePhase', timePhase: 'Morning' }],
+        actions: [
+          { type: 'dialogue', speakerName: '神主さん', dialogueLines: ['おお、手伝ってくれるのか。ありがとう。'] },
+          { type: 'incrementInt', intKey: 'shrine_clean_count', intValue: 1 },
+          { type: 'logAction', actionTag: 'ShrineClean' },
+        ],
+        scriptName: 'Event_ShrineClean',
+        isRepeatable: true,
+        priority: 60,
+        enabled: true,
+      },
+      {
+        id: 'evt_fishing',
+        name: '防波堤で釣り',
+        description: '防波堤で釣りの老人と一緒に釣りをする。',
+        category: 'sea',
+        triggers: [{ type: 'always' }],
+        actions: [
+          { type: 'dialogue', speakerName: '釣りの老人', dialogueLines: ['今日はよく釣れるぞ。'] },
+          { type: 'logAction', actionTag: 'Fishing' },
+        ],
+        scriptName: 'Event_Fishing',
+        isRepeatable: true,
+        priority: 40,
+        enabled: true,
+      },
+      {
+        id: 'evt_night_dive',
+        name: '夜の海へ飛び込み',
+        description: '夜の海に飛び込む特別イベント。素潜りカウントが増加。',
+        category: 'sea',
+        triggers: [
+          { type: 'timePhase', timePhase: 'Night' },
+          { type: 'day', day: 5, dayOperator: '>=' },
+        ],
+        actions: [
+          { type: 'incrementInt', intKey: 'diving_count', intValue: 1 },
+          { type: 'logAction', actionTag: 'NightDive' },
+        ],
+        scriptName: 'Event_NightDive',
+        isRepeatable: true,
+        priority: 90,
+        enabled: true,
+      },
+      {
+        id: 'evt_old_diary',
+        name: '古い日記の発見',
+        description: '森の奥で古い日記を発見する。謎の核心に迫るイベント。',
+        category: 'mystery',
+        triggers: [
+          { type: 'flag', flagKey: 'unlock_fallen_tree', flagValue: true },
+          { type: 'day', day: 12, dayOperator: '>=' },
+        ],
+        actions: [
+          { type: 'dialogue', speakerName: '', dialogueLines: ['古い日記だ......。誰かがここに書き残したらしい。'] },
+          { type: 'setFlag', flagKey: 'found_old_diary', flagValue: true },
+          { type: 'logAction', actionTag: 'FoundDiary' },
+        ],
+        scriptName: 'Event_OldDiary',
+        isRepeatable: false,
+        priority: 100,
+        enabled: true,
+      },
+    ],
   }
 }
 

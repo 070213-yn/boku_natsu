@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "lastModified": "",
+  "nodes": [
+    {
+      "id": "day1_start",
+      "type": "dayStart",
+      "position": { "x": 100, "y": 300 },
+      "data": { "label": "8月1日 - 島に到着", "day": 1 }
+    },
+    {
+      "id": "evt_radio_1",
+      "type": "event",
+      "position": { "x": 400, "y": 150 },
+      "data": {
+        "label": "ラジオ体操（初回）",
+        "description": "広場でラジオ体操に参加",
+        "day": 1,
+        "timePhase": "Morning",
+        "category": "routine",
+        "actionTag": "RadioExercise"
+      }
+    },
+    {
+      "id": "evt_heroine_1",
+      "type": "event",
+      "position": { "x": 400, "y": 450 },
+      "data": {
+        "label": "ヒロインと初めて会う",
+        "description": "堤防で夕焼けを見ている少女",
+        "day": 1,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "day1_start", "target": "evt_radio_1", "data": { "label": "朝" } },
+    { "id": "e2", "source": "day1_start", "target": "evt_heroine_1", "data": { "label": "夕方" } }
+  ]
+}

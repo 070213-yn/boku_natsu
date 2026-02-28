@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   GitBranch,
+  List,
   MessageSquare,
   Calendar,
   BookOpen,
@@ -21,6 +22,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { to: '/', label: 'ダッシュボード', icon: <LayoutDashboard size={20} /> },
   { to: '/event-flow', label: 'ストーリー分岐', icon: <GitBranch size={20} /> },
+  { to: '/events', label: 'イベント一覧', icon: <List size={20} /> },
   { to: '/dialogue', label: '会話テキスト', icon: <MessageSquare size={20} /> },
   { to: '/timeline', label: 'タイムライン', icon: <Calendar size={20} /> },
   { to: '/diary', label: '日記システム', icon: <BookOpen size={20} /> },

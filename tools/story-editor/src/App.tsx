@@ -16,6 +16,7 @@ const TimelinePage = lazy(() => import('./pages/TimelinePage'));
 const DiaryPage = lazy(() => import('./pages/DiaryPage'));
 const FlagsPage = lazy(() => import('./pages/FlagsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const EventListPage = lazy(() => import('./pages/EventListPage'));
 
 /**
  * ページ遷移アニメーション設定
@@ -62,6 +63,7 @@ function AnimatedRoutes() {
             <Route path="/timeline" element={<TimelinePage />} />
             <Route path="/diary" element={<DiaryPage />} />
             <Route path="/flags" element={<FlagsPage />} />
+            <Route path="/events" element={<EventListPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </Suspense>

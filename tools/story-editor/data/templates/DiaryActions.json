@@ -1,0 +1,7 @@
+{
+  "version": "1.0",
+  "lastModified": "",
+  "defaultText": "今日は静かな一日だった。",
+  "fallbackTemplate": "今日は「{actionTag}」をした。",
+  "actions": []
+}
