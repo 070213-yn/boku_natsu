@@ -1,8 +1,12 @@
 import { Router } from 'express'
 import fs from 'fs/promises'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 export const dataRouter = Router()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const DATA_DIR = path.resolve(__dirname, '../../data')
 const TEMPLATE_DIR = path.resolve(__dirname, '../../data/templates')

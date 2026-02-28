@@ -1,6 +1,11 @@
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { dataRouter } from './routes/data'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const app = express()
 const PORT = 3001
@@ -13,10 +18,9 @@ app.use('/api/data', dataRouter)
 // Unity向けJSON一括エクスポート
 app.post('/api/export/all', async (req, res) => {
   const fs = await import('fs/promises')
-  const path = await import('path')
 
-  const dataDir = path.resolve(__dirname, '../../data')
-  const unityDataDir = path.resolve(__dirname, '../../../Assets/_Project/Data')
+  const dataDir = path.resolve(__dirname, '../data')
+  const unityDataDir = path.resolve(__dirname, '../../Assets/_Project/Data')
 
   try {
     await fs.mkdir(unityDataDir, { recursive: true })
