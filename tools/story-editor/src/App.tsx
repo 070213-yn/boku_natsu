@@ -18,6 +18,7 @@ const FlagsPage = lazy(() => import('./pages/FlagsPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const EventListPage = lazy(() => import('./pages/EventListPage'));
 const CharacterPage = lazy(() => import('./pages/CharacterPage'));
+const GuidePage = lazy(() => import('./pages/GuidePage'));
 
 /**
  * ページ遷移アニメーション設定
@@ -67,6 +68,7 @@ function AnimatedRoutes() {
             <Route path="/events" element={<EventListPage />} />
             <Route path="/characters" element={<CharacterPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/guide" element={<GuidePage />} />
           </Routes>
         </Suspense>
       </motion.div>

@@ -9,6 +9,7 @@ import {
   Flag,
   Settings,
   Users,
+  BookMarked,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -30,6 +31,7 @@ const navItems: NavItem[] = [
   { to: '/diary', label: '日記システム', icon: <BookOpen size={20} /> },
   { to: '/flags', label: 'フラグ管理', icon: <Flag size={20} /> },
   { to: '/settings', label: '設定', icon: <Settings size={20} /> },
+  { to: '/guide', label: '開発ガイド', icon: <BookMarked size={20} /> },
 ];
 
 /**

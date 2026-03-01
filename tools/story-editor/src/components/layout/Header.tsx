@@ -26,6 +26,7 @@ const pageTitles: Record<string, string> = {
   '/flags': 'フラグ管理',
   '/characters': 'キャラクター',
   '/settings': '設定',
+  '/guide': '開発ガイド',
 };
 
 /**
