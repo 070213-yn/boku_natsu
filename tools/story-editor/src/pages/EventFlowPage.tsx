@@ -17,7 +17,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { motion } from 'framer-motion';
-import { Trash2, Save, GitBranch, Sun, Flag, Diamond } from 'lucide-react';
+import { Trash2, Save, GitBranch, Sun, Flag, Diamond, LayoutGrid, Network, Grid3X3 } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useEventFlowStore } from '../hooks/useStores';
 import type {
@@ -29,6 +29,8 @@ import type {
   TimePhase,
 } from '../types';
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types';
+import { autoLayoutNodes } from '../utils/autoLayout';
+import MonthlyOverview from '../components/eventflow/MonthlyOverview';
 
 // ================================================
 // カスタムノードコンポーネント（4種類）
@@ -328,6 +330,9 @@ function EventFlowEditor() {
   // 日別フィルター
   const [dayFilter, setDayFilter] = useState<number | null>(null);
 
+  // ビューモード切替（フロー表示 or 月間概要表示）
+  const [viewMode, setViewMode] = useState<'flow' | 'monthly'>('flow');
+
   // カスタムノードタイプをメモ化（リレンダリング時に再作成させない）
   const nodeTypes: NodeTypes = useMemo(
     () => ({
@@ -476,6 +481,13 @@ function EventFlowEditor() {
     save();
   }, [nodes, edges, update, save]);
 
+  // 自動整列（dagre によるノード自動配置）
+  const handleAutoLayout = useCallback(() => {
+    const layoutedNodes = autoLayoutNodes(nodes, edges);
+    setNodes(layoutedNodes);
+    markDirty();
+  }, [nodes, edges, setNodes, markDirty]);
+
   // 日別フィルター用のデータ
   const availableDays = useMemo(() => {
     const days = new Set<number>();
@@ -560,7 +572,7 @@ function EventFlowEditor() {
           ))}
         </div>
 
-        {/* 日別フィルター */}
+        {/* 日別フィルター & 自動整列 */}
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold text-gray-500">日:</span>
           <select
@@ -573,6 +585,44 @@ function EventFlowEditor() {
               <option key={d} value={d}>Day {d}</option>
             ))}
           </select>
+
+          {/* 自動整列ボタン */}
+          <button
+            onClick={handleAutoLayout}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+            title="ノードを自動整列する"
+          >
+            <LayoutGrid size={14} />
+            自動整列
+          </button>
+        </div>
+
+        {/* ビューモード切替 */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setViewMode('flow')}
+            className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              viewMode === 'flow'
+                ? 'bg-ocean-500 text-white shadow-sm'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            title="フロー表示"
+          >
+            <Network size={14} />
+            フロー
+          </button>
+          <button
+            onClick={() => setViewMode('monthly')}
+            className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              viewMode === 'monthly'
+                ? 'bg-ocean-500 text-white shadow-sm'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            title="月間概要表示"
+          >
+            <Grid3X3 size={14} />
+            月間概要
+          </button>
         </div>
 
         {/* 右側: 削除 & 保存ボタン */}
@@ -600,48 +650,61 @@ function EventFlowEditor() {
         </div>
       </motion.div>
 
-      {/* ReactFlowキャンバス */}
-      <div className="flex-1 rounded-xl overflow-hidden border border-white/20 shadow-lg">
-        <ReactFlow
-          nodes={filteredNodes}
-          edges={filteredEdges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={handleConnect}
-          onNodeDragStop={handleNodeDragStop}
-          onSelectionChange={handleSelectionChange}
-          onNodesDelete={handleNodesDelete}
-          onEdgesDelete={handleEdgesDelete}
-          nodeTypes={nodeTypes}
-          fitView
-          fitViewOptions={{ padding: 0.2 }}
-          deleteKeyCode="Delete"
-          multiSelectionKeyCode="Shift"
-          style={{ background: 'rgba(255, 255, 255, 0.05)' }}
-        >
-          {/* ドットパターン背景 */}
-          <Background color="#c4c4c4" gap={20} size={1} />
-
-          {/* 左下にズームコントロール */}
-          <Controls
-            position="bottom-left"
-            showInteractive={false}
-            style={{ borderRadius: '8px', overflow: 'hidden' }}
-          />
-
-          {/* 右下にミニマップ */}
-          <MiniMap
-            position="bottom-right"
-            nodeColor={miniMapNodeColor}
-            maskColor="rgba(0, 0, 0, 0.1)"
-            style={{
-              borderRadius: '8px',
-              overflow: 'hidden',
-              background: 'rgba(255,255,255,0.8)',
+      {/* メインコンテンツ: フロー表示 or 月間概要 */}
+      {viewMode === 'monthly' ? (
+        <div className="flex-1 rounded-xl overflow-hidden border border-white/20 shadow-lg">
+          <MonthlyOverview
+            nodes={nodes}
+            onDaySelect={(day) => {
+              // 選択した日でフィルターしてフロー表示に切替
+              setDayFilter(day);
+              setViewMode('flow');
             }}
           />
-        </ReactFlow>
-      </div>
+        </div>
+      ) : (
+        <div className="flex-1 rounded-xl overflow-hidden border border-white/20 shadow-lg">
+          <ReactFlow
+            nodes={filteredNodes}
+            edges={filteredEdges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={handleConnect}
+            onNodeDragStop={handleNodeDragStop}
+            onSelectionChange={handleSelectionChange}
+            onNodesDelete={handleNodesDelete}
+            onEdgesDelete={handleEdgesDelete}
+            nodeTypes={nodeTypes}
+            fitView
+            fitViewOptions={{ padding: 0.2 }}
+            deleteKeyCode="Delete"
+            multiSelectionKeyCode="Shift"
+            style={{ background: 'rgba(255, 255, 255, 0.05)' }}
+          >
+            {/* ドットパターン背景 */}
+            <Background color="#c4c4c4" gap={20} size={1} />
+
+            {/* 左下にズームコントロール */}
+            <Controls
+              position="bottom-left"
+              showInteractive={false}
+              style={{ borderRadius: '8px', overflow: 'hidden' }}
+            />
+
+            {/* 右下にミニマップ */}
+            <MiniMap
+              position="bottom-right"
+              nodeColor={miniMapNodeColor}
+              maskColor="rgba(0, 0, 0, 0.1)"
+              style={{
+                borderRadius: '8px',
+                overflow: 'hidden',
+                background: 'rgba(255,255,255,0.8)',
+              }}
+            />
+          </ReactFlow>
+        </div>
+      )}
 
       {/* ステータスバー */}
       <div className="flex items-center justify-between px-2 py-1 text-[10px] text-gray-400 mt-1">

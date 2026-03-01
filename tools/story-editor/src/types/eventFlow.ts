@@ -42,9 +42,18 @@ export interface FlowEdge {
   data?: { label?: string; condition?: string | null }
 }
 
+/** 定期イベントや任意セルに対するメモデータ */
+export interface DailyNote {
+  day: number
+  timePhase: string  // 'Morning' | 'Afternoon' | 'Evening' | 'Night'
+  noteId: string     // 定期イベントIDまたはカスタムメモID
+  text: string
+}
+
 export interface EventFlowData {
   version: string
   lastModified: string
   nodes: FlowNode[]
   edges: FlowEdge[]
+  dailyNotes?: DailyNote[]
 }

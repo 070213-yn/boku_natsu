@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Sun, Sunset, Moon, Cloud, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Sun, Sunset, Moon, Cloud, Plus, X, ChevronLeft, ChevronRight, StickyNote } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useEventFlowStore, useGameConfigStore } from '../hooks/useStores';
 import { useToastStore } from '../components/common/Toast';
-import type { FlowNode, EventNodeData, TimePhase, EventCategory } from '../types';
+import type { FlowNode, EventNodeData, TimePhase, EventCategory, DailyNote } from '../types';
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types';
 
 /** 時間帯の順序定義 */
@@ -18,6 +18,14 @@ const TIME_PHASE_ICONS: Record<TimePhase, React.ReactNode> = {
   Evening: <Sunset size={16} />,
   Night: <Moon size={16} />,
 };
+
+/** 毎日繰り返される定期イベントの定義 */
+const RECURRING_EVENTS = [
+  { id: 'radio_exercise', label: 'ラジオ体操', timePhase: 'Morning' as TimePhase, icon: '\u{1F305}' },
+  { id: 'breakfast', label: '朝ごはん', timePhase: 'Morning' as TimePhase, icon: '\u{1F35A}' },
+  { id: 'dinner', label: '夜ごはん', timePhase: 'Evening' as TimePhase, icon: '\u{1F37D}\uFE0F' },
+  { id: 'diary', label: '日記', timePhase: 'Night' as TimePhase, icon: '\u{1F4D4}' },
+];
 
 /** 1ページあたりの日数 */
 const DAYS_PER_PAGE = 10;
@@ -58,6 +66,11 @@ export default function TimelinePage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingNodeId, setEditingNodeId] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState<EventFormData>({ ...EMPTY_FORM });
+
+  // 定期イベントメモモーダルの状態
+  const [showNoteModal, setShowNoteModal] = useState(false);
+  const [noteTarget, setNoteTarget] = useState<{ day: number; timePhase: TimePhase; recurringId: string; label: string; icon: string } | null>(null);
+  const [noteText, setNoteText] = useState('');
 
   // 初回読み込み
   useEffect(() => {
@@ -105,6 +118,25 @@ export default function TimelinePage() {
     }
     return map;
   }, [eventFlow.data?.nodes]);
+
+  // dailyNotesを「日-時間帯-noteId」キーでマッピング（高速検索用）
+  const notesMap = useMemo(() => {
+    const map = new Map<string, DailyNote>();
+    if (!eventFlow.data?.dailyNotes) return map;
+    for (const note of eventFlow.data.dailyNotes) {
+      const key = `${note.day}-${note.timePhase}-${note.noteId}`;
+      map.set(key, note);
+    }
+    return map;
+  }, [eventFlow.data?.dailyNotes]);
+
+  /** 指定した日・時間帯・定期イベントIDに対応するメモを取得 */
+  const getNote = useCallback(
+    (day: number, timePhase: string, noteId: string): DailyNote | undefined => {
+      return notesMap.get(`${day}-${timePhase}-${noteId}`);
+    },
+    [notesMap]
+  );
 
   // ヒロイン不在日かどうか判定
   const isAbsenceDay = useCallback(
@@ -217,6 +249,59 @@ export default function TimelinePage() {
     setShowEditModal(false);
     setEditingNodeId(null);
     addToast(`イベント「${label}」を削除しました`, 'info');
+  };
+
+  // 定期イベントのメモモーダルを開く
+  const handleRecurringClick = (e: React.MouseEvent, day: number, recurring: typeof RECURRING_EVENTS[number]) => {
+    e.stopPropagation(); // セルのクリックイベントが発火しないようにする
+    const existingNote = getNote(day, recurring.timePhase, recurring.id);
+    setNoteTarget({ day, timePhase: recurring.timePhase, recurringId: recurring.id, label: recurring.label, icon: recurring.icon });
+    setNoteText(existingNote?.text ?? '');
+    setShowNoteModal(true);
+  };
+
+  // メモを保存する
+  const handleSaveNote = () => {
+    if (!noteTarget) return;
+
+    eventFlow.update((data) => {
+      const existingNotes = data.dailyNotes ?? [];
+      // 既存のメモを探す
+      const existingIndex = existingNotes.findIndex(
+        (n) => n.day === noteTarget.day && n.timePhase === noteTarget.timePhase && n.noteId === noteTarget.recurringId
+      );
+
+      let newNotes: DailyNote[];
+      if (noteText.trim() === '') {
+        // テキストが空の場合はメモを削除
+        newNotes = existingNotes.filter((_, i) => i !== existingIndex);
+      } else if (existingIndex >= 0) {
+        // 既存メモを更新
+        newNotes = existingNotes.map((n, i) =>
+          i === existingIndex ? { ...n, text: noteText.trim() } : n
+        );
+      } else {
+        // 新規メモを追加
+        newNotes = [
+          ...existingNotes,
+          {
+            day: noteTarget.day,
+            timePhase: noteTarget.timePhase,
+            noteId: noteTarget.recurringId,
+            text: noteText.trim(),
+          },
+        ];
+      }
+
+      return {
+        ...data,
+        lastModified: new Date().toISOString(),
+        dailyNotes: newNotes,
+      };
+    });
+
+    setShowNoteModal(false);
+    setNoteTarget(null);
   };
 
   // ページ切り替え
@@ -436,8 +521,47 @@ export default function TimelinePage() {
                             );
                           })}
 
+                          {/* 定期イベント（該当する時間帯のもののみ表示） */}
+                          {RECURRING_EVENTS.filter((r) => r.timePhase === phase).map((recurring) => {
+                            const note = getNote(day, phase, recurring.id);
+                            const hasNote = !!note && note.text.trim().length > 0;
+
+                            return (
+                              <motion.div
+                                key={recurring.id}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="group/recurring relative"
+                                onClick={(e) => handleRecurringClick(e, day, recurring)}
+                              >
+                                <div
+                                  className={`
+                                    flex items-center gap-1 px-2 py-1 rounded-md text-xs
+                                    leading-tight cursor-pointer
+                                    transition-all duration-150
+                                    bg-gray-50/50 border border-dashed border-gray-200
+                                    hover:bg-gray-100/70 hover:border-gray-300
+                                    ${hasNote ? 'text-gray-700' : 'text-gray-400'}
+                                  `}
+                                >
+                                  {/* 定期イベントのアイコン */}
+                                  <span className="flex-shrink-0 text-[10px]">{recurring.icon}</span>
+                                  {/* ラベルまたはメモプレビュー */}
+                                  <span className="truncate" style={{ maxWidth: '70px' }} title={hasNote ? note!.text : recurring.label}>
+                                    {hasNote ? note!.text.slice(0, 20) : recurring.label}
+                                  </span>
+                                  {/* メモアイコン */}
+                                  <StickyNote
+                                    size={10}
+                                    className={`flex-shrink-0 ml-auto transition-colors ${hasNote ? 'text-sunset-500' : 'text-gray-300 group-hover/recurring:text-gray-400'}`}
+                                  />
+                                </div>
+                              </motion.div>
+                            );
+                          })}
+
                           {/* 空セルのプラスアイコン（ホバーで表示） */}
-                          {events.length === 0 && (
+                          {events.length === 0 && RECURRING_EVENTS.filter((r) => r.timePhase === phase).length === 0 && (
                             <div className="flex items-center justify-center h-full opacity-0 hover:opacity-40 transition-opacity">
                               <Plus size={14} className="text-gray-400" />
                             </div>
@@ -747,6 +871,78 @@ export default function TimelinePage() {
                     更新する
                   </Button>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- 定期イベントメモ編集モーダル --- */}
+      <AnimatePresence>
+        {showNoteModal && noteTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            onClick={() => setShowNoteModal(false)}
+          >
+            {/* 背景オーバーレイ */}
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
+
+            {/* モーダル本体 */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative glass-card p-6 w-full max-w-sm mx-4 bg-white/90"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* 閉じるボタン */}
+              <button
+                onClick={() => setShowNoteModal(false)}
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+
+              {/* ヘッダー: イベント名と日付情報 */}
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-lg">{noteTarget.icon}</span>
+                <h3 className="font-serif-jp text-lg font-bold text-sunset-700">
+                  {noteTarget.label}
+                </h3>
+              </div>
+              <p className="text-xs text-gray-400 mb-4">
+                {noteTarget.day}日目 - {TIME_PHASE_CONFIG[noteTarget.timePhase].label}
+              </p>
+
+              {/* メモ入力テキストエリア */}
+              <div className="mb-4">
+                <textarea
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  placeholder="メモを入力..."
+                  rows={3}
+                  className="
+                    w-full px-3 py-2 rounded-lg text-sm resize-none
+                    bg-white/60 border border-white/30
+                    focus:outline-none focus:ring-2 focus:ring-sunset-400/50
+                    placeholder-gray-300
+                  "
+                  autoFocus
+                />
+              </div>
+
+              {/* アクションボタン */}
+              <div className="flex justify-end gap-2">
+                <Button variant="ghost" onClick={() => setShowNoteModal(false)}>
+                  閉じる
+                </Button>
+                <Button variant="primary" onClick={handleSaveNote}>
+                  保存
+                </Button>
               </div>
             </motion.div>
           </motion.div>

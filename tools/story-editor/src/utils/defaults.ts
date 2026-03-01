@@ -155,6 +155,7 @@ export function createDefaultEventFlow(): EventFlowData {
   return {
     version: '1.0',
     lastModified: new Date().toISOString(),
+    dailyNotes: [],
     nodes: [
       // フェーズ1: 到着・導入 (Day1-5)
       { id: 'phase1', type: 'dayStart', position: { x: 0, y: 0 }, data: { label: 'フェーズ1: 到着・導入', day: 1 } },
