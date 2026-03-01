@@ -9,8 +9,6 @@ import {
   Save,
   Lock,
   Unlock,
-  ChevronDown,
-  ChevronUp,
   Award,
 } from 'lucide-react';
 import Card from '../components/common/Card';
@@ -36,7 +34,7 @@ const containerVariants = {
 /** 各子要素のフェードイン */
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
 /** リストアイテムのアニメーション */

@@ -15,7 +15,6 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import Card from '../components/common/Card';
-import Button from '../components/common/Button';
 import {
   useEventFlowStore,
   useEventListStore,
@@ -39,7 +38,7 @@ const containerVariants = {
 /** 各子要素のフェードイン */
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' as const } },
 };
 
 /* ---------- 統計カード ---------- */
@@ -129,8 +128,6 @@ function formatDate(isoString: string | undefined | null): string {
 /* ---------- メインコンポーネント ---------- */
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
-
   // 各データストア
   const eventFlow = useEventFlowStore();
   const eventList = useEventListStore();
@@ -340,7 +337,7 @@ export default function DashboardPage() {
                 <Clock size={16} className="text-sunset-400 flex-shrink-0" />
                 <span className="text-sm text-gray-500">時間倍率:</span>
                 <span className="text-sm font-medium text-gray-800">
-                  {timeSystem ? `${timeSystem.timeScale}倍速（開始 ${timeSystem.defaultStartHour}時）` : '---'}
+                  {timeSystem ? `行動ベース（開始 ${timeSystem.defaultStartHour}時）` : '---'}
                 </span>
               </div>
             </div>

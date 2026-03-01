@@ -12,7 +12,7 @@ import type { NPCDialogueData, DialogueStage, SpecialDialogue } from '../types';
 const fadeIn = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: 'easeOut' },
+  transition: { duration: 0.4, ease: 'easeOut' as const },
 };
 
 /** 新規NPCのデフォルトデータを生成 */
@@ -534,7 +534,7 @@ export default function DialoguePage() {
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2, ease: 'easeInOut' }}
+                              transition={{ duration: 0.2, ease: 'easeInOut' as const }}
                               className="overflow-hidden"
                             >
                               <div className="px-4 pb-4 space-y-4">
@@ -654,7 +654,7 @@ export default function DialoguePage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' as const }}
                       className="overflow-hidden"
                     >
                       <div className="mt-4 space-y-4">

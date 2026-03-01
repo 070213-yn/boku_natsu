@@ -7,6 +7,30 @@
     "startDay": 1,
     "gameName": "なつのしま"
   },
+  "protagonist": {
+    "gender": "male",
+    "age": 9,
+    "grade": "小学3年生",
+    "nameInputEnabled": true,
+    "defaultName": "はるき",
+    "voiceType": "full",
+    "arrivalReason": "両親の仕事の都合で、夏休みの間、親戚のおうちにお世話になることになった"
+  },
+  "camera": {
+    "perspective": "third_person",
+    "rotation": "fixed"
+  },
+  "controls": {
+    "supportedDevices": ["keyboard_mouse", "gamepad"],
+    "keyBindings": {
+      "move": "WASD",
+      "jump": "Space",
+      "dash": "Shift",
+      "interact": "LeftClick",
+      "menu": "Tab",
+      "system": "Escape"
+    }
+  },
   "timePhases": {
     "Morning": { "startHour": 6, "endHour": 12, "label": "朝" },
     "Noon": { "startHour": 12, "endHour": 17, "label": "昼" },
@@ -14,8 +38,40 @@
     "Night": { "startHour": 20, "endHour": 6, "label": "夜" }
   },
   "timeSystem": {
-    "timeScale": 60,
-    "defaultStartHour": 6.0
+    "type": "action_based",
+    "defaultStartHour": 6.0,
+    "areaTransitionMinutes": { "min": 5, "max": 15 },
+    "speedPresets": [
+      { "name": "はやい", "multiplier": 1.5 },
+      { "name": "ふつう", "multiplier": 1.0 },
+      { "name": "おそい", "multiplier": 0.6 },
+      { "name": "すごくおそい", "multiplier": 0.3 }
+    ]
+  },
+  "menu": {
+    "tabMenu": ["図鑑", "虫篭", "地図", "持ち物", "お財布"],
+    "escapeMenu": ["セーブ", "ロード", "画面設定", "ゲーム設定", "タイトルに戻る", "ゲーム終了"]
+  },
+  "map": {
+    "structure": "area_based",
+    "totalAreas": 10,
+    "progressiveUnlock": true,
+    "minimap": false
+  },
+  "save": {
+    "anytimeSave": true,
+    "autoSave": true,
+    "slotCount": 3,
+    "newGamePlus": false
+  },
+  "endings": {
+    "multipleEndings": true,
+    "conditions": []
+  },
+  "text": {
+    "diaryPerspective": "first_person",
+    "kanjiStyle": "normal",
+    "furigana": true
   },
   "heroine": {
     "absenceStartDay": 16,

@@ -3,13 +3,10 @@ import { motion } from 'framer-motion';
 import {
   Settings,
   Download,
-  Save,
   Clock,
   Volume2,
   Heart,
   Gamepad2,
-  Sun,
-  Moon,
   RefreshCw,
 } from 'lucide-react';
 import Card from '../components/common/Card';
@@ -310,22 +307,68 @@ export default function SettingsPage() {
         <div className="border-t border-white/10 pt-4 space-y-4">
           <h4 className="text-sm font-semibold text-gray-600">時間システム</h4>
 
-          {/* 時間倍率 */}
+          {/* 方式表示 */}
+          <div className="bg-ocean-50 rounded-lg px-4 py-2 text-sm text-ocean-700">
+            方式: 行動ベース（エリア移動・イベントで時間が進む）
+          </div>
+
+          {/* エリア移動時の経過時間 */}
           <div>
-            <label className={labelClass}>時間倍率</label>
-            <input
-              type="number"
-              className={inputClass}
-              min={1}
-              max={120}
-              value={data.timeSystem.timeScale}
-              onChange={(e) =>
-                updateTimeSystem({ timeScale: Number(e.target.value) })
-              }
-            />
-            <p className="text-xs text-gray-400 mt-1">
-              現実{data.timeSystem.timeScale}秒 = ゲーム1時間
-            </p>
+            <label className={labelClass}>エリア移動時の経過時間（分）</label>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className={labelClass}>最小</label>
+                <input
+                  type="number"
+                  className={inputClass}
+                  min={1}
+                  max={60}
+                  value={data.timeSystem.areaTransitionMinutes.min}
+                  onChange={(e) =>
+                    updateTimeSystem({
+                      areaTransitionMinutes: {
+                        ...data.timeSystem.areaTransitionMinutes,
+                        min: Number(e.target.value),
+                      },
+                    })
+                  }
+                />
+              </div>
+              <div className="flex-1">
+                <label className={labelClass}>最大</label>
+                <input
+                  type="number"
+                  className={inputClass}
+                  min={1}
+                  max={60}
+                  value={data.timeSystem.areaTransitionMinutes.max}
+                  onChange={(e) =>
+                    updateTimeSystem({
+                      areaTransitionMinutes: {
+                        ...data.timeSystem.areaTransitionMinutes,
+                        max: Number(e.target.value),
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* 速度プリセット一覧 */}
+          <div>
+            <label className={labelClass}>速度プリセット</label>
+            <div className="space-y-2">
+              {data.timeSystem.speedPresets.map((preset, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-2"
+                >
+                  <span className="text-sm font-medium w-28">{preset.name}</span>
+                  <span className="text-sm text-gray-500">x{preset.multiplier}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* デフォルト開始時刻 */}

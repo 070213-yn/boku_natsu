@@ -17,7 +17,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, Save, GitBranch, Sun, Flag, Diamond } from 'lucide-react';
+import { Trash2, Save, GitBranch, Sun, Flag, Diamond } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useEventFlowStore } from '../hooks/useStores';
 import { useAutoSave } from '../hooks/useAutoSave';

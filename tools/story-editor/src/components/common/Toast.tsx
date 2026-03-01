@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { create } from 'zustand';
 import { CheckCircle, XCircle, Info, X } from 'lucide-react';
@@ -91,7 +90,7 @@ export default function ToastContainer() {
               initial={{ opacity: 0, x: 80, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 80, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
+              transition={{ duration: 0.3, ease: 'easeOut' as const }}
               className={`
                 pointer-events-auto flex items-center gap-3 px-5 py-3
                 rounded-xl border shadow-lg backdrop-blur-sm
