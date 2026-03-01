@@ -8,6 +8,7 @@ import {
   useDiaryStore,
   useExplorationStore,
   useGameConfigStore,
+  useCharacterStore,
 } from '../../hooks/useStores';
 import { useToastStore } from '../common/Toast';
 import { exportAll } from '../../utils/api';
@@ -23,6 +24,7 @@ const pageTitles: Record<string, string> = {
   '/timeline': 'タイムライン',
   '/diary': '日記システム',
   '/flags': 'フラグ管理',
+  '/characters': 'キャラクター',
   '/settings': '設定',
 };
 
@@ -43,6 +45,7 @@ export default function Header() {
   const diarySaving = useDiaryStore((s) => s.isSaving);
   const explorationSaving = useExplorationStore((s) => s.isSaving);
   const gameConfigSaving = useGameConfigStore((s) => s.isSaving);
+  const characterSaving = useCharacterStore((s) => s.isSaving);
 
   // 最終保存日時を集約（最も新しいもの）
   const eventFlowLastSaved = useEventFlowStore((s) => s.lastSaved);
@@ -51,6 +54,7 @@ export default function Header() {
   const diaryLastSaved = useDiaryStore((s) => s.lastSaved);
   const explorationLastSaved = useExplorationStore((s) => s.lastSaved);
   const gameConfigLastSaved = useGameConfigStore((s) => s.lastSaved);
+  const characterLastSaved = useCharacterStore((s) => s.lastSaved);
 
   // 全ストアのisDirty状態を取得
   const eventFlowDirty = useEventFlowStore((s) => s.isDirty);
@@ -59,9 +63,10 @@ export default function Header() {
   const diaryDirty = useDiaryStore((s) => s.isDirty);
   const explorationDirty = useExplorationStore((s) => s.isDirty);
   const gameConfigDirty = useGameConfigStore((s) => s.isDirty);
+  const characterDirty = useCharacterStore((s) => s.isDirty);
 
   const isAnyDirty = eventFlowDirty || eventListDirty || dialogueDirty
-    || diaryDirty || explorationDirty || gameConfigDirty;
+    || diaryDirty || explorationDirty || gameConfigDirty || characterDirty;
 
   // 全ストアのsave関数を取得
   const eventFlowSave = useEventFlowStore((s) => s.save);
@@ -70,21 +75,24 @@ export default function Header() {
   const diarySave = useDiaryStore((s) => s.save);
   const explorationSave = useExplorationStore((s) => s.save);
   const gameConfigSave = useGameConfigStore((s) => s.save);
+  const characterSave = useCharacterStore((s) => s.save);
 
   // いずれかのストアが保存中か判定
   const isAnySaving = eventFlowSaving || eventListSaving || dialogueSaving
-    || diarySaving || explorationSaving || gameConfigSaving;
+    || diarySaving || explorationSaving || gameConfigSaving || characterSaving;
 
   // 最終保存日時（最も新しいもの）
   const lastSaved = useMemo(() => {
     const dates = [
       eventFlowLastSaved, eventListLastSaved, dialogueLastSaved,
       diaryLastSaved, explorationLastSaved, gameConfigLastSaved,
+      characterLastSaved,
     ].filter(Boolean) as string[];
     if (dates.length === 0) return null;
     return dates.sort().reverse()[0];
   }, [eventFlowLastSaved, eventListLastSaved, dialogueLastSaved,
-      diaryLastSaved, explorationLastSaved, gameConfigLastSaved]);
+      diaryLastSaved, explorationLastSaved, gameConfigLastSaved,
+      characterLastSaved]);
 
   // 「保存完了」表示を3秒後に消すための状態
   const [showSaved, setShowSaved] = useState(false);
@@ -123,12 +131,13 @@ export default function Header() {
     if (diaryDirty) saves.push(diarySave());
     if (explorationDirty) saves.push(explorationSave());
     if (gameConfigDirty) saves.push(gameConfigSave());
+    if (characterDirty) saves.push(characterSave());
     if (saves.length > 0) {
       await Promise.all(saves);
       addToast('保存しました', 'success');
     }
-  }, [eventFlowDirty, eventListDirty, dialogueDirty, diaryDirty, explorationDirty, gameConfigDirty,
-      eventFlowSave, eventListSave, dialogueSave, diarySave, explorationSave, gameConfigSave, addToast]);
+  }, [eventFlowDirty, eventListDirty, dialogueDirty, diaryDirty, explorationDirty, gameConfigDirty, characterDirty,
+      eventFlowSave, eventListSave, dialogueSave, diarySave, explorationSave, gameConfigSave, characterSave, addToast]);
 
   // Ctrl+S キーボードショートカット
   useEffect(() => {

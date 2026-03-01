@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { dataRouter } from './routes/data'
 import { eventsRouter } from './routes/events'
+import { uploadsRouter } from './routes/uploads'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -16,6 +17,7 @@ app.use(express.json({ limit: '10mb' }))
 
 app.use('/api/data', dataRouter)
 app.use('/api/events', eventsRouter)
+app.use('/api/uploads', uploadsRouter)
 
 // Unity向けJSON一括エクスポート
 app.post('/api/export/all', async (req, res) => {

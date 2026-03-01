@@ -21,3 +21,24 @@ export async function exportAll(): Promise<string[]> {
   const data = await res.json()
   return data.exported
 }
+
+// キャラクター画像アップロード
+export async function uploadCharacterImage(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('image', file)
+  const res = await fetch(`${BASE_URL}/uploads/characters`, {
+    method: 'POST',
+    body: formData,
+  })
+  if (!res.ok) throw new Error('画像のアップロードに失敗')
+  const data = await res.json()
+  return data.path
+}
+
+// キャラクター画像削除
+export async function deleteCharacterImage(filename: string): Promise<void> {
+  const res = await fetch(`${BASE_URL}/uploads/characters/${filename}`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) throw new Error('画像の削除に失敗')
+}

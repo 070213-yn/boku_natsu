@@ -1,4 +1,4 @@
-import type { DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData, EventFlowData, EventListData } from '../types'
+import type { DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData, EventFlowData, EventListData, CharacterFileData } from '../types'
 
 export function createDefaultDialogueData(): DialogueFileData {
   return {
@@ -147,6 +147,25 @@ export function createDefaultEventList(): EventListData {
       { id: 'evt_old_diary', name: '古い日記の発見', description: '森の奥で古い日記を発見する', category: 'mystery', triggers: [{ type: 'flag', flagKey: 'unlock_fallen_tree', flagValue: true }, { type: 'day', day: 12, dayOperator: '>=' }], actions: [{ type: 'setFlag', flagKey: 'found_old_diary', flagValue: true }, { type: 'logAction', actionTag: 'FoundDiary' }], scriptName: 'Event_OldDiary', isRepeatable: false, priority: 97, enabled: true },
       { id: 'evt_sea_ruins', name: '海底遺構', description: '海底トンネルの先に古代の遺構を発見', category: 'mystery', triggers: [{ type: 'flag', flagKey: 'unlock_sea_tunnel', flagValue: true }, { type: 'flag', flagKey: 'found_map_fragment', flagValue: true }], actions: [{ type: 'setFlag', flagKey: 'unlock_sea_ruins', flagValue: true }, { type: 'logAction', actionTag: 'SeaRuins' }], scriptName: 'Event_SeaRuins', isRepeatable: false, priority: 98, enabled: true, timeAdvanceMinutes: 60 },
       { id: 'evt_hidden_place', name: '地図にない場所', description: '落書きの地図が示す秘密の場所に到達', category: 'mystery', triggers: [{ type: 'flag', flagKey: 'found_map_fragment', flagValue: true }], actions: [{ type: 'setFlag', flagKey: 'unlock_hidden_place', flagValue: true }, { type: 'logAction', actionTag: 'HiddenPlace' }], scriptName: 'Event_HiddenPlace', isRepeatable: false, priority: 99, enabled: true, timeAdvanceMinutes: 45 },
+    ],
+  }
+}
+
+// キャラクターデータのデフォルト（既存NPCから生成）
+export function createDefaultCharacterData(): CharacterFileData {
+  return {
+    version: '1.0',
+    lastModified: new Date().toISOString(),
+    characters: [
+      { id: 'hina', name: 'ヒナ', displayName: 'ヒナ', age: 9, gender: 'female', profile: '堤防で夕焼けを見ている少女。主人公と同い年。', images: [], type: 'heroine', specialInteractions: [] },
+      { id: 'gen', name: 'ゲンさん', displayName: 'ゲンさん', gender: 'male', profile: '防波堤で釣りをしている老人。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'kannushi', name: '神主さん', displayName: '神主さん', gender: 'male', profile: '神社の神主。掃除を手伝うと裏門を開けてくれる。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'tatsuya', name: 'タツヤおじさん', displayName: 'タツヤおじさん', gender: 'male', profile: '主人公の親戚。夏の間お世話になるおじさん。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'mitsuko', name: 'ミツコおばさん', displayName: 'ミツコおばさん', gender: 'female', profile: 'タツヤおじさんの奥さん。料理上手。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'yoshie', name: 'ヨシエさん', displayName: 'ヨシエさん', gender: 'female', profile: '配達の仕事をしている元気なおばさん。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'tetsu', name: 'テツさん', displayName: 'テツさん', gender: 'male', profile: '漁師。網引きを手伝える。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'hana', name: 'ハナさん', displayName: 'ハナさん', gender: 'female', profile: '商店のおばさん。', images: [], type: 'npc', specialInteractions: [] },
+      { id: 'kazu', name: 'カズさん', displayName: 'カズさん', gender: 'male', profile: '元気な兄ちゃん。', images: [], type: 'npc', specialInteractions: [] },
     ],
   }
 }

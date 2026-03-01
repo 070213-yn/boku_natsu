@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import type { EventFlowData, EventListData, DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData } from '../types'
+import type { EventFlowData, EventListData, DialogueFileData, DiaryActionsData, ExplorationFlagsData, GameConfigData, CharacterFileData } from '../types'
 import { fetchData, saveData } from '../utils/api'
-import { createDefaultEventFlow, createDefaultEventList, createDefaultDialogueData, createDefaultDiaryActions, createDefaultExplorationFlags, createDefaultGameConfig } from '../utils/defaults'
+import { createDefaultEventFlow, createDefaultEventList, createDefaultDialogueData, createDefaultDiaryActions, createDefaultExplorationFlags, createDefaultGameConfig, createDefaultCharacterData } from '../utils/defaults'
 
 // 共通のデータストアパターン
 interface DataStore<T> {
@@ -60,3 +60,4 @@ export const useDialogueStore = createDataStore<DialogueFileData>('DialogueData'
 export const useDiaryStore = createDataStore<DiaryActionsData>('DiaryActions', createDefaultDiaryActions)
 export const useExplorationStore = createDataStore<ExplorationFlagsData>('ExplorationFlags', createDefaultExplorationFlags)
 export const useGameConfigStore = createDataStore<GameConfigData>('GameConfig', createDefaultGameConfig)
+export const useCharacterStore = createDataStore<CharacterFileData>('CharacterData', createDefaultCharacterData)
