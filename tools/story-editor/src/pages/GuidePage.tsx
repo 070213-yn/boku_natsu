@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { BookOpen, Copy, Check, MessageSquare, Gamepad2, Palette, Wrench, Bug, FileText, Lightbulb } from 'lucide-react';
+import { BookOpen, Copy, Check, MessageSquare, Gamepad2, Palette, Wrench, Bug, FileText, Lightbulb, ArrowRight, Zap, XCircle, Terminal } from 'lucide-react';
 import Card from '../components/common/Card';
 import { useState, useCallback } from 'react';
 
@@ -252,6 +252,110 @@ export default function GuidePage() {
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Unity連携セクション */}
+      <div>
+        <h3 className="font-serif-jp text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">
+          <Gamepad2 size={20} className="text-green-600" />
+          Unity連携
+        </h3>
+
+        {/* データフロー図 */}
+        <Card>
+          <h4 className="text-sm font-bold text-gray-700 mb-4">データフロー</h4>
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {[
+              { label: 'Story Editor', sub: '(ビジュアル編集)', color: 'bg-ocean-100 text-ocean-700 border-ocean-300' },
+              { label: 'JSON', sub: '(data/*.json)', color: 'bg-gray-100 text-gray-700 border-gray-300' },
+              { label: 'C# 自動生成', sub: '(サーバーAPI)', color: 'bg-green-100 text-green-700 border-green-300' },
+              { label: 'Unity', sub: '(Assets/_Project/)', color: 'bg-purple-100 text-purple-700 border-purple-300' },
+            ].map((step, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className={`px-4 py-3 rounded-xl border text-center ${step.color}`}>
+                  <div className="text-sm font-bold">{step.label}</div>
+                  <div className="text-[10px] mt-0.5">{step.sub}</div>
+                </div>
+                {i < 3 && <ArrowRight size={16} className="text-gray-300" />}
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* 自動化できること / できないこと */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <Card>
+            <h4 className="text-sm font-bold text-green-600 mb-3 flex items-center gap-1.5">
+              <Zap size={16} />
+              自動化できること
+            </h4>
+            <ul className="space-y-2">
+              {[
+                'EventFlow → DayFlow C#（日ごとのコルーチンチェーン）',
+                'EventList → 個別イベント C#（トリガー＋アクション）',
+                'JSON一括エクスポート（Story Editor → Unity Data）',
+                'フラグ整合性チェック（未定義フラグの検出）',
+              ].map((item, i) => (
+                <li key={i} className="text-xs text-gray-600 flex items-start gap-1.5">
+                  <span className="text-green-400 mt-0.5">-</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          <Card>
+            <h4 className="text-sm font-bold text-red-500 mb-3 flex items-center gap-1.5">
+              <XCircle size={16} />
+              自動化できないこと
+            </h4>
+            <ul className="space-y-2">
+              {[
+                'シーン上のGameObject配置・階層構成',
+                '3Dモデル・テクスチャ・マテリアルの作成',
+                'UIプレハブの作成・レイアウト調整',
+                'InspectorでのSerializeField参照設定',
+              ].map((item, i) => (
+                <li key={i} className="text-xs text-gray-600 flex items-start gap-1.5">
+                  <span className="text-red-400 mt-0.5">-</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </div>
+
+        {/* Claude Codeへの指示テンプレート */}
+        <Card>
+          <h4 className="text-sm font-bold text-gray-700 mb-4 flex items-center gap-1.5 mt-4">
+            <Terminal size={16} />
+            Claude Codeへの指示テンプレート
+          </h4>
+          <div className="space-y-3">
+            {[
+              {
+                title: 'EventFlow変更後のUnity同期',
+                prompt: 'C:\\boku_natsu のStory EditorでEventFlowを変更しました。「Unity同期」ボタンでC#を再生成してから、生成されたDayFlowスクリプトに問題がないか確認してください。',
+              },
+              {
+                title: 'C#スクリプトの手動修正',
+                prompt: 'C:\\boku_natsu のAssets/_Project/Scripts/DayFlow/ にある DayFlow_DayXX.cs の自動生成コードを確認して、必要な修正を加えてください。修正後はAUTO-GENERATEDマーカーを削除して手動管理に切り替えてください。',
+              },
+              {
+                title: 'デバッグ依頼',
+                prompt: 'C:\\boku_natsu のUnityプロジェクトでDay XX のイベントフローが正しく動きません。DayFlow_DayXX.cs と EventFlow.json の該当日のノードを確認して、原因を特定してください。',
+              },
+            ].map((tmpl, i) => (
+              <div key={i} className="bg-gray-900/5 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-gray-600">{tmpl.title}</span>
+                  <CopyButton text={tmpl.prompt} />
+                </div>
+                <p className="text-xs text-gray-700 font-mono leading-relaxed">{tmpl.prompt}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
 
       {/* セッション判断フローチャート */}

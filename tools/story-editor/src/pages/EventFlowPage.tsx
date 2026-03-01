@@ -19,9 +19,9 @@ import {
 import '@xyflow/react/dist/style.css';
 import { motion } from 'framer-motion';
 import {
-  Trash2, Save, GitBranch, Sun, Flag, Diamond, LayoutGrid,
+  Trash2, Save, GitBranch, Sun, Flag, Diamond,
   Network, Grid3X3, Undo2, Redo2, HelpCircle, Users, MessageSquare,
-  Copy, AlignLeft,
+  Copy, AlignLeft, Upload,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useEventFlowStore } from '../hooks/useStores';
@@ -36,7 +36,7 @@ import type {
   TimePhase,
 } from '../types';
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types';
-import { autoLayoutNodes, horizontalDayLayout } from '../utils/autoLayout';
+import { horizontalDayLayout } from '../utils/autoLayout';
 import MonthlyOverview from '../components/eventflow/MonthlyOverview';
 import NodeDetailPanel from '../components/event-flow/panels/NodeDetailPanel';
 import PresetPanel, { type NodePreset } from '../components/event-flow/panels/PresetPanel';
@@ -432,6 +432,10 @@ function EventFlowEditor() {
   // プリセットパネルの表示切替
   const [showPresetPanel, setShowPresetPanel] = useState(false);
 
+  // Unity同期の状態管理
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<{ success: boolean; message: string } | null>(null);
+
   // メモ編集ポップアップ
   const [memoEditor, setMemoEditor] = useState<MemoEditorState | null>(null);
   const memoInputRef = useRef<HTMLInputElement>(null);
@@ -720,21 +724,41 @@ function EventFlowEditor() {
     save();
   }, [nodes, edges, update, save]);
 
-  // dagre自動整列
-  const handleAutoLayout = useCallback(() => {
-    pushHistory(nodesRef.current, edgesRef.current);
-    const layoutedNodes = autoLayoutNodes(nodes, edges);
-    setNodes(layoutedNodes);
-    markDirty();
-  }, [nodes, edges, setNodes, markDirty, pushHistory]);
-
-  // 横一直線レイアウト（日付ごとに1行）
+  // 整列レイアウト（BFSベース、日付ごとに横一直線）
   const handleHorizontalLayout = useCallback(() => {
     pushHistory(nodesRef.current, edgesRef.current);
     const layoutedNodes = horizontalDayLayout(nodes, edges);
     setNodes(layoutedNodes);
     markDirty();
   }, [nodes, edges, setNodes, markDirty, pushHistory]);
+
+  // Unity同期（EventFlow → DayFlow C#生成）
+  const handleUnitySync = useCallback(async () => {
+    setIsSyncing(true);
+    setSyncResult(null);
+    try {
+      // まず保存
+      handleManualSave();
+      // C#生成APIを呼び出し
+      const res = await fetch('/api/eventflow/sync', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const { created, updated, skipped } = data.summary;
+        setSyncResult({
+          success: true,
+          message: `生成: ${created}件 / 更新: ${updated}件 / スキップ: ${skipped}件`,
+        });
+      } else {
+        setSyncResult({ success: false, message: data.error || '同期に失敗しました' });
+      }
+    } catch (err) {
+      setSyncResult({ success: false, message: `通信エラー: ${err}` });
+    } finally {
+      setIsSyncing(false);
+      // 5秒後に結果表示を消す
+      setTimeout(() => setSyncResult(null), 5000);
+    }
+  }, [handleManualSave]);
 
   // キャンバスクリック時にメモエディタを閉じる
   const handlePaneClick = useCallback(() => {
@@ -905,22 +929,25 @@ function EventFlowEditor() {
             ))}
           </select>
 
-          {/* レイアウトボタン2種 */}
+          {/* 整列ボタン */}
           <button
             onClick={handleHorizontalLayout}
             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-ocean-100 hover:bg-ocean-200 text-ocean-700 transition-colors"
-            title="日付ごとに横一直線に整列"
+            title="エッジ接続順に横一直線で整列"
           >
             <AlignLeft size={14} />
-            横一直線
+            整列
           </button>
+
+          {/* Unity同期ボタン */}
           <button
-            onClick={handleAutoLayout}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-            title="dagre自動整列"
+            onClick={handleUnitySync}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 hover:bg-green-200 text-green-700 transition-colors disabled:opacity-50 disabled:cursor-wait"
+            title="EventFlow → Unity DayFlow C# を生成"
           >
-            <LayoutGrid size={14} />
-            自動整列
+            <Upload size={14} />
+            {isSyncing ? '同期中...' : 'Unity同期'}
           </button>
         </div>
 
@@ -1080,6 +1107,19 @@ function EventFlowEditor() {
               Enter: 保存 / Esc: キャンセル
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Unity同期結果の通知 */}
+      {syncResult && (
+        <div
+          className={`mx-2 mt-1 px-3 py-1.5 rounded-lg text-xs font-medium ${
+            syncResult.success
+              ? 'bg-green-100 text-green-700 border border-green-200'
+              : 'bg-red-100 text-red-700 border border-red-200'
+          }`}
+        >
+          {syncResult.success ? 'Unity同期完了' : 'Unity同期エラー'}: {syncResult.message}
         </div>
       )}
 

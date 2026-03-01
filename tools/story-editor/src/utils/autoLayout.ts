@@ -1,88 +1,57 @@
 /**
- * dagre を使ったノード自動レイアウトユーティリティ
- * ノードとエッジの接続関係に基づいて、見やすい配置を自動計算する
+ * ノード自動レイアウトユーティリティ
+ * エッジ接続順（BFS）に基づいて、日付ごとに横一直線で並べる
  */
 import type { Node, Edge } from '@xyflow/react';
-import dagre from '@dagrejs/dagre';
 
-/** 各ノードのデフォルトサイズ */
-const NODE_WIDTH = 200;
-const NODE_HEIGHT = 80;
+/** レイアウト定数 */
+const ROW_SPACING = 250;      // 日付間の縦間隔
+const COL_SPACING = 280;      // ノード間の横間隔
+const BRANCH_OFFSET = 130;    // 分岐時の上下オフセット
 
 /**
- * ノードを自動レイアウトして、位置が更新された新しいNodes配列を返す
- *
- * @param nodes - 現在のノード配列
- * @param edges - 現在のエッジ配列
- * @param direction - レイアウト方向。'TB'=上から下、'LR'=左から右（デフォルト: LR）
- * @returns 位置が更新された新しいNodes配列
+ * 分岐ハンドルかどうかを判定
+ * condition: true/false、choice/event(hasChoice): yes/no
  */
-export function autoLayoutNodes(
-  nodes: Node[],
-  edges: Edge[],
-  direction: 'TB' | 'LR' = 'LR'
-): Node[] {
-  // dagre のグラフを作成
-  const g = new dagre.graphlib.Graph();
-  g.setDefaultEdgeLabel(() => ({}));
-
-  // グラフ全体の設定（方向、ノード間隔、ランク間隔）
-  g.setGraph({
-    rankdir: direction,
-    nodesep: 80,  // 同ランク内のノード間隔
-    ranksep: 150, // ランク間の間隔
-  });
-
-  // ノードをグラフに追加
-  nodes.forEach((node) => {
-    g.setNode(node.id, { width: NODE_WIDTH, height: NODE_HEIGHT });
-  });
-
-  // エッジをグラフに追加
-  edges.forEach((edge) => {
-    g.setEdge(edge.source, edge.target);
-  });
-
-  // レイアウトを計算
-  dagre.layout(g);
-
-  // 計算結果を元に新しいノード配列を生成
-  // dagre はノード中心座標を返すので、左上座標に変換する
-  return nodes.map((node) => {
-    const pos = g.node(node.id);
-    return {
-      ...node,
-      position: {
-        x: pos.x - NODE_WIDTH / 2,
-        y: pos.y - NODE_HEIGHT / 2,
-      },
-    };
-  });
+function isBranchSource(node: Node): boolean {
+  if (node.type === 'condition' || node.type === 'choice') return true;
+  const data = node.data as Record<string, unknown>;
+  return data.hasChoice === true;
 }
 
-// 時間帯の表示順序（横並びのときの左→右の順番）
-const TIME_PHASE_ORDER: Record<string, number> = {
-  'EarlyMorning': 0,
-  'Morning': 1,
-  'Noon': 2,
-  'Afternoon': 3,
-  'Evening': 4,
-  'Night': 5,
-};
+/**
+ * エッジが「上段（Yes/True）」側かどうかを判定
+ */
+function isYesBranch(edge: Edge): boolean {
+  const h = edge.sourceHandle;
+  return h === 'yes' || h === 'true';
+}
 
 /**
- * 日付ごとに横一直線レイアウト
+ * 日付ごとにBFSで横一直線レイアウト
  *
- * 画像のように、各日付のノードを1行（横一直線）に並べる。
- * - dayStart が左端
- * - イベントが timePhase 順に左→右
- * - 絵日記・就寝系が右端
- * - 日ごとに行が変わる（上→下）
- * - 日付を持たないノード（condition, ending等）は最下行にまとめる
+ * アルゴリズム:
+ * 1. ノードを日付ごとにグループ化
+ * 2. 各日付グループで dayStart を起点にエッジをBFS（幅優先探索）でたどる
+ * 3. condition/choiceノードで分岐 → Yes=上段(y-BRANCH_OFFSET)、No=下段(y+BRANCH_OFFSET)
+ * 4. 合流ノード（複数の入力エッジを持つ）は中央に戻す
+ * 5. 日付を持たないノードは最下行にまとめる
  */
 export function horizontalDayLayout(nodes: Node[], edges: Edge[]): Node[] {
-  const ROW_SPACING = 250;   // 日付間の縦間隔
-  const COL_SPACING = 280;   // ノード間の横間隔
+  // エッジのルックアップテーブルを構築
+  // sourceId → そこから出るエッジ一覧
+  const outEdges = new Map<string, Edge[]>();
+  // targetId → そこに入るエッジ一覧
+  const inEdges = new Map<string, Edge[]>();
+  const nodeMap = new Map<string, Node>();
+
+  nodes.forEach((n) => nodeMap.set(n.id, n));
+  edges.forEach((e) => {
+    if (!outEdges.has(e.source)) outEdges.set(e.source, []);
+    outEdges.get(e.source)!.push(e);
+    if (!inEdges.has(e.target)) inEdges.set(e.target, []);
+    inEdges.get(e.target)!.push(e);
+  });
 
   // 日付ごとにノードをグループ化
   const dayGroups = new Map<number, Node[]>();
@@ -98,47 +67,95 @@ export function horizontalDayLayout(nodes: Node[], edges: Edge[]): Node[] {
     }
   });
 
-  // 日付をソート
   const sortedDays = Array.from(dayGroups.keys()).sort((a, b) => a - b);
-
   const positionMap = new Map<string, { x: number; y: number }>();
 
-  // 日付ごとに横一行に配置
+  // 各日付グループをBFSで配置
   sortedDays.forEach((day, dayIndex) => {
-    const rowY = dayIndex * ROW_SPACING;
+    const baseY = dayIndex * ROW_SPACING;
     const dayNodes = dayGroups.get(day)!;
+    const dayNodeIds = new Set(dayNodes.map((n) => n.id));
 
-    // ノードを並べ替え: dayStart → timePhase順 → ending
-    dayNodes.sort((a, b) => {
-      // dayStartは一番左
-      if (a.type === 'dayStart') return -1;
-      if (b.type === 'dayStart') return 1;
-      // endingは一番右
-      if (a.type === 'ending') return 1;
-      if (b.type === 'ending') return -1;
+    // dayStartノードを探す
+    const startNode = dayNodes.find((n) => n.type === 'dayStart');
 
-      // timePhaseで並べる
-      const aData = a.data as Record<string, unknown>;
-      const bData = b.data as Record<string, unknown>;
-      const aPhase = (aData.timePhase as string) || 'Noon';
-      const bPhase = (bData.timePhase as string) || 'Noon';
-      const aOrder = TIME_PHASE_ORDER[aPhase] ?? 2;
-      const bOrder = TIME_PHASE_ORDER[bPhase] ?? 2;
-
-      if (aOrder !== bOrder) return aOrder - bOrder;
-
-      // 同じtimePhaseならラベル順
-      const aLabel = (aData.label as string) || '';
-      const bLabel = (bData.label as string) || '';
-      return aLabel.localeCompare(bLabel);
-    });
-
-    // 横一直線に配置
-    dayNodes.forEach((node, colIndex) => {
-      positionMap.set(node.id, {
-        x: colIndex * COL_SPACING,
-        y: rowY,
+    if (!startNode) {
+      // dayStartがない場合はそのまま横に並べる
+      dayNodes.forEach((node, i) => {
+        positionMap.set(node.id, { x: i * COL_SPACING, y: baseY });
       });
+      return;
+    }
+
+    // BFSで接続順にノードを配置
+    const visited = new Set<string>();
+    // キュー: [ノードID, y方向のオフセット]
+    const queue: Array<[string, number]> = [[startNode.id, 0]];
+    visited.add(startNode.id);
+    let colIndex = 0;
+
+    while (queue.length > 0) {
+      const [nodeId, yOffset] = queue.shift()!;
+      const node = nodeMap.get(nodeId);
+      if (!node) continue;
+
+      // 合流ノードの判定: 複数の入力エッジがある場合はy方向を中央(0)に戻す
+      const incoming = (inEdges.get(nodeId) || []).filter((e) => dayNodeIds.has(e.source));
+      const finalYOffset = incoming.length > 1 ? 0 : yOffset;
+
+      positionMap.set(nodeId, {
+        x: colIndex * COL_SPACING,
+        y: baseY + finalYOffset,
+      });
+      colIndex++;
+
+      // このノードから出るエッジをたどる
+      const outgoing = (outEdges.get(nodeId) || []).filter(
+        (e) => dayNodeIds.has(e.target) && !visited.has(e.target)
+      );
+
+      if (outgoing.length === 0) continue;
+
+      // 分岐ノードの場合: Yes=上段、No=下段
+      if (isBranchSource(node) && outgoing.length >= 2) {
+        // Yes（上段）とNo（下段）を分ける
+        const yesEdges = outgoing.filter((e) => isYesBranch(e));
+        const noEdges = outgoing.filter((e) => !isYesBranch(e));
+
+        // Yes側を先にキューに追加（上段）
+        yesEdges.forEach((e) => {
+          if (!visited.has(e.target)) {
+            visited.add(e.target);
+            queue.push([e.target, -BRANCH_OFFSET]);
+          }
+        });
+        // No側（下段）
+        noEdges.forEach((e) => {
+          if (!visited.has(e.target)) {
+            visited.add(e.target);
+            queue.push([e.target, BRANCH_OFFSET]);
+          }
+        });
+      } else {
+        // 直線: 同じyオフセットを維持
+        outgoing.forEach((e) => {
+          if (!visited.has(e.target)) {
+            visited.add(e.target);
+            queue.push([e.target, finalYOffset]);
+          }
+        });
+      }
+    }
+
+    // BFSで到達しなかったノード（孤立ノード）を末尾に配置
+    dayNodes.forEach((node) => {
+      if (!visited.has(node.id)) {
+        positionMap.set(node.id, {
+          x: colIndex * COL_SPACING,
+          y: baseY,
+        });
+        colIndex++;
+      }
     });
   });
 
