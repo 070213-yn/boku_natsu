@@ -37,14 +37,9 @@ const navItems: NavItem[] = [
 export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-56 glass-card rounded-none border-r border-white/20 flex flex-col z-40">
-      {/* ロゴ: 「なつのしま」縦書き風 */}
-      <div className="flex items-center justify-center py-8 border-b border-white/10">
-        <h1
-          className="font-serif-jp text-2xl font-bold text-sunset-600 tracking-widest"
-          style={{ writingMode: 'vertical-rl' }}
-        >
-          なつのしま
-        </h1>
+      {/* ロゴ */}
+      <div className="flex items-center justify-center py-5 px-4 border-b border-white/10">
+        <img src="/logo.png" alt="なつのしま" className="h-10 w-auto" />
       </div>
 
       {/* ナビゲーション */}
@@ -57,7 +52,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-sunset-500 text-white shadow-lg shadow-sunset-500/25'
+                  ? 'bg-ocean-400 text-white shadow-lg shadow-ocean-400/25'
                   : 'text-gray-600 hover:bg-white/30 hover:text-gray-900'
               }`
             }

@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useState } from 'react';
+import { useEffect, useCallback, useMemo, useState, useRef } from 'react';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -20,7 +20,6 @@ import { motion } from 'framer-motion';
 import { Trash2, Save, GitBranch, Sun, Flag, Diamond } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useEventFlowStore } from '../hooks/useStores';
-import { useAutoSave } from '../hooks/useAutoSave';
 import type {
   FlowNode,
   FlowEdge,
@@ -317,7 +316,7 @@ function toFlowEdge(e: Edge): FlowEdge {
 // ================================================
 
 function EventFlowEditor() {
-  const { data, isLoading, load, save, update } = useEventFlowStore();
+  const { data, isLoading, load, save, update, markDirty } = useEventFlowStore();
 
   // ReactFlowのノードとエッジの状態管理
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -325,6 +324,9 @@ function EventFlowEditor() {
 
   // 選択中のノード管理
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
+
+  // 日別フィルター
+  const [dayFilter, setDayFilter] = useState<number | null>(null);
 
   // カスタムノードタイプをメモ化（リレンダリング時に再作成させない）
   const nodeTypes: NodeTypes = useMemo(
@@ -337,54 +339,27 @@ function EventFlowEditor() {
     []
   );
 
-  // 自動保存（データ変更時に2秒デバウンスで保存）
-  useAutoSave(data, save, 2000);
-
   // 初回ロード
   useEffect(() => {
     load();
   }, [load]);
 
-  // ストアのデータが変更されたらReactFlowの状態に反映
+  // 初回ロード時のみストアからReactFlowに反映
+  const initialLoadDone = useRef(false);
   useEffect(() => {
-    if (!data) return;
+    if (!data || initialLoadDone.current) return;
+    initialLoadDone.current = true;
     setNodes(data.nodes.map(toReactFlowNode));
     setEdges(data.edges.map(toReactFlowEdge));
   }, [data, setNodes, setEdges]);
 
-  // ノード変更時にストアを更新するコールバック
-  const syncNodesToStore = useCallback(
-    (currentNodes: Node[]) => {
-      update((prev) => ({
-        ...prev,
-        lastModified: new Date().toISOString(),
-        nodes: currentNodes.map(toFlowNode),
-      }));
-    },
-    [update]
-  );
-
-  // エッジ変更時にストアを更新するコールバック
-  const syncEdgesToStore = useCallback(
-    (currentEdges: Edge[]) => {
-      update((prev) => ({
-        ...prev,
-        lastModified: new Date().toISOString(),
-        edges: currentEdges.map(toFlowEdge),
-      }));
-    },
-    [update]
-  );
-
-  // ノードのドラッグ終了時にストアと同期
+  // ノードのドラッグ終了時にdirtyマーク
   const handleNodeDragStop = useCallback(
-    (_event: React.MouseEvent, _node: Node, updatedNodes: Node[]) => {
-      syncNodesToStore(updatedNodes);
-    },
-    [syncNodesToStore]
+    () => { markDirty(); },
+    [markDirty]
   );
 
-  // エッジの接続時にストアと同期
+  // エッジの接続時
   const handleConnect = useCallback(
     (connection: Connection) => {
       const newEdge: Edge = {
@@ -396,14 +371,10 @@ function EventFlowEditor() {
         animated: true,
         style: { stroke: '#94A3B8', strokeWidth: 2 },
       };
-      setEdges((eds) => {
-        const updated = addEdge(newEdge, eds);
-        // ストアにも反映
-        syncEdgesToStore(updated);
-        return updated;
-      });
+      setEdges((eds) => addEdge(newEdge, eds));
+      markDirty();
     },
-    [setEdges, syncEdgesToStore]
+    [setEdges, markDirty]
   );
 
   // ノードの選択状態を追跡
@@ -454,75 +425,80 @@ function EventFlowEditor() {
         data: nodeData,
       };
 
-      setNodes((nds) => {
-        const updated = [...nds, newNode];
-        syncNodesToStore(updated);
-        return updated;
-      });
+      setNodes((nds) => [...nds, newNode]);
+      markDirty();
     },
-    [setNodes, syncNodesToStore]
+    [setNodes, markDirty]
   );
 
   // 選択中のノードを削除
   const handleDeleteSelected = useCallback(() => {
     if (selectedNodeIds.size === 0) return;
-
-    setNodes((nds) => {
-      const updated = nds.filter((n) => !selectedNodeIds.has(n.id));
-      syncNodesToStore(updated);
-      return updated;
-    });
-
-    // 削除したノードに接続されたエッジも削除
-    setEdges((eds) => {
-      const updated = eds.filter(
-        (e) => !selectedNodeIds.has(e.source) && !selectedNodeIds.has(e.target)
-      );
-      syncEdgesToStore(updated);
-      return updated;
-    });
-
+    setNodes((nds) => nds.filter((n) => !selectedNodeIds.has(n.id)));
+    setEdges((eds) => eds.filter(
+      (e) => !selectedNodeIds.has(e.source) && !selectedNodeIds.has(e.target)
+    ));
     setSelectedNodeIds(new Set());
-  }, [selectedNodeIds, setNodes, setEdges, syncNodesToStore, syncEdgesToStore]);
+    markDirty();
+  }, [selectedNodeIds, setNodes, setEdges, markDirty]);
 
-  // エッジ削除時にストアと同期
+  // エッジ削除時にdirtyマーク
   const handleEdgesDelete = useCallback(
     (deletedEdges: Edge[]) => {
       const deletedIds = new Set(deletedEdges.map((e) => e.id));
-      setEdges((eds) => {
-        const updated = eds.filter((e) => !deletedIds.has(e.id));
-        syncEdgesToStore(updated);
-        return updated;
-      });
+      setEdges((eds) => eds.filter((e) => !deletedIds.has(e.id)));
+      markDirty();
     },
-    [setEdges, syncEdgesToStore]
+    [setEdges, markDirty]
   );
 
-  // ノード削除時にストアと同期（Deleteキー対応）
+  // ノード削除時にdirtyマーク（Deleteキー対応）
   const handleNodesDelete = useCallback(
     (deletedNodes: Node[]) => {
       const deletedIds = new Set(deletedNodes.map((n) => n.id));
-      setNodes((nds) => {
-        const updated = nds.filter((n) => !deletedIds.has(n.id));
-        syncNodesToStore(updated);
-        return updated;
-      });
-      // 削除されたノードに繋がるエッジも同時に削除
-      setEdges((eds) => {
-        const updated = eds.filter(
-          (e) => !deletedIds.has(e.source) && !deletedIds.has(e.target)
-        );
-        syncEdgesToStore(updated);
-        return updated;
-      });
+      setNodes((nds) => nds.filter((n) => !deletedIds.has(n.id)));
+      setEdges((eds) => eds.filter(
+        (e) => !deletedIds.has(e.source) && !deletedIds.has(e.target)
+      ));
+      markDirty();
     },
-    [setNodes, setEdges, syncNodesToStore, syncEdgesToStore]
+    [setNodes, setEdges, markDirty]
   );
 
-  // 手動保存
+  // 手動保存（ReactFlowの現在状態をストアに同期してから保存）
   const handleManualSave = useCallback(() => {
+    update((prev) => ({
+      ...prev,
+      lastModified: new Date().toISOString(),
+      nodes: nodes.map(toFlowNode),
+      edges: edges.map(toFlowEdge),
+    }));
     save();
-  }, [save]);
+  }, [nodes, edges, update, save]);
+
+  // 日別フィルター用のデータ
+  const availableDays = useMemo(() => {
+    const days = new Set<number>();
+    nodes.forEach((n) => {
+      const day = (n.data as Record<string, unknown>)?.day as number | undefined;
+      if (day != null) days.add(day);
+    });
+    return Array.from(days).sort((a, b) => a - b);
+  }, [nodes]);
+
+  const filteredNodes = useMemo(() => {
+    if (dayFilter === null) return nodes;
+    return nodes.filter((n) => {
+      const day = (n.data as Record<string, unknown>)?.day as number | undefined;
+      return day === dayFilter;
+    });
+  }, [nodes, dayFilter]);
+
+  const filteredEdges = useMemo(() => {
+    if (dayFilter === null) return edges;
+    const nodeIds = new Set(filteredNodes.map((n) => n.id));
+    return edges.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target));
+  }, [edges, filteredNodes, dayFilter]);
 
   // MiniMapのノード色を決定する関数
   const miniMapNodeColor = useCallback((node: Node) => {
@@ -584,6 +560,21 @@ function EventFlowEditor() {
           ))}
         </div>
 
+        {/* 日別フィルター */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-gray-500">日:</span>
+          <select
+            value={dayFilter ?? ''}
+            onChange={(e) => setDayFilter(e.target.value === '' ? null : Number(e.target.value))}
+            className="px-2 py-1.5 rounded-lg text-xs bg-white/80 border border-gray-300 text-gray-700"
+          >
+            <option value="">全体</option>
+            {availableDays.map((d) => (
+              <option key={d} value={d}>Day {d}</option>
+            ))}
+          </select>
+        </div>
+
         {/* 右側: 削除 & 保存ボタン */}
         <div className="flex items-center gap-2">
           {/* 選択中ノード削除ボタン */}
@@ -612,8 +603,8 @@ function EventFlowEditor() {
       {/* ReactFlowキャンバス */}
       <div className="flex-1 rounded-xl overflow-hidden border border-white/20 shadow-lg">
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
+          nodes={filteredNodes}
+          edges={filteredEdges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={handleConnect}
@@ -657,7 +648,7 @@ function EventFlowEditor() {
         <span>
           ノード: {nodes.length} / エッジ: {edges.length}
         </span>
-        <span>自動保存: 有効 (2秒デバウンス)</span>
+        <span>手動保存: Ctrl+S または保存ボタン</span>
       </div>
     </div>
   );

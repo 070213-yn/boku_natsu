@@ -52,6 +52,25 @@ export default function Header() {
   const explorationLastSaved = useExplorationStore((s) => s.lastSaved);
   const gameConfigLastSaved = useGameConfigStore((s) => s.lastSaved);
 
+  // 全ストアのisDirty状態を取得
+  const eventFlowDirty = useEventFlowStore((s) => s.isDirty);
+  const eventListDirty = useEventListStore((s) => s.isDirty);
+  const dialogueDirty = useDialogueStore((s) => s.isDirty);
+  const diaryDirty = useDiaryStore((s) => s.isDirty);
+  const explorationDirty = useExplorationStore((s) => s.isDirty);
+  const gameConfigDirty = useGameConfigStore((s) => s.isDirty);
+
+  const isAnyDirty = eventFlowDirty || eventListDirty || dialogueDirty
+    || diaryDirty || explorationDirty || gameConfigDirty;
+
+  // 全ストアのsave関数を取得
+  const eventFlowSave = useEventFlowStore((s) => s.save);
+  const eventListSave = useEventListStore((s) => s.save);
+  const dialogueSave = useDialogueStore((s) => s.save);
+  const diarySave = useDiaryStore((s) => s.save);
+  const explorationSave = useExplorationStore((s) => s.save);
+  const gameConfigSave = useGameConfigStore((s) => s.save);
+
   // いずれかのストアが保存中か判定
   const isAnySaving = eventFlowSaving || eventListSaving || dialogueSaving
     || diarySaving || explorationSaving || gameConfigSaving;
@@ -95,29 +114,71 @@ export default function Header() {
     }
   }, [addToast]);
 
-  // 保存状態のアイコンを表示
-  const renderSaveIndicator = () => {
+  // 変更があるストアだけを一括保存する
+  const handleSaveAll = useCallback(async () => {
+    const saves: Promise<void>[] = [];
+    if (eventFlowDirty) saves.push(eventFlowSave());
+    if (eventListDirty) saves.push(eventListSave());
+    if (dialogueDirty) saves.push(dialogueSave());
+    if (diaryDirty) saves.push(diarySave());
+    if (explorationDirty) saves.push(explorationSave());
+    if (gameConfigDirty) saves.push(gameConfigSave());
+    if (saves.length > 0) {
+      await Promise.all(saves);
+      addToast('保存しました', 'success');
+    }
+  }, [eventFlowDirty, eventListDirty, dialogueDirty, diaryDirty, explorationDirty, gameConfigDirty,
+      eventFlowSave, eventListSave, dialogueSave, diarySave, explorationSave, gameConfigSave, addToast]);
+
+  // Ctrl+S キーボードショートカット
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSaveAll();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSaveAll]);
+
+  // 保存ボタンを表示
+  const renderSaveButton = () => {
     if (isAnySaving) {
       return (
-        <div className="flex items-center gap-1.5 text-ocean-500 text-sm">
+        <button disabled className="flex items-center gap-1.5 px-4 py-2 bg-ocean-400 text-white rounded-xl text-sm font-medium opacity-70">
           <Loader2 size={16} className="animate-spin" />
-          <span>自動保存中...</span>
-        </div>
-      );
-    }
-    if (showSaved) {
-      return (
-        <div className="flex items-center gap-1.5 text-green-500 text-sm">
-          <Check size={16} />
-          <span>保存完了</span>
-        </div>
+          <span>保存中...</span>
+        </button>
       );
     }
     return (
-      <div className="flex items-center gap-1.5 text-gray-400 text-sm">
-        <Save size={16} />
-        <span>待機中</span>
-      </div>
+      <button
+        onClick={handleSaveAll}
+        className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+          isAnyDirty
+            ? 'bg-ocean-500 text-white hover:bg-ocean-600 shadow-lg shadow-ocean-500/25'
+            : 'bg-gray-200 text-gray-500'
+        }`}
+      >
+        {isAnyDirty ? (
+          <>
+            <Save size={16} />
+            <span>保存</span>
+            <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+          </>
+        ) : showSaved ? (
+          <>
+            <Check size={16} />
+            <span>保存済み</span>
+          </>
+        ) : (
+          <>
+            <Save size={16} />
+            <span>保存済み</span>
+          </>
+        )}
+      </button>
     );
   };
 
@@ -131,16 +192,16 @@ export default function Header() {
       {/* 右側: 保存状態 + 書き出しボタン */}
       <div className="flex items-center gap-6">
         {/* 保存状態インジケーター */}
-        {renderSaveIndicator()}
+        {renderSaveButton()}
 
         {/* Unity書き出しボタン */}
         <button
           onClick={handleExport}
           disabled={exporting}
-          className="flex items-center gap-2 px-5 py-2 bg-sunset-500 text-white rounded-xl text-sm font-medium
-                     hover:bg-sunset-600 active:scale-95 transition-all duration-200
+          className="flex items-center gap-2 px-5 py-2 bg-ocean-500 text-white rounded-xl text-sm font-medium
+                     hover:bg-ocean-600 active:scale-95 transition-all duration-200
                      disabled:opacity-50 disabled:cursor-not-allowed
-                     shadow-lg shadow-sunset-500/25"
+                     shadow-lg shadow-ocean-500/25"
         >
           {exporting ? (
             <Loader2 size={16} className="animate-spin" />

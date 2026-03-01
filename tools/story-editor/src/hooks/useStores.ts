@@ -8,11 +8,13 @@ interface DataStore<T> {
   data: T | null
   isLoading: boolean
   isSaving: boolean
+  isDirty: boolean
   lastSaved: string | null
   error: string | null
   load: () => Promise<void>
   save: () => Promise<void>
   update: (updater: (data: T) => T) => void
+  markDirty: () => void
 }
 
 function createDataStore<T>(filename: string, defaultFactory: () => T) {
@@ -20,15 +22,16 @@ function createDataStore<T>(filename: string, defaultFactory: () => T) {
     data: null,
     isLoading: false,
     isSaving: false,
+    isDirty: false,
     lastSaved: null,
     error: null,
     load: async () => {
       set({ isLoading: true, error: null })
       try {
         const data = await fetchData<T>(filename)
-        set({ data: data && Object.keys(data).length > 0 ? data : defaultFactory(), isLoading: false })
+        set({ data: data && Object.keys(data).length > 0 ? data : defaultFactory(), isLoading: false, isDirty: false })
       } catch {
-        set({ data: defaultFactory(), isLoading: false })
+        set({ data: defaultFactory(), isLoading: false, isDirty: false })
       }
     },
     save: async () => {
@@ -37,7 +40,7 @@ function createDataStore<T>(filename: string, defaultFactory: () => T) {
       set({ isSaving: true })
       try {
         await saveData(filename, data)
-        set({ isSaving: false, lastSaved: new Date().toISOString() })
+        set({ isSaving: false, lastSaved: new Date().toISOString(), isDirty: false })
       } catch (err) {
         set({ isSaving: false, error: String(err) })
       }
@@ -45,8 +48,9 @@ function createDataStore<T>(filename: string, defaultFactory: () => T) {
     update: (updater) => {
       const { data } = get()
       if (!data) return
-      set({ data: updater(data) })
+      set({ data: updater(data), isDirty: true })
     },
+    markDirty: () => set({ isDirty: true }),
   }))
 }
 

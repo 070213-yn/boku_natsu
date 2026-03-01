@@ -12,7 +12,6 @@ import {
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useGameConfigStore } from '../hooks/useStores';
-import { useAutoSave } from '../hooks/useAutoSave';
 import { useToastStore } from '../components/common/Toast';
 import { exportAll } from '../utils/api';
 import type { GameConfigData } from '../types';
@@ -51,9 +50,6 @@ export default function SettingsPage() {
   useEffect(() => {
     load();
   }, [load]);
-
-  // 自動保存（データ変更の2秒後に保存）
-  useAutoSave(data, save);
 
   /** Unityへ全データを書き出す */
   const handleExport = async () => {

@@ -5,7 +5,6 @@ import {
   Play, Code, X, Save, Zap, Hash
 } from 'lucide-react'
 import { useEventListStore } from '../hooks/useStores'
-import { useAutoSave } from '../hooks/useAutoSave'
 import { useToastStore } from '../components/common/Toast'
 import type { GameEvent, EventTrigger, EventAction, EventCategory, TimePhase } from '../types'
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types'
@@ -62,9 +61,6 @@ function createNewEvent(): GameEvent {
 export default function EventListPage() {
   const { data, isLoading, isSaving, save, update } = useEventListStore()
   const addToast = useToastStore(s => s.addToast)
-
-  // 自動保存（データ変更時に2秒デバウンスで保存）
-  useAutoSave(data, save, 2000)
 
   // フィルター状態
   const [search, setSearch] = useState('')

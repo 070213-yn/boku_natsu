@@ -14,7 +14,6 @@ import {
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useExplorationStore } from '../hooks/useStores';
-import { useAutoSave } from '../hooks/useAutoSave';
 import { useToastStore } from '../components/common/Toast';
 import type { ExplorationFlag, IntCounter, UnlockCondition } from '../types';
 
@@ -765,9 +764,6 @@ export default function FlagsPage() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  /* 自動保存（データが変更された2秒後にサーバーへ保存） */
-  useAutoSave(data, save);
 
   /* ---------- フラグ操作 ---------- */
 

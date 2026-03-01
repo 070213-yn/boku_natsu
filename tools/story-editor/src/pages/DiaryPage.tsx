@@ -4,7 +4,6 @@ import { BookOpen, Plus, Trash2, GripVertical, ArrowUpDown, Edit3, Save } from '
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useDiaryStore } from '../hooks/useStores';
-import { useAutoSave } from '../hooks/useAutoSave';
 import { useToastStore } from '../components/common/Toast';
 import type { DiaryAction } from '../types';
 
@@ -80,9 +79,6 @@ export default function DiaryPage() {
   useEffect(() => {
     load();
   }, [load]);
-
-  // 自動保存（データが変わるたびに2秒後に保存）
-  useAutoSave(data, save);
 
   // ローディング中の表示
   if (isLoading || !data) {

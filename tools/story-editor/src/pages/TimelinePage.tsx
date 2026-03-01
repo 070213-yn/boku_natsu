@@ -5,7 +5,6 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useEventFlowStore, useGameConfigStore } from '../hooks/useStores';
 import { useToastStore } from '../components/common/Toast';
-import { useAutoSave } from '../hooks/useAutoSave';
 import type { FlowNode, EventNodeData, TimePhase, EventCategory } from '../types';
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types';
 
@@ -66,9 +65,6 @@ export default function TimelinePage() {
     gameConfig.load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // 自動保存（データが変更されたら2秒後に保存）
-  useAutoSave(eventFlow.data, eventFlow.save);
 
   // ゲーム設定からの値を取得
   const maxDay = gameConfig.data?.general.maxDay ?? 30;

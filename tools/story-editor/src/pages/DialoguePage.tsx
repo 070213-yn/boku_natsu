@@ -4,7 +4,6 @@ import { Plus, Trash2, Save, MessageSquare, User, Heart, ChevronDown, ChevronUp,
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useDialogueStore } from '../hooks/useStores';
-import { useAutoSave } from '../hooks/useAutoSave';
 import { useToastStore } from '../components/common/Toast';
 import type { NPCDialogueData, DialogueStage, SpecialDialogue } from '../types';
 
@@ -60,9 +59,6 @@ export default function DialoguePage() {
   useEffect(() => {
     load();
   }, [load]);
-
-  // データ変更時に自動保存
-  useAutoSave(data, save);
 
   // ローディング中
   if (isLoading || !data) {
