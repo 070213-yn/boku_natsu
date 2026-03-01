@@ -15,6 +15,22 @@ export interface EventDialogue {
   speaker: string   // 話者名
   text: string      // セリフテキスト
   emotion?: string  // 感情タグ（喜び、驚き、悲しみ など）
+  animation?: string // セリフ中のアニメーション（例: "頷く", "手を振る"）
+}
+
+// シーン遷移（場所の移動）
+export interface SceneTransition {
+  fromScene: string   // 例: "おじさんの家"
+  toScene: string     // 例: "広場"
+  trigger?: string    // 例: "ドアをクリック"
+}
+
+// キャラクター演出
+export interface CharacterDirection {
+  characterId: string    // キャラクターID
+  animation: string      // 例: "Walk", "Talk", "Surprised"
+  movement?: string      // 例: "左から登場"
+  position?: string      // 例: "画面中央"
 }
 
 export interface EventNodeData {
@@ -34,6 +50,10 @@ export interface EventNodeData {
   // 登場人物・セリフ
   characters?: EventCharacter[]
   dialogues?: EventDialogue[]
+  // 場所・演出
+  location?: string                      // イベント発生場所
+  sceneTransitions?: SceneTransition[]   // シーン遷移リスト
+  characterDirections?: CharacterDirection[] // キャラ演出リスト
 }
 
 // 独立したYes/No選択ノード

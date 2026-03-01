@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { Node } from '@xyflow/react';
-import { X, Plus, Trash2, Users, MessageSquare, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
-import type { EventCategory, TimePhase, EventCharacter, EventDialogue } from '../../../types';
-import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../../../types';
+import { X, Plus, Trash2, Users, MessageSquare, HelpCircle, ChevronDown, ChevronUp, MapPin, Clapperboard } from 'lucide-react';
+import type { EventCategory, TimePhase, EventCharacter, EventDialogue, SceneTransition, CharacterDirection } from '../../../types';
+import { CATEGORY_CONFIG, TIME_PHASE_CONFIG, LOCATION_OPTIONS } from '../../../types';
 
 interface NodeDetailPanelProps {
   node: Node;
@@ -32,6 +32,7 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
   const [showCharacters, setShowCharacters] = useState(true);
   const [showDialogues, setShowDialogues] = useState(true);
   const [showChoice, setShowChoice] = useState(true);
+  const [showSceneDirection, setShowSceneDirection] = useState(false);
 
   // データ更新ヘルパー
   const updateField = (field: string, value: unknown) => {
@@ -87,6 +88,46 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
     updateField('dialogues', dialogues);
   };
 
+  // シーン遷移の追加
+  const addSceneTransition = () => {
+    const transitions = ((data.sceneTransitions as SceneTransition[]) || []).slice();
+    transitions.push({ fromScene: '', toScene: '' });
+    updateField('sceneTransitions', transitions);
+  };
+
+  // シーン遷移の更新
+  const updateSceneTransition = (index: number, field: keyof SceneTransition, value: string) => {
+    const transitions = ((data.sceneTransitions as SceneTransition[]) || []).slice();
+    transitions[index] = { ...transitions[index], [field]: value };
+    updateField('sceneTransitions', transitions);
+  };
+
+  // シーン遷移の削除
+  const removeSceneTransition = (index: number) => {
+    const transitions = ((data.sceneTransitions as SceneTransition[]) || []).filter((_, i) => i !== index);
+    updateField('sceneTransitions', transitions);
+  };
+
+  // キャラ演出の追加
+  const addCharacterDirection = () => {
+    const directions = ((data.characterDirections as CharacterDirection[]) || []).slice();
+    directions.push({ characterId: '', animation: '' });
+    updateField('characterDirections', directions);
+  };
+
+  // キャラ演出の更新
+  const updateCharacterDirection = (index: number, field: keyof CharacterDirection, value: string) => {
+    const directions = ((data.characterDirections as CharacterDirection[]) || []).slice();
+    directions[index] = { ...directions[index], [field]: value };
+    updateField('characterDirections', directions);
+  };
+
+  // キャラ演出の削除
+  const removeCharacterDirection = (index: number) => {
+    const directions = ((data.characterDirections as CharacterDirection[]) || []).filter((_, i) => i !== index);
+    updateField('characterDirections', directions);
+  };
+
   // 登場人物名のリスト（セリフの話者選択用）
   const characterNames = ((data.characters as EventCharacter[]) || [])
     .map(c => c.name)
@@ -94,6 +135,8 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
 
   const characters = (data.characters as EventCharacter[]) || [];
   const dialogues = (data.dialogues as EventDialogue[]) || [];
+  const sceneTransitions = (data.sceneTransitions as SceneTransition[]) || [];
+  const characterDirections = (data.characterDirections as CharacterDirection[]) || [];
 
   return (
     <div className="absolute right-0 top-0 bottom-0 w-[380px] z-50 flex">
@@ -208,6 +251,22 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
                   <option value="">未設定</option>
                   {Object.entries(TIME_PHASE_CONFIG).map(([key, config]) => (
                     <option key={key} value={key}>{config.label}</option>
+                  ))}
+                </select>
+              </Field>
+            )}
+
+            {/* 場所（eventノードのみ） */}
+            {nodeType === 'event' && (
+              <Field label="場所">
+                <select
+                  value={(data.location as string) || ''}
+                  onChange={(e) => updateField('location', e.target.value || undefined)}
+                  className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-ocean-300 focus:border-transparent"
+                >
+                  <option value="">未設定</option>
+                  {LOCATION_OPTIONS.map((loc) => (
+                    <option key={loc} value={loc}>{loc}</option>
                   ))}
                 </select>
               </Field>
@@ -397,6 +456,14 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
                         rows={2}
                         className="w-full px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300 resize-y"
                       />
+                      {/* アニメーション */}
+                      <input
+                        type="text"
+                        value={dlg.animation || ''}
+                        onChange={(e) => updateDialogue(i, 'animation', e.target.value)}
+                        placeholder="アニメーション（例: 頷く、手を振る）"
+                        className="w-full px-2 py-1 text-xs rounded border border-purple-200 bg-purple-50 focus:outline-none focus:ring-1 focus:ring-purple-300"
+                      />
                     </div>
                   ))}
                 </div>
@@ -416,6 +483,156 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
                 <Plus size={12} />
                 セリフを追加
               </button>
+            </CollapsibleSection>
+          )}
+
+          {/* === 場所・演出（eventノードのみ） === */}
+          {nodeType === 'event' && (
+            <CollapsibleSection
+              title="場所・演出"
+              icon={<Clapperboard size={14} />}
+              isOpen={showSceneDirection}
+              onToggle={() => setShowSceneDirection(!showSceneDirection)}
+              count={sceneTransitions.length + characterDirections.length}
+            >
+              {/* シーン遷移 */}
+              <div className="mb-3">
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                  <MapPin size={10} />
+                  シーン遷移
+                </div>
+                {sceneTransitions.length === 0 ? (
+                  <div className="text-xs text-gray-400 text-center py-1">
+                    シーン遷移がまだありません
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {sceneTransitions.map((st, i) => (
+                      <div key={i} className="flex items-start gap-1.5 p-2 rounded-lg bg-gray-50">
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center gap-1">
+                            <select
+                              value={st.fromScene}
+                              onChange={(e) => updateSceneTransition(i, 'fromScene', e.target.value)}
+                              className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                            >
+                              <option value="">移動元</option>
+                              {LOCATION_OPTIONS.map((loc) => (
+                                <option key={loc} value={loc}>{loc}</option>
+                              ))}
+                            </select>
+                            <span className="text-xs text-gray-400">→</span>
+                            <select
+                              value={st.toScene}
+                              onChange={(e) => updateSceneTransition(i, 'toScene', e.target.value)}
+                              className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                            >
+                              <option value="">移動先</option>
+                              {LOCATION_OPTIONS.map((loc) => (
+                                <option key={loc} value={loc}>{loc}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <input
+                            type="text"
+                            value={st.trigger || ''}
+                            onChange={(e) => updateSceneTransition(i, 'trigger', e.target.value)}
+                            placeholder="トリガー（例: ドアをクリック）"
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                          />
+                        </div>
+                        <button
+                          onClick={() => removeSceneTransition(i)}
+                          className="p-1 rounded hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <button
+                  onClick={addSceneTransition}
+                  className="mt-1.5 w-full flex items-center justify-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-dashed border-gray-300 text-gray-500 hover:border-ocean-400 hover:text-ocean-600 hover:bg-ocean-50 transition-colors"
+                >
+                  <Plus size={12} />
+                  シーン遷移を追加
+                </button>
+              </div>
+
+              {/* キャラクター演出 */}
+              <div>
+                <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                  <Users size={10} />
+                  キャラクター演出
+                </div>
+                {characterDirections.length === 0 ? (
+                  <div className="text-xs text-gray-400 text-center py-1">
+                    キャラクター演出がまだありません
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {characterDirections.map((cd, i) => (
+                      <div key={i} className="flex items-start gap-1.5 p-2 rounded-lg bg-gray-50">
+                        <div className="flex-1 space-y-1">
+                          <input
+                            type="text"
+                            list={`direction-chars-${node.id}`}
+                            value={cd.characterId}
+                            onChange={(e) => updateCharacterDirection(i, 'characterId', e.target.value)}
+                            placeholder="キャラクター名/ID"
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                          />
+                          <input
+                            type="text"
+                            value={cd.animation}
+                            onChange={(e) => updateCharacterDirection(i, 'animation', e.target.value)}
+                            placeholder="アニメーション（例: Walk, Talk, Surprised）"
+                            className="w-full px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                          />
+                          <div className="flex gap-1">
+                            <input
+                              type="text"
+                              value={cd.movement || ''}
+                              onChange={(e) => updateCharacterDirection(i, 'movement', e.target.value)}
+                              placeholder="移動（例: 左から登場）"
+                              className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                            />
+                            <input
+                              type="text"
+                              value={cd.position || ''}
+                              onChange={(e) => updateCharacterDirection(i, 'position', e.target.value)}
+                              placeholder="位置（例: 画面中央）"
+                              className="flex-1 px-2 py-1 text-xs rounded border border-gray-200 bg-white focus:outline-none focus:ring-1 focus:ring-ocean-300"
+                            />
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeCharacterDirection(i)}
+                          className="p-1 rounded hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* キャラ名候補 */}
+                <datalist id={`direction-chars-${node.id}`}>
+                  {characterNames.map(name => (
+                    <option key={name} value={name} />
+                  ))}
+                </datalist>
+
+                <button
+                  onClick={addCharacterDirection}
+                  className="mt-1.5 w-full flex items-center justify-center gap-1 px-3 py-1.5 text-xs rounded-lg border border-dashed border-gray-300 text-gray-500 hover:border-ocean-400 hover:text-ocean-600 hover:bg-ocean-50 transition-colors"
+                >
+                  <Plus size={12} />
+                  キャラクター演出を追加
+                </button>
+              </div>
             </CollapsibleSection>
           )}
 

@@ -8,6 +8,7 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
+  useReactFlow,
   type Node,
   type Edge,
   type Connection,
@@ -436,9 +437,15 @@ function EventFlowEditor() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<{ success: boolean; message: string } | null>(null);
 
+  // エッジ上ドロップ挿入用のハイライト状態
+  const [highlightedEdgeId, setHighlightedEdgeId] = useState<string | null>(null);
+  const highlightedEdgeIdRef = useRef<string | null>(null);
+
   // メモ編集ポップアップ
   const [memoEditor, setMemoEditor] = useState<MemoEditorState | null>(null);
   const memoInputRef = useRef<HTMLInputElement>(null);
+
+  const reactFlowInstance = useReactFlow();
 
   const nodesRef = useRef<Node[]>([]);
   const edgesRef = useRef<Edge[]>([]);
@@ -542,9 +549,96 @@ function EventFlowEditor() {
     pushHistory(nodesRef.current, edgesRef.current);
   }, [pushHistory]);
 
-  const handleNodeDragStop = useCallback(() => {
-    markDirty();
-  }, [markDirty]);
+  // 点Pから線分ABへの最短距離を計算
+  const pointToSegmentDistance = useCallback(
+    (px: number, py: number, ax: number, ay: number, bx: number, by: number): number => {
+      const dx = bx - ax;
+      const dy = by - ay;
+      const lenSq = dx * dx + dy * dy;
+      if (lenSq === 0) return Math.hypot(px - ax, py - ay);
+      let t = ((px - ax) * dx + (py - ay) * dy) / lenSq;
+      t = Math.max(0, Math.min(1, t));
+      const nearX = ax + t * dx;
+      const nearY = ay + t * dy;
+      return Math.hypot(px - nearX, py - nearY);
+    },
+    []
+  );
+
+  // ドラッグ中にエッジとの距離を計算してハイライト
+  const handleNodeDrag = useCallback(
+    (_event: React.MouseEvent, dragNode: Node) => {
+      const dragX = dragNode.position.x + (dragNode.measured?.width ?? 180) / 2;
+      const dragY = dragNode.position.y + (dragNode.measured?.height ?? 80) / 2;
+      const threshold = 50;
+
+      let closestEdgeId: string | null = null;
+      let closestDist = Infinity;
+
+      for (const edge of edgesRef.current) {
+        // ドラッグ中のノード自身に接続されたエッジは除外
+        if (edge.source === dragNode.id || edge.target === dragNode.id) continue;
+
+        const sourceNode = nodesRef.current.find((n) => n.id === edge.source);
+        const targetNode = nodesRef.current.find((n) => n.id === edge.target);
+        if (!sourceNode || !targetNode) continue;
+
+        const sx = sourceNode.position.x + (sourceNode.measured?.width ?? 180) / 2;
+        const sy = sourceNode.position.y + (sourceNode.measured?.height ?? 80) / 2;
+        const tx = targetNode.position.x + (targetNode.measured?.width ?? 180) / 2;
+        const ty = targetNode.position.y + (targetNode.measured?.height ?? 80) / 2;
+
+        const dist = pointToSegmentDistance(dragX, dragY, sx, sy, tx, ty);
+        if (dist < threshold && dist < closestDist) {
+          closestDist = dist;
+          closestEdgeId = edge.id;
+        }
+      }
+
+      if (closestEdgeId !== highlightedEdgeIdRef.current) {
+        highlightedEdgeIdRef.current = closestEdgeId;
+        setHighlightedEdgeId(closestEdgeId);
+      }
+    },
+    [pointToSegmentDistance]
+  );
+
+  const handleNodeDragStop = useCallback(
+    (_event: React.MouseEvent, dragNode: Node) => {
+      const edgeId = highlightedEdgeIdRef.current;
+      if (edgeId) {
+        // エッジを分割して2つの新エッジを作成
+        const edge = edgesRef.current.find((e) => e.id === edgeId);
+        if (edge) {
+          const newEdge1: Edge = {
+            id: `edge_${Date.now()}_1`,
+            source: edge.source,
+            target: dragNode.id,
+            sourceHandle: edge.sourceHandle,
+            type: 'memo',
+            interactionWidth: 20,
+          };
+          const newEdge2: Edge = {
+            id: `edge_${Date.now()}_2`,
+            source: dragNode.id,
+            target: edge.target,
+            targetHandle: edge.targetHandle,
+            type: 'memo',
+            interactionWidth: 20,
+          };
+          setEdges((eds) => [
+            ...eds.filter((e) => e.id !== edgeId),
+            newEdge1,
+            newEdge2,
+          ]);
+        }
+        highlightedEdgeIdRef.current = null;
+        setHighlightedEdgeId(null);
+      }
+      markDirty();
+    },
+    [markDirty, setEdges]
+  );
 
   const handleConnect = useCallback(
     (connection: Connection) => {
@@ -606,7 +700,7 @@ function EventFlowEditor() {
           nodeData = {
             label: '新しいイベント',
             description: '',
-            category: 'routine' as EventCategory,
+            category: 'daily' as EventCategory,
             timePhase: 'Morning' as TimePhase,
             characters: [],
             dialogues: [],
@@ -785,10 +879,23 @@ function EventFlowEditor() {
   }, [nodes, dayFilter]);
 
   const filteredEdges = useMemo(() => {
-    if (dayFilter === null) return edges;
-    const nodeIds = new Set(filteredNodes.map((n) => n.id));
-    return edges.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target));
-  }, [edges, filteredNodes, dayFilter]);
+    let result = edges;
+    if (dayFilter !== null) {
+      const nodeIds = new Set(filteredNodes.map((n) => n.id));
+      result = result.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target));
+    }
+    // ハイライトされたエッジにdata.highlightedフラグを付与
+    if (highlightedEdgeId) {
+      result = result.map((e) =>
+        e.id === highlightedEdgeId
+          ? { ...e, data: { ...(e.data || {}), highlighted: true } }
+          : e.data?.highlighted
+            ? { ...e, data: { ...e.data, highlighted: false } }
+            : e
+      );
+    }
+    return result;
+  }, [edges, filteredNodes, dayFilter, highlightedEdgeId]);
 
   const editingNode = useMemo(
     () => (editingNodeId ? nodes.find((n) => n.id === editingNodeId) : null),
@@ -1017,6 +1124,7 @@ function EventFlowEditor() {
             onEdgesChange={onEdgesChange}
             onConnect={handleConnect}
             onNodeDragStart={handleNodeDragStart}
+            onNodeDrag={handleNodeDrag}
             onNodeDragStop={handleNodeDragStop}
             onSelectionChange={handleSelectionChange}
             onNodesDelete={handleNodesDelete}

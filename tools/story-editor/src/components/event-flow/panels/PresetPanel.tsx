@@ -44,7 +44,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: 'ラジオ体操',
       description: '朝のラジオ体操。前日22時までに就寝で参加可能。スタンプがもらえる。',
-      category: 'routine' as EventCategory,
+      category: 'daily' as EventCategory,
       timePhase: 'Morning' as TimePhase,
       characters: [],
       dialogues: [],
@@ -59,7 +59,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '朝ごはん',
       description: 'おばさんが作ってくれた朝ごはん。',
-      category: 'routine' as EventCategory,
+      category: 'daily' as EventCategory,
       timePhase: 'Morning' as TimePhase,
       characters: [],
       dialogues: [],
@@ -74,7 +74,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: 'カルメ焼きお手伝い',
       description: '駄菓子屋でカルメ焼き作りのお手伝い。3個作るとカルメ焼きがもらえる。お駄賃10円。',
-      category: 'interaction' as EventCategory,
+      category: 'npc' as EventCategory,
       timePhase: 'Noon' as TimePhase,
       characters: [],
       dialogues: [],
@@ -89,7 +89,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '虫取り',
       description: '島の森で虫取り。樹液ポイントを回って虫を集める。',
-      category: 'exploration' as EventCategory,
+      category: 'play' as EventCategory,
       timePhase: 'Noon' as TimePhase,
       characters: [],
       dialogues: [],
@@ -104,7 +104,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '釣り',
       description: '堤防や海で釣り。釣り老人との会話も。',
-      category: 'exploration' as EventCategory,
+      category: 'play' as EventCategory,
       timePhase: 'Noon' as TimePhase,
       characters: [],
       dialogues: [],
@@ -119,7 +119,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '素潜り',
       description: '海での素潜り。潜水時間が伸びると深場へ行ける。',
-      category: 'exploration' as EventCategory,
+      category: 'play' as EventCategory,
       timePhase: 'Noon' as TimePhase,
       characters: [],
       dialogues: [],
@@ -149,7 +149,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '晩ごはん',
       description: 'おばさんの晩ごはん。',
-      category: 'routine' as EventCategory,
+      category: 'daily' as EventCategory,
       timePhase: 'Evening' as TimePhase,
       characters: [],
       dialogues: [],
@@ -164,7 +164,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '猫に餌やり',
       description: '野良猫に餌やり。なつき度アップ。',
-      category: 'interaction' as EventCategory,
+      category: 'npc' as EventCategory,
       timePhase: 'Night' as TimePhase,
       characters: [],
       dialogues: [],
@@ -179,7 +179,7 @@ const BUILT_IN_PRESETS: NodePreset[] = [
     nodeData: {
       label: '絵日記書いて就寝',
       description: '1日の終わり。絵日記を書いて就寝。',
-      category: 'routine' as EventCategory,
+      category: 'daily' as EventCategory,
       timePhase: 'Night' as TimePhase,
       characters: [],
       dialogues: [],

@@ -278,10 +278,49 @@ function generateNodeCode(chain: ChainNode, indent: string = '        '): string
 
 /** イベントノードの本体コード生成 */
 function generateEventBody(node: FlowNode, lines: string[], indent: string): void {
+  // 場所設定
+  if (node.data.location) {
+    lines.push(`${indent}// 場所: ${escapeCSharp(node.data.location)}`)
+    lines.push(`${indent}// TODO: LocationManager.Instance.SetCurrentLocation("${escapeCSharp(node.data.location)}");`)
+  }
+
+  // シーン遷移
+  const sceneTransitions = (node.data as Record<string, unknown>).sceneTransitions as Array<{ fromScene: string; toScene: string; trigger?: string }> | undefined
+  if (sceneTransitions && sceneTransitions.length > 0) {
+    lines.push(`${indent}// シーン遷移`)
+    for (const st of sceneTransitions) {
+      if (st.trigger) {
+        lines.push(`${indent}// トリガー: ${escapeCSharp(st.trigger)}`)
+      }
+      lines.push(`${indent}// TODO: SceneTransitionManager.Instance.TransitionTo("${escapeCSharp(st.fromScene)}", "${escapeCSharp(st.toScene)}");`)
+      lines.push(`${indent}// yield return new WaitUntil(() => !SceneTransitionManager.Instance.IsTransitioning);`)
+    }
+  }
+
+  // キャラクター演出
+  const characterDirections = (node.data as Record<string, unknown>).characterDirections as Array<{ characterId: string; animation: string; movement?: string; position?: string }> | undefined
+  if (characterDirections && characterDirections.length > 0) {
+    lines.push(`${indent}// キャラクター演出`)
+    for (const cd of characterDirections) {
+      if (cd.movement) {
+        lines.push(`${indent}// 移動: ${escapeCSharp(cd.characterId)} - ${escapeCSharp(cd.movement)}`)
+      }
+      if (cd.position) {
+        lines.push(`${indent}// 位置: ${escapeCSharp(cd.characterId)} - ${escapeCSharp(cd.position)}`)
+      }
+      lines.push(`${indent}// TODO: CharacterManager.Instance.PlayAnimation("${escapeCSharp(cd.characterId)}", "${escapeCSharp(cd.animation)}");`)
+    }
+  }
+
   // 会話（dialogues配列がある場合）
   const dialogues = node.data.dialogues || []
   if (dialogues.length > 0) {
     for (const d of dialogues) {
+      // セリフ中のアニメーション
+      const animation = (d as Record<string, unknown>).animation as string | undefined
+      if (animation) {
+        lines.push(`${indent}// アニメーション: ${escapeCSharp(animation)}`)
+      }
       const linesArr = (d.lines || []).map(l => `"${escapeCSharp(l)}"`).join(', ')
       lines.push(`${indent}DialogueUI.Instance.ShowDialogue("${escapeCSharp(d.speakerName || '')}", new string[] { ${linesArr} });`)
       lines.push(`${indent}yield return new WaitUntil(() => !DialogueUI.Instance.IsDialogueActive);`)

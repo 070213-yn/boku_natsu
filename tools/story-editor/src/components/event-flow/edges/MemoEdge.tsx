@@ -19,6 +19,7 @@ export default function MemoEdge({
   selected,
   label,
   markerEnd,
+  data,
 }: EdgeProps) {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -30,17 +31,22 @@ export default function MemoEdge({
   });
 
   const memo = (label as string) || '';
+  const highlighted = (data as Record<string, unknown>)?.highlighted as boolean;
+
+  // ハイライト中（ドラッグ中のノードがエッジ上にある）→ 黄色太線
+  const strokeColor = highlighted ? '#EAB308' : selected ? '#22C55E' : '#94A3B8';
+  const strokeWidth = highlighted ? 4 : selected ? 3 : 2;
 
   return (
     <>
-      {/* エッジのパス（選択中は緑色、点線アニメーション付き） */}
+      {/* エッジのパス（ハイライト中は黄色、選択中は緑色、点線アニメーション付き） */}
       <BaseEdge
         id={id}
         path={edgePath}
         markerEnd={markerEnd}
         style={{
-          stroke: selected ? '#22C55E' : '#94A3B8',
-          strokeWidth: selected ? 3 : 2,
+          stroke: strokeColor,
+          strokeWidth,
           strokeDasharray: '8 4',
           animation: 'memo-edge-flow 0.8s linear infinite',
         }}
