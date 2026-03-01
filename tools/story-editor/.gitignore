@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# ランタイム生成データ（テンプレートから自動生成）
+data/*.json
+!data/templates/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
