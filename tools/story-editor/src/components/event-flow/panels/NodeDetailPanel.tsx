@@ -144,14 +144,27 @@ export default function NodeDetailPanel({ node, onUpdateNode, onClose }: NodeDet
               />
             </Field>
 
-            {/* 説明（event, choiceノードのみ） */}
+            {/* 説明（event, choiceノードのみ）- 行数に応じて自動リサイズ */}
             {(nodeType === 'event' || nodeType === 'choice') && (
               <Field label="説明">
                 <textarea
+                  ref={(el) => {
+                    if (el) {
+                      el.style.height = 'auto';
+                      el.style.height = Math.max(el.scrollHeight, 40) + 'px';
+                    }
+                  }}
                   value={(data.description as string) || ''}
-                  onChange={(e) => updateField('description', e.target.value)}
-                  rows={2}
-                  className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-ocean-300 focus:border-transparent resize-y"
+                  onChange={(e) => {
+                    updateField('description', e.target.value);
+                    // 入力に合わせて高さを自動調整
+                    const el = e.target;
+                    el.style.height = 'auto';
+                    el.style.height = Math.max(el.scrollHeight, 40) + 'px';
+                  }}
+                  rows={1}
+                  className="w-full px-3 py-1.5 text-sm rounded-lg border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-ocean-300 focus:border-transparent resize-none overflow-hidden"
+                  style={{ minHeight: '40px' }}
                 />
               </Field>
             )}
