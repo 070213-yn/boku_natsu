@@ -2,26 +2,27 @@ import { useEffect, useState, useMemo } from 'react';
 
 /**
  * 時間帯で変わる背景グラデーション + 光の粒子エフェクト
- * 朝(6-12): 澄んだ水色
- * 昼(12-17): 明るいパステルブルー
- * 夕方(17-20): パステルブルー→薄い紫
- * 夜(20-6): 紺色→暗い青
+ * 全時間帯を明るいトーンに統一して文字の視認性を確保
+ * 朝(6-12): 明るい水色
+ * 昼(12-17): 白に近いパステルブルー
+ * 夕方(17-20): 薄いラベンダー
+ * 夜(20-6): 薄い紺色（明るめ）
  */
 
 // 時間帯に応じたグラデーション色を返す
 function getGradientByHour(hour: number): string {
   if (hour >= 6 && hour < 12) {
-    // 朝: 澄んだ水色
-    return 'linear-gradient(180deg, #DBEAFE 0%, #E0F2FE 40%, #F0F9FF 100%)';
+    // 朝: 明るい水色
+    return 'linear-gradient(180deg, #E0F2FE 0%, #F0F9FF 40%, #F8FCFF 100%)';
   } else if (hour >= 12 && hour < 17) {
-    // 昼: 明るいパステルブルー
-    return 'linear-gradient(180deg, #F0F9FF 0%, #E0F2FE 40%, #DBEAFE 100%)';
+    // 昼: 白に近いパステルブルー
+    return 'linear-gradient(180deg, #F8FCFF 0%, #F0F9FF 40%, #E0F2FE 100%)';
   } else if (hour >= 17 && hour < 20) {
-    // 夕方: パステルブルー→薄い紫→薄いピンク
-    return 'linear-gradient(180deg, #BAE6FD 0%, #A5B4FC 30%, #C4B5FD 55%, #DDD6FE 80%, #EDE9FE 100%)';
+    // 夕方: 薄いラベンダー
+    return 'linear-gradient(180deg, #E0F2FE 0%, #DDD6FE 30%, #EDE9FE 60%, #F5F3FF 100%)';
   } else {
-    // 夜: 紺色→暗い青
-    return 'linear-gradient(180deg, #1E3A5F 0%, #1E293B 50%, #0F172A 100%)';
+    // 夜: 薄い紺色（明るめ、文字が読みやすいトーン）
+    return 'linear-gradient(180deg, #C7D2FE 0%, #DBEAFE 40%, #E0E7FF 100%)';
   }
 }
 
