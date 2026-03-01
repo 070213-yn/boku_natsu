@@ -50,7 +50,7 @@ const SESSION_CATEGORIES: SessionCategory[] = [
     color: 'text-ocean-500',
     bgColor: 'bg-ocean-100',
     description: 'Story Editorに新しいページや機能を追加するとき',
-    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。CLAUDE.mdとPROGRESS.mdを読んでから、Story Editorに〇〇機能を追加してください。',
+    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。PROGRESS.mdを読んでから、Story Editorに〇〇機能を追加してください。',
     examples: [
       '新しい編集ページを追加したい',
       '既存ページに機能を追加したい',
@@ -65,7 +65,7 @@ const SESSION_CATEGORIES: SessionCategory[] = [
     color: 'text-red-500',
     bgColor: 'bg-red-100',
     description: 'Story Editorの表示崩れ、動作不具合、デザイン調整',
-    starterPrompt: 'C:\\boku_natsu のStory Editorで問題があります。CLAUDE.mdを読んでから、以下のバグを修正してください: 〇〇',
+    starterPrompt: 'C:\\boku_natsu のStory Editorで問題があります。以下のバグを修正してください: 〇〇',
     examples: [
       'ページの表示が崩れている',
       'ボタンが効かない',
@@ -80,7 +80,7 @@ const SESSION_CATEGORIES: SessionCategory[] = [
     color: 'text-green-600',
     bgColor: 'bg-green-100',
     description: 'UnityのC#スクリプト作成・ゲームシステム実装',
-    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。CLAUDE.mdとGAME_DESIGN.mdを読んでから、Unity側の〇〇を実装してください。',
+    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。GAME_DESIGN.mdを読んでから、Unity側の〇〇を実装してください。',
     examples: [
       'プレイヤー移動を実装したい',
       'イベント実行エンジンを作りたい',
@@ -96,7 +96,7 @@ const SESSION_CATEGORIES: SessionCategory[] = [
     color: 'text-purple-500',
     bgColor: 'bg-purple-100',
     description: 'イベント・会話・フラグなどのゲームデータをJSONで追加・修正',
-    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。CLAUDE.mdを読んでから、〇〇のゲームデータを追加・修正してください。',
+    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。PROGRESS.mdを読んでから、〇〇のゲームデータを追加・修正してください。',
     examples: [
       'イベントを追加したい',
       'NPCの会話内容を充実させたい',
@@ -128,7 +128,7 @@ const SESSION_CATEGORIES: SessionCategory[] = [
     color: 'text-pink-500',
     bgColor: 'bg-pink-100',
     description: '3Dモデル、テクスチャ、サウンド、アニメーションの準備や設定',
-    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。CLAUDE.mdを読んでから、〇〇のアセットについて作業してください。',
+    starterPrompt: 'C:\\boku_natsu のなつのしまプロジェクトで作業します。〇〇のアセットについて作業してください。',
     examples: [
       'サウンド設定を追加したい',
       'アニメーション設定を作りたい',
@@ -143,19 +143,19 @@ const SESSION_CATEGORIES: SessionCategory[] = [
 const IMPORTANT_RULES = [
   {
     title: 'セッションの始め方',
-    content: '必ず「C:\\\\boku_natsu のなつのしまプロジェクトで作業します」と伝えてください。これでClaude CodeがCLAUDE.mdを読み、プロジェクトの全体像を把握します。',
+    content: '「C:\\\\boku_natsu の〇〇をやって」とパスを含めて伝えてください。パスがあればClaude Codeが迷わずプロジェクトに到達し、CLAUDE.mdを自動で読みます。',
   },
   {
-    title: '1セッション = 1テーマ',
-    content: '1つの会話では1つのテーマに集中してください。会話が長くなるとコンテキストが圧縮され、古い内容を忘れてしまいます。',
+    title: '必要なファイルだけ読ませる',
+    content: 'CLAUDE.mdは最小限の情報だけ。作業に必要なファイル（PROGRESS.mdやGAME_DESIGN.md等）は指示テンプレートに含まれているので、コピペするだけでOKです。',
   },
   {
     title: 'セッション終了時',
     content: '大きな変更をしたら「PROGRESS.mdを更新して」と伝えてください。次のセッションで現状を把握できるようになります。',
   },
   {
-    title: '困ったとき',
-    content: '「PROGRESS.mdを読んで現状を教えて」と言えば、今何ができていて何が未着手かを確認できます。',
+    title: '1セッション = 1テーマ',
+    content: '1つの会話では1つのテーマに集中。会話が長くなるとコンテキストが圧縮され、古い内容を忘れます。30往復を超えたら新しいセッションに。',
   },
 ];
 
