@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   GitBranch,
+  List,
   MessageSquare,
   Calendar,
   BookOpen,
@@ -17,6 +18,7 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import {
   useEventFlowStore,
+  useEventListStore,
   useDialogueStore,
   useDiaryStore,
   useExplorationStore,
@@ -131,6 +133,7 @@ export default function DashboardPage() {
 
   // 各データストア
   const eventFlow = useEventFlowStore();
+  const eventList = useEventListStore();
   const dialogue = useDialogueStore();
   const diary = useDiaryStore();
   const exploration = useExplorationStore();
@@ -139,6 +142,7 @@ export default function DashboardPage() {
   // 初回マウント時に全ストアを読み込む
   useEffect(() => {
     eventFlow.load();
+    eventList.load();
     dialogue.load();
     diary.load();
     exploration.load();
@@ -149,6 +153,7 @@ export default function DashboardPage() {
   // いずれかのストアが読み込み中か判定
   const isLoading =
     eventFlow.isLoading ||
+    eventList.isLoading ||
     dialogue.isLoading ||
     diary.isLoading ||
     exploration.isLoading ||
@@ -172,6 +177,7 @@ export default function DashboardPage() {
 
   /* --- 統計値の算出 --- */
   const nodeCount = eventFlow.data?.nodes.length ?? 0;
+  const eventCount = eventList.data?.events.length ?? 0;
   const npcCount = dialogue.data?.npcs.length ?? 0;
   const actionCount = diary.data?.actions.length ?? 0;
   const flagCount =
@@ -193,6 +199,14 @@ export default function DashboardPage() {
       path: '/event-flow',
       color: 'text-sunset-500',
       bgColor: 'bg-sunset-100',
+    },
+    {
+      icon: <List size={20} />,
+      title: 'イベント一覧',
+      description: 'イベントの追加・編集とC#スクリプト自動生成',
+      path: '/events',
+      color: 'text-green-600',
+      bgColor: 'bg-green-100',
     },
     {
       icon: <MessageSquare size={20} />,
@@ -239,6 +253,7 @@ export default function DashboardPage() {
   /* --- 最終更新情報 --- */
   const updateEntries = [
     { label: 'イベントフロー', date: eventFlow.data?.lastModified },
+    { label: 'イベント一覧', date: eventList.data?.lastModified },
     { label: '会話データ', date: dialogue.data?.lastModified },
     { label: '日記アクション', date: diary.data?.lastModified },
     { label: '探索フラグ', date: exploration.data?.lastModified },
@@ -260,14 +275,21 @@ export default function DashboardPage() {
         </h2>
       </motion.div>
 
-      {/* ---- 統計カード（4列グリッド） ---- */}
-      <div className="grid grid-cols-4 gap-4">
+      {/* ---- 統計カード（5列グリッド） ---- */}
+      <div className="grid grid-cols-5 gap-4">
         <StatCard
           icon={<GitBranch size={24} />}
           value={nodeCount}
           label="ストーリーノード"
           color="text-sunset-500"
           bgColor="bg-sunset-100"
+        />
+        <StatCard
+          icon={<List size={24} />}
+          value={eventCount}
+          label="イベント"
+          color="text-green-600"
+          bgColor="bg-green-100"
         />
         <StatCard
           icon={<MessageSquare size={24} />}
