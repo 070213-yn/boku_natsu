@@ -52,6 +52,7 @@ export interface GameEvent {
   isRepeatable: boolean
   priority: number
   enabled: boolean
+  timeAdvanceMinutes?: number  // イベント完了時に進むゲーム内時間（分）。0や未設定=時間が進まない
 }
 
 // イベント一覧データ全体

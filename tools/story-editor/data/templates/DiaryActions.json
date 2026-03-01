@@ -1,7 +1,295 @@
 {
-  "version": "1.0",
-  "lastModified": "",
-  "defaultText": "今日は静かな一日だった。",
-  "fallbackTemplate": "今日は「{actionTag}」をした。",
-  "actions": []
+  "version": "1.0.0",
+  "lastModified": "2026-03-01",
+  "defaultText": "今日は静かな一日だった。波の音をずっと聞いてた。",
+  "fallbackTemplate": "今日は「{actionTag}」をした。楽しかった。",
+  "actions": [
+    {
+      "tag": "RadioExercise",
+      "displayName": "ラジオ体操",
+      "priority": 15,
+      "diaryText": "朝、ラジオ体操に行った。まだ眠くて目がしょぼしょぼしてたけど、体を動かしたら気持ちよくなった。帰り道、朝の空気がひんやりして好きだなって思った。",
+      "category": "routine"
+    },
+    {
+      "tag": "TalkHeroine",
+      "displayName": "ヒロインと会話",
+      "priority": 85,
+      "diaryText": "夕方、いつもの堤防に行ったら、あの子がいた。今日は海の向こうの話をしてくれた。あの子の話を聞いてると、なんだか時間がゆっくり流れる気がする。",
+      "category": "heroine"
+    },
+    {
+      "tag": "HeroineFirstMeet",
+      "displayName": "ヒロインとの出会い",
+      "priority": 95,
+      "diaryText": "堤防で夕焼けを見てたら、女の子がひとりで座ってた。「きれいだね」って言ったら、少しだけ笑ってくれた。名前は聞けなかった。また会えるかな。",
+      "category": "heroine"
+    },
+    {
+      "tag": "HeroineReturn",
+      "displayName": "ヒロイン帰還",
+      "priority": 95,
+      "diaryText": "堤防に行ったら、あの子がいた。しばらく会えなかったから、なんかうれしかった。ぼくは「おかえり」って言った。あの子は「ただいま」って言ってくれた。",
+      "category": "heroine"
+    },
+    {
+      "tag": "HeroineLastDay",
+      "displayName": "最後の会話",
+      "priority": 100,
+      "diaryText": "最後の夕焼け。あの子と堤防に並んで座った。ふたりとも何も言わなかった。空がオレンジからむらさきに変わっていくのを、ずっと見てた。「この夕焼け、ずっと覚えてる」って約束した。あの子も「わたしも」って言ってくれた。",
+      "category": "heroine"
+    },
+    {
+      "tag": "HeroineAbsence",
+      "displayName": "ヒロイン不在",
+      "priority": 70,
+      "diaryText": "夕方、堤防に行ったけど、あの子はいなかった。波の音だけが聞こえた。ひとりで夕焼けを見てたけど、なんかいつもと違う気がした。",
+      "category": "heroine"
+    },
+    {
+      "tag": "DidDelivery",
+      "displayName": "配達バイト",
+      "priority": 50,
+      "diaryText": "今日も配達のバイトをした。坂道がきついけど、だんだん道を覚えてきた。届けたおばあちゃんが「ありがとうね」って言ってくれて、うれしかった。",
+      "category": "work"
+    },
+    {
+      "tag": "NetPulling",
+      "displayName": "網引き手伝い",
+      "priority": 55,
+      "diaryText": "テツさんの網引きを手伝った。網はすごく重くて、腕がパンパンになった。でも魚がいっぱい入ってて、テツさんが「よくやった」って頭をなでてくれた。",
+      "category": "work"
+    },
+    {
+      "tag": "ShrineClean",
+      "displayName": "神社掃除",
+      "priority": 45,
+      "diaryText": "神社の掃除をした。落ち葉がいっぱいだったけど、きれいになると気持ちいい。神主さんが冷たいお茶を出してくれた。セミの声がすごかった。",
+      "category": "work"
+    },
+    {
+      "tag": "Fishing",
+      "displayName": "釣り",
+      "priority": 40,
+      "diaryText": "防波堤でゲンさんと一緒に釣りをした。なかなか釣れなくて、ゲンさんが「魚は待つもんだ」って言ってた。待ってたら本当に釣れた。待つのって大事なんだな。",
+      "category": "play"
+    },
+    {
+      "tag": "BugCatch",
+      "displayName": "虫取り",
+      "priority": 35,
+      "diaryText": "虫取り網を持って山に行った。クワガタを追いかけて転んだけど、最後にはつかまえた。手の中でもぞもぞ動いて、ちょっとくすぐったかった。夏って感じがする。",
+      "category": "play"
+    },
+    {
+      "tag": "ShellCollect",
+      "displayName": "貝殻集め",
+      "priority": 30,
+      "diaryText": "浜辺で貝殻を集めた。ピンク色のきれいなのを見つけた。耳に当てたら海の音がした。ふしぎだな。お母さんへのおみやげにしよう。",
+      "category": "play"
+    },
+    {
+      "tag": "FedCat",
+      "displayName": "猫にごはん",
+      "priority": 40,
+      "diaryText": "野良猫にごはんをあげた。最初は逃げてたけど、最近は少しだけ近くに来てくれるようになった。しっぽをゆらゆらさせてた。なついてきたのかな。",
+      "category": "interaction"
+    },
+    {
+      "tag": "CookingHelp",
+      "displayName": "料理手伝い",
+      "priority": 35,
+      "diaryText": "おばさんの料理を手伝った。野菜を切るのはむずかしかったけど、「上手になったね」って言ってもらえた。今日のごはんはいつもよりおいしく感じた。",
+      "category": "interaction"
+    },
+    {
+      "tag": "ShallowDive",
+      "displayName": "素潜り",
+      "priority": 45,
+      "diaryText": "今日は海に潜った。水の中は静かで、太陽の光がゆらゆら揺れてきれいだった。小さい魚の群れが目の前を通り過ぎていった。もっと深く潜れるようになりたい。",
+      "category": "sea"
+    },
+    {
+      "tag": "NightDive",
+      "displayName": "夜潜水",
+      "priority": 90,
+      "diaryText": "夜の海に飛び込んだ。こわかったけど、水の中から見上げた空に星がいっぱいあった。海の中も光ってて、まるで宇宙みたいだった。すごかった。一生忘れないと思う。",
+      "category": "special"
+    },
+    {
+      "tag": "DeepShadow",
+      "displayName": "巨大影目撃",
+      "priority": 92,
+      "diaryText": "海の深いところで、すごく大きな影が動くのを見た。何だったんだろう。心臓がバクバクして、急いで水面まで上がった。こわかった。でも、もう一回見てみたい気もする。",
+      "category": "sea"
+    },
+    {
+      "tag": "FaintRescue",
+      "displayName": "失神→救出",
+      "priority": 88,
+      "diaryText": "海の中で夢中になりすぎて、息が続かなくなった。気がついたら浜辺に寝てて、テツさんの顔があった。すごく怒られた。でも最後に「無事でよかった」って言ってくれた。",
+      "category": "sea"
+    },
+    {
+      "tag": "SeaTunnel",
+      "displayName": "海底トンネル",
+      "priority": 93,
+      "diaryText": "海の底に暗いトンネルみたいな穴を見つけた！ 中は真っ暗で何も見えなかったけど、向こう側から水が流れてきてた。この先に何があるんだろう。ドキドキする。",
+      "category": "sea"
+    },
+    {
+      "tag": "SeaRuins",
+      "displayName": "海底遺構",
+      "priority": 98,
+      "diaryText": "海底のトンネルの先に、古い建物みたいなものがあった。石でできた壁とか、階段みたいなものとか。誰が作ったんだろう。海の底にこんなものがあるなんて、信じられない。すごかった。",
+      "category": "mystery"
+    },
+    {
+      "tag": "SapRecipe",
+      "displayName": "樹液レシピ",
+      "priority": 50,
+      "diaryText": "おじさんから樹液の作り方を教えてもらった。砂糖水とお酢とバナナを混ぜるんだって。木に塗っておいたら、虫が集まるかな。明日が楽しみだ。",
+      "category": "bug"
+    },
+    {
+      "tag": "RareBeetle",
+      "displayName": "激レアカブト",
+      "priority": 80,
+      "diaryText": "山の奥で、すごいカブトムシを見つけた！ ツノが大きくて、色がピカピカ光ってた。手が震えたけど、そーっとつかまえた。宝物にする。",
+      "category": "bug"
+    },
+    {
+      "tag": "SellBugs",
+      "displayName": "虫を売る",
+      "priority": 25,
+      "diaryText": "駄菓子屋のおじいちゃんに虫を見せたら、「こりゃ立派だ」って言って買ってくれた。もらったお金でアイスを買った。虫取りってすごい。",
+      "category": "bug"
+    },
+    {
+      "tag": "FoundDiary",
+      "displayName": "古い日記発見",
+      "priority": 97,
+      "diaryText": "森の奥で、古い日記を見つけた。ボロボロだったけど、中の字はなんとか読めた。ぼくと同じくらいの子が書いたみたいだ。何十年も前の夏のことが書いてあった。誰が書いたんだろう。",
+      "category": "story"
+    },
+    {
+      "tag": "Graffiti1",
+      "displayName": "落書き発見1",
+      "priority": 75,
+      "diaryText": "神社の裏で、石に不思議な模様が描いてあるのを見つけた。落書きみたいだけど、なんか意味がありそうだ。ギザギザの線と丸が組み合わさってた。",
+      "category": "mystery"
+    },
+    {
+      "tag": "Graffiti2",
+      "displayName": "落書き発見2",
+      "priority": 75,
+      "diaryText": "山の上でも、前に見たのと似た落書きを見つけた。こっちには波みたいな線が描いてあった。ふたつ合わせたら何かわかるのかな。",
+      "category": "mystery"
+    },
+    {
+      "tag": "MapComplete",
+      "displayName": "地図完成",
+      "priority": 96,
+      "diaryText": "神社の落書きと山の落書きを紙に写して並べてみたら、地図になった！ 島のどこかを指してるみたいだ。ここに何があるんだろう。行ってみたい。",
+      "category": "mystery"
+    },
+    {
+      "tag": "HiddenPlace",
+      "displayName": "地図にない場所",
+      "priority": 99,
+      "diaryText": "落書きの地図が指してた場所に行った。草をかき分けて進んだら、誰も知らないような場所に出た。空が広くて、風が気持ちよくて、世界にぼくだけみたいだった。信じられない。こんな場所があったなんて。",
+      "category": "mystery"
+    },
+    {
+      "tag": "BottleMessage",
+      "displayName": "ガラス瓶メッセージ",
+      "priority": 60,
+      "diaryText": "浜辺でガラス瓶を見つけた。中に手紙が入ってた。字がにじんでてよく読めなかったけど、「また会えますように」って書いてあった気がする。誰が流したんだろう。",
+      "category": "mystery"
+    },
+    {
+      "tag": "Stargazing",
+      "displayName": "星空観察",
+      "priority": 65,
+      "diaryText": "山の上で寝転んで星を見た。東京じゃ絶対見られないくらい、星がいっぱいあった。天の川も見えた。おじさんが星の名前を教えてくれた。でも多すぎて覚えられなかった。",
+      "category": "special"
+    },
+    {
+      "tag": "SecretBase",
+      "displayName": "秘密基地",
+      "priority": 70,
+      "diaryText": "森の中に秘密基地を作った！ 板を集めて壁にして、屋根は大きな葉っぱを乗せた。まだちょっとぐらぐらするけど、ぼくだけの場所ができた。うれしい。",
+      "category": "exploration"
+    },
+    {
+      "tag": "SunsetSpot",
+      "displayName": "夕焼けスポット",
+      "priority": 60,
+      "diaryText": "山の途中に、夕焼けがすごくきれいに見える場所を見つけた。海がオレンジ色に光って、まぶしかった。ここはぼくだけの秘密の場所にしよう。",
+      "category": "exploration"
+    },
+    {
+      "tag": "LetterHome",
+      "displayName": "お家への手紙",
+      "priority": 55,
+      "diaryText": "お父さんとお母さんに手紙を書いた。島のこととか、海のこととか、いっぱい書きたいことがあって、便せん３枚になっちゃった。元気にしてるよって書いた。ちょっとだけ会いたくなった。",
+      "category": "special"
+    },
+    {
+      "tag": "OldWell",
+      "displayName": "古井戸探索",
+      "priority": 90,
+      "diaryText": "ヒナと一緒に古い井戸の中に入った。はしごを降りたら、中はひんやりしてて暗かった。壁に何か彫ってあった。ヒナが「こわい」って言うから、ぼくが先に進んだ。ちょっとだけ勇気が出た。",
+      "category": "exploration"
+    },
+    {
+      "tag": "ShrineGateOpen",
+      "displayName": "裏門解放",
+      "priority": 70,
+      "diaryText": "神社の裏にある古い門が開いた！ 神主さんが「よく頑張ったね」って言って鍵を開けてくれた。門の向こうは薄暗い森が続いてた。何があるんだろう。",
+      "category": "exploration"
+    },
+    {
+      "tag": "FallenTree",
+      "displayName": "倒木撤去",
+      "priority": 55,
+      "diaryText": "森の道をふさいでた大きな倒木がなくなってた。テツさんが切ってくれたらしい。奥に続く道が見えた。前から気になってたから、行ってみよう。",
+      "category": "exploration"
+    },
+    {
+      "tag": "MountainShortcut",
+      "displayName": "山頂ショートカット",
+      "priority": 60,
+      "diaryText": "森の奥に、山頂に続く近道を見つけた！ けもの道みたいに細いけど、ここを通ればすぐ山の上に行ける。前よりずっと早く着いた。島のことがだんだんわかってきた気がする。",
+      "category": "exploration"
+    },
+    {
+      "tag": "StampReward",
+      "displayName": "スタンプ報酬",
+      "priority": 30,
+      "diaryText": "ラジオ体操のスタンプカードがたまって、ごほうびをもらった。がんばって早起きした分、うれしさもいっぱいだ。",
+      "category": "routine"
+    },
+    {
+      "tag": "UncleChat",
+      "displayName": "おじさんとの会話",
+      "priority": 20,
+      "diaryText": "夜、おじさんと縁側で話した。おじさんも子どものころ、この島で夏を過ごしたんだって。昔の話をしてくれた。風が気持ちよかった。",
+      "category": "interaction"
+    },
+    {
+      "tag": "BugIntro",
+      "displayName": "虫取り入門",
+      "priority": 45,
+      "diaryText": "おじさんから虫取り網をもらった！ 「この島にはすごい虫がいるぞ」って教えてくれた。明日から虫取りに行くんだ。ワクワクする。",
+      "category": "bug"
+    },
+    {
+      "tag": "FishingRod",
+      "displayName": "釣り竿をもらう",
+      "priority": 50,
+      "diaryText": "おじさんが物置から古い釣り竿を出してきてくれた。「おじさんが子どものころ使ってたやつだ」って言ってた。大事に使おう。早く魚を釣りたいな。",
+      "category": "interaction"
+    }
+  ]
 }

@@ -1,42 +1,1307 @@
 {
-  "version": "1.0",
-  "lastModified": "",
+  "version": "2.0",
+  "lastModified": "2026-03-01",
   "nodes": [
     {
       "id": "day1_start",
       "type": "dayStart",
-      "position": { "x": 100, "y": 300 },
-      "data": { "label": "8月1日 - 島に到着", "day": 1 }
+      "position": { "x": 100, "y": 500 },
+      "data": { "label": "8月1日 - 島に到着", "day": 1, "phase": "導入期" }
     },
     {
-      "id": "evt_radio_1",
+      "id": "evt_d1_arrival",
       "type": "event",
-      "position": { "x": 400, "y": 150 },
+      "position": { "x": 200, "y": 250 },
       "data": {
-        "label": "ラジオ体操（初回）",
-        "description": "広場でラジオ体操に参加",
+        "label": "フェリーで島に到着",
+        "description": "おじさん・おばさんの家に着く。荷解きをして、島の暮らしの説明を受ける。",
         "day": 1,
-        "timePhase": "Morning",
-        "category": "routine",
-        "actionTag": "RadioExercise"
+        "timePhase": "Noon",
+        "category": "interaction",
+        "actionTag": "Arrival"
       }
     },
     {
-      "id": "evt_heroine_1",
+      "id": "evt_d1_radio_explain",
       "type": "event",
-      "position": { "x": 400, "y": 450 },
+      "position": { "x": 300, "y": 100 },
       "data": {
-        "label": "ヒロインと初めて会う",
-        "description": "堤防で夕焼けを見ている少女",
+        "label": "ラジオ体操の説明",
+        "description": "おばさんから『毎朝6時に広場でラジオ体操があるよ』と教わる。スタンプカードをもらう。",
+        "day": 1,
+        "timePhase": "Noon",
+        "category": "routine",
+        "actionTag": "RadioExplain"
+      }
+    },
+    {
+      "id": "evt_d1_explore_village",
+      "type": "event",
+      "position": { "x": 400, "y": 400 },
+      "data": {
+        "label": "集落を散策",
+        "description": "小さな集落を歩き回る。駄菓子屋、神社、港を発見。",
+        "day": 1,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "ExploreVillage"
+      }
+    },
+    {
+      "id": "evt_d1_hina_meet",
+      "type": "event",
+      "position": { "x": 500, "y": 850 },
+      "data": {
+        "label": "ヒナとの出会い",
+        "description": "堤防で夕焼けを眺める少女・ヒナと出会う。『…誰？ ああ、夏の間だけ来る子？』短い会話の後、彼女は去る。",
         "day": 1,
         "timePhase": "Evening",
         "category": "heroine",
-        "actionTag": "TalkHeroine"
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_met"
+      }
+    },
+    {
+      "id": "evt_d1_dinner",
+      "type": "event",
+      "position": { "x": 600, "y": 250 },
+      "data": {
+        "label": "おばさんの晩ごはん",
+        "description": "島の魚料理。おじさんが島の伝説をちらっと話す。『この島にはな、昔…まあ寝る前の話じゃないな』",
+        "day": 1,
+        "timePhase": "Night",
+        "category": "interaction",
+        "actionTag": "Dinner"
+      }
+    },
+
+    {
+      "id": "day2_start",
+      "type": "dayStart",
+      "position": { "x": 250, "y": 500 },
+      "data": { "label": "8月2日 - はじめての朝", "day": 2, "phase": "導入期" }
+    },
+    {
+      "id": "evt_d2_radio_first",
+      "type": "event",
+      "position": { "x": 350, "y": 100 },
+      "data": {
+        "label": "初ラジオ体操",
+        "description": "広場で島の子どもたちと一緒にラジオ体操。スタンプ1個目。体操後、近所のガキ大将・タケシが話しかけてくる。",
+        "day": 2,
+        "timePhase": "Morning",
+        "category": "routine",
+        "actionTag": "RadioExercise",
+        "setFlag": "radio_count+1"
+      }
+    },
+    {
+      "id": "evt_d2_bug_net",
+      "type": "event",
+      "position": { "x": 450, "y": 700 },
+      "data": {
+        "label": "虫取り網を入手",
+        "description": "タケシが古い虫取り網をくれる。『これ使っていいよ。俺はもっといいの持ってるし』虫取りシステム解放。",
+        "day": 2,
+        "timePhase": "Morning",
+        "category": "bug",
+        "actionTag": "GetBugNet",
+        "setFlag": "has_bug_net",
+        "unlock": "虫取りシステム"
+      }
+    },
+    {
+      "id": "evt_d2_free_explore",
+      "type": "event",
+      "position": { "x": 550, "y": 400 },
+      "data": {
+        "label": "自由探索開始",
+        "description": "初めて自由行動ができる日。浜辺、森の入口、岬を探索可能に。",
+        "day": 2,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "FreeExplore",
+        "unlock": "浜辺・森入口・岬エリア"
+      }
+    },
+    {
+      "id": "evt_d2_hina_levee",
+      "type": "event",
+      "position": { "x": 650, "y": 850 },
+      "data": {
+        "label": "堤防でヒナと再会",
+        "description": "夕方の堤防にヒナがいる。少しだけ打ち解ける。『…毎日ここにいるよ。別に待ってるわけじゃないけど』",
+        "day": 2,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+    {
+      "id": "day3_start",
+      "type": "dayStart",
+      "position": { "x": 400, "y": 500 },
+      "data": { "label": "8月3日 - 島の人々", "day": 3, "phase": "導入期" }
+    },
+    {
+      "id": "evt_d3_radio",
+      "type": "event",
+      "position": { "x": 450, "y": 100 },
+      "data": {
+        "label": "ラジオ体操 Day3",
+        "description": "体操後、おじいさんが釣りの話をしてくれる。",
+        "day": 3,
+        "timePhase": "Morning",
+        "category": "routine",
+        "actionTag": "RadioExercise",
+        "setFlag": "radio_count+1"
+      }
+    },
+    {
+      "id": "evt_d3_fisherman",
+      "type": "event",
+      "position": { "x": 550, "y": 550 },
+      "data": {
+        "label": "釣り老人との出会い",
+        "description": "港の端で釣りをしている老人・源じいに出会う。『坊主、魚を釣りたいか？ まず見とれ』釣りの基本を教わる。",
+        "day": 3,
+        "timePhase": "Noon",
+        "category": "sea",
+        "actionTag": "MeetFisherman",
+        "setFlag": "met_fisherman"
+      }
+    },
+    {
+      "id": "evt_d3_shrine_clean",
+      "type": "event",
+      "position": { "x": 650, "y": 400 },
+      "data": {
+        "label": "神社掃除開始",
+        "description": "おばさんに頼まれて神社の掃除を手伝う。裏手に古い石碑を発見するが、草に覆われて読めない。",
+        "day": 3,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "ShrineClean",
+        "setFlag": "shrine_clean_started",
+        "unlock": "神社裏エリア"
+      }
+    },
+    {
+      "id": "evt_d3_hina_talk",
+      "type": "event",
+      "position": { "x": 750, "y": 850 },
+      "data": {
+        "label": "ヒナ：星の話",
+        "description": "堤防でヒナが星座の話をしてくれる。『この島、街灯が少ないから星がよく見えるんだ』",
+        "day": 3,
+        "timePhase": "Night",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+    {
+      "id": "day4_start",
+      "type": "dayStart",
+      "position": { "x": 550, "y": 500 },
+      "data": { "label": "8月4日 - お手伝い", "day": 4, "phase": "導入期" }
+    },
+    {
+      "id": "evt_d4_delivery",
+      "type": "event",
+      "position": { "x": 600, "y": 250 },
+      "data": {
+        "label": "配達バイト開始",
+        "description": "駄菓子屋のおっちゃんから配達の手伝いを頼まれる。島の各家を回ってお届け物。お駄賃がもらえる。",
+        "day": 4,
+        "timePhase": "Morning",
+        "category": "interaction",
+        "actionTag": "DeliveryStart",
+        "setFlag": "delivery_job",
+        "unlock": "配達バイトシステム"
+      }
+    },
+    {
+      "id": "evt_d4_cat",
+      "type": "event",
+      "position": { "x": 700, "y": 400 },
+      "data": {
+        "label": "謎の猫出現",
+        "description": "配達中、路地で不思議な模様の猫を見かける。近づくと逃げるが、何かを落としていった…古い鍵？",
+        "day": 4,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "MeetCat",
+        "setFlag": "cat_appeared",
+        "item": "古い鍵（用途不明）"
+      }
+    },
+    {
+      "id": "evt_d4_bug_hunt",
+      "type": "event",
+      "position": { "x": 750, "y": 700 },
+      "data": {
+        "label": "タケシと虫取り勝負",
+        "description": "タケシに虫取り勝負を挑まれる。カブトムシやクワガタの捕り方を実践で学ぶ。",
+        "day": 4,
+        "timePhase": "Noon",
+        "category": "bug",
+        "actionTag": "BugContest",
+        "requires": "has_bug_net"
+      }
+    },
+
+    {
+      "id": "day5_start",
+      "type": "dayStart",
+      "position": { "x": 700, "y": 500 },
+      "data": { "label": "8月5日 - 海の暮らし", "day": 5, "phase": "導入期" }
+    },
+    {
+      "id": "evt_d5_bento",
+      "type": "event",
+      "position": { "x": 750, "y": 250 },
+      "data": {
+        "label": "おばさんのお弁当",
+        "description": "おばさんが特製弁当を持たせてくれる。『今日は一日遊んでおいで』体力回復アイテムとして使える。",
+        "day": 5,
+        "timePhase": "Morning",
+        "category": "interaction",
+        "actionTag": "GetBento",
+        "item": "おばさんの弁当"
+      }
+    },
+    {
+      "id": "evt_d5_net_pull",
+      "type": "event",
+      "position": { "x": 800, "y": 550 },
+      "data": {
+        "label": "漁師の網引き開始",
+        "description": "浜辺で漁師たちの網引きを手伝う。力仕事だが、獲れた魚を少し分けてもらえる。毎朝参加可能に。",
+        "day": 5,
+        "timePhase": "Morning",
+        "category": "sea",
+        "actionTag": "NetPull",
+        "setFlag": "net_pull_available",
+        "unlock": "網引きシステム"
+      }
+    },
+    {
+      "id": "evt_d5_hina_shell",
+      "type": "event",
+      "position": { "x": 800, "y": 850 },
+      "data": {
+        "label": "ヒナ：貝殻集め",
+        "description": "浜辺でヒナと貝殻を集める。ヒナが少し笑う。『…こういうの、久しぶり』",
+        "day": 5,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+
+    {
+      "id": "day6_start",
+      "type": "dayStart",
+      "position": { "x": 900, "y": 500 },
+      "data": { "label": "8月6日 - 秘密基地", "day": 6, "phase": "拡張期" }
+    },
+    {
+      "id": "evt_d6_secret_base_start",
+      "type": "event",
+      "position": { "x": 950, "y": 400 },
+      "data": {
+        "label": "秘密基地づくり開始",
+        "description": "タケシが森の中に秘密基地を作ろうと提案。材料集めが始まる。板、ロープ、トタン屋根が必要。",
+        "day": 6,
+        "timePhase": "Morning",
+        "category": "exploration",
+        "actionTag": "SecretBaseStart",
+        "setFlag": "secret_base_started",
+        "requires": "has_bug_net"
+      }
+    },
+    {
+      "id": "evt_d6_hina_drawing",
+      "type": "event",
+      "position": { "x": 1000, "y": 850 },
+      "data": {
+        "label": "ヒナ：スケッチブック",
+        "description": "堤防でヒナがスケッチブックに海を描いているのを見かける。『見ないで…まだ下手だから』",
+        "day": 6,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+    {
+      "id": "day7_start",
+      "type": "dayStart",
+      "position": { "x": 1050, "y": 500 },
+      "data": { "label": "8月7日 - 釣り竿", "day": 7, "phase": "拡張期" }
+    },
+    {
+      "id": "evt_d7_fishing_rod",
+      "type": "event",
+      "position": { "x": 1100, "y": 550 },
+      "data": {
+        "label": "おじさんから釣り竿をもらう",
+        "description": "おじさんが物置から古い釣り竿を出してくれる。『昔使ってたやつだ。大事に使えよ』釣りシステム解放。",
+        "day": 7,
+        "timePhase": "Morning",
+        "category": "sea",
+        "actionTag": "GetFishingRod",
+        "setFlag": "has_fishing_rod",
+        "unlock": "釣りシステム"
+      }
+    },
+    {
+      "id": "evt_d7_cooking",
+      "type": "event",
+      "position": { "x": 1150, "y": 250 },
+      "data": {
+        "label": "おばさんの料理手伝い",
+        "description": "おばさんの料理を手伝う。魚のさばき方を教わる。『上手上手！ やなちゃん筋がいいねえ』",
+        "day": 7,
+        "timePhase": "Evening",
+        "category": "interaction",
+        "actionTag": "CookingHelp",
+        "setFlag": "cooking_learned"
+      }
+    },
+    {
+      "id": "evt_d7_secret_base_progress",
+      "type": "event",
+      "position": { "x": 1200, "y": 400 },
+      "data": {
+        "label": "秘密基地：壁完成",
+        "description": "タケシたちと秘密基地の壁を作る。だんだん形になってきた。",
+        "day": 7,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "SecretBaseBuild",
+        "requires": "secret_base_started"
+      }
+    },
+
+    {
+      "id": "day8_start",
+      "type": "dayStart",
+      "position": { "x": 1200, "y": 500 },
+      "data": { "label": "8月8日 - 森の深く", "day": 8, "phase": "拡張期" }
+    },
+    {
+      "id": "evt_d8_sap_recipe",
+      "type": "event",
+      "position": { "x": 1250, "y": 700 },
+      "data": {
+        "label": "樹液レシピ入手",
+        "description": "源じいから樹液トラップの作り方を教わる。『夜にな、蜜を塗っておくんじゃ。朝にはカブトが来とる』",
+        "day": 8,
+        "timePhase": "Morning",
+        "category": "bug",
+        "actionTag": "SapRecipe",
+        "setFlag": "has_sap_recipe",
+        "unlock": "樹液トラップシステム"
+      }
+    },
+    {
+      "id": "evt_d8_deep_shadow",
+      "type": "event",
+      "position": { "x": 1350, "y": 550 },
+      "data": {
+        "label": "深場で巨大な影",
+        "description": "源じいと釣りをしていると、海の深いところに巨大な影が見える。『あれは…いや、気のせいじゃろ』",
+        "day": 8,
+        "timePhase": "Noon",
+        "category": "sea",
+        "actionTag": "DeepShadow",
+        "setFlag": "deep_shadow_seen",
+        "requires": "has_fishing_rod"
+      }
+    },
+    {
+      "id": "evt_d8_hina_past",
+      "type": "event",
+      "position": { "x": 1350, "y": 850 },
+      "data": {
+        "label": "ヒナ：少しだけ過去の話",
+        "description": "ヒナが少しだけ自分のことを話す。『…私もね、ここに来たのは初めてじゃないの。小さい頃に一度だけ…』",
+        "day": 8,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+    {
+      "id": "day10_start",
+      "type": "dayStart",
+      "position": { "x": 1400, "y": 500 },
+      "data": { "label": "8月10日 - 道が開く", "day": 10, "phase": "拡張期" }
+    },
+    {
+      "id": "evt_d10_fallen_tree",
+      "type": "event",
+      "position": { "x": 1450, "y": 400 },
+      "data": {
+        "label": "倒木撤去→森の奥開放",
+        "description": "おじさんと一緒に森の道を塞いでいた倒木を撤去する。奥の森エリアが開放される。そこには大きなクヌギの木が…",
+        "day": 10,
+        "timePhase": "Morning",
+        "category": "exploration",
+        "actionTag": "RemoveFallenTree",
+        "setFlag": "deep_forest_open",
+        "unlock": "森の奥エリア・山頂への道"
+      }
+    },
+    {
+      "id": "evt_d10_secret_base_done",
+      "type": "event",
+      "position": { "x": 1500, "y": 250 },
+      "data": {
+        "label": "秘密基地完成",
+        "description": "秘密基地がついに完成！ タケシが旗を立てる。『これで俺たちの城だ！』基地でアイテム保管が可能に。",
+        "day": 10,
+        "timePhase": "Noon",
+        "category": "interaction",
+        "actionTag": "SecretBaseDone",
+        "setFlag": "secret_base_complete",
+        "unlock": "アイテム保管機能"
+      }
+    },
+    {
+      "id": "evt_d10_rare_bug",
+      "type": "event",
+      "position": { "x": 1550, "y": 700 },
+      "data": {
+        "label": "森の奥でオオクワガタ発見",
+        "description": "開放された森の奥で、樹液トラップにオオクワガタがかかっている！ タケシが大興奮。",
+        "day": 10,
+        "timePhase": "Evening",
+        "category": "bug",
+        "actionTag": "RareBugFind",
+        "requires": "deep_forest_open && has_sap_recipe"
+      }
+    },
+
+    {
+      "id": "day12_start",
+      "type": "dayStart",
+      "position": { "x": 1550, "y": 500 },
+      "data": { "label": "8月12日 - 古い記憶", "day": 12, "phase": "拡張期" }
+    },
+    {
+      "id": "evt_d12_old_diary",
+      "type": "event",
+      "position": { "x": 1600, "y": 1000 },
+      "data": {
+        "label": "古い日記発見",
+        "description": "神社の掃除中、社務所の奥で古い日記を見つける。30年前の子どもが書いたもの。『海の底に光る場所がある』という記述が…",
+        "day": 12,
+        "timePhase": "Noon",
+        "category": "mystery",
+        "actionTag": "FindOldDiary",
+        "setFlag": "old_diary_found",
+        "requires": "shrine_clean_started"
+      }
+    },
+    {
+      "id": "evt_d12_shrine_backgate",
+      "type": "event",
+      "position": { "x": 1550, "y": 400 },
+      "data": {
+        "label": "神社裏門発見→落書き1",
+        "description": "掃除を続けていると、草に覆われた裏門を発見。その先の岩壁に子どもの落書きのような地図の断片が彫られている。",
+        "day": 12,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "ShrineBackgate",
+        "setFlag": "graffiti_1_found",
+        "requires": "shrine_clean_started"
+      }
+    },
+    {
+      "id": "evt_d12_hina_diary",
+      "type": "event",
+      "position": { "x": 1600, "y": 850 },
+      "data": {
+        "label": "ヒナ：日記のこと",
+        "description": "ヒナに古い日記の話をすると、彼女の表情が曇る。『…それ、もしかして…いや、なんでもない』",
+        "day": 12,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1",
+        "requires": "old_diary_found"
+      }
+    },
+
+
+    {
+      "id": "day14_start",
+      "type": "dayStart",
+      "position": { "x": 1750, "y": 500 },
+      "data": { "label": "8月14日 - 予感", "day": 14, "phase": "深化期" }
+    },
+    {
+      "id": "evt_d14_hina_announce",
+      "type": "event",
+      "position": { "x": 1800, "y": 850 },
+      "data": {
+        "label": "ヒナ：旅行の予告",
+        "description": "ヒナが家族旅行で数日間島を離れると告げる。『…16日から何日かいないから。別に寂しくないでしょ？』少し寂しそうな表情。",
+        "day": 14,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaAnnounce",
+        "setFlag": "hina_travel_announced"
+      }
+    },
+    {
+      "id": "evt_d14_mountain_top",
+      "type": "event",
+      "position": { "x": 1850, "y": 400 },
+      "data": {
+        "label": "山頂到達→落書き2",
+        "description": "森の奥から山頂へ。島全体が見渡せる絶景。山頂の岩に2つ目の地図の断片（落書き）を発見。",
+        "day": 14,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "MountainTop",
+        "setFlag": "graffiti_2_found",
+        "requires": "deep_forest_open"
+      }
+    },
+
+    {
+      "id": "day15_start",
+      "type": "dayStart",
+      "position": { "x": 1900, "y": 500 },
+      "data": { "label": "8月15日 - 海の秘密", "day": 15, "phase": "深化期" }
+    },
+    {
+      "id": "evt_d15_bottle_message",
+      "type": "event",
+      "position": { "x": 1950, "y": 550 },
+      "data": {
+        "label": "ガラス瓶メッセージ",
+        "description": "浜辺に古いガラス瓶が流れ着く。中にメッセージ。『岬の下、満ち潮の時、岩の隙間に道が現れる』",
+        "day": 15,
+        "timePhase": "Morning",
+        "category": "sea",
+        "actionTag": "BottleMessage",
+        "setFlag": "bottle_message_found"
+      }
+    },
+    {
+      "id": "evt_d15_sea_tunnel",
+      "type": "event",
+      "position": { "x": 2050, "y": 550 },
+      "data": {
+        "label": "海底トンネル発見",
+        "description": "瓶のメッセージの通り、岬の下に海底トンネルの入口を発見。中は暗くて奥が見えない。",
+        "day": 15,
+        "timePhase": "Noon",
+        "category": "sea",
+        "actionTag": "SeaTunnelFind",
+        "setFlag": "sea_tunnel_found",
+        "requires": "bottle_message_found"
+      }
+    },
+    {
+      "id": "evt_d15_fireflies",
+      "type": "event",
+      "position": { "x": 2050, "y": 1000 },
+      "data": {
+        "label": "蛍の群れ",
+        "description": "夜、森の奥で蛍の群れを見つける。幻想的な光景。日記に『光る場所』とあったのはこのことか…？ いや、海の話だったはず。",
+        "day": 15,
+        "timePhase": "Night",
+        "category": "mystery",
+        "actionTag": "Fireflies",
+        "requires": "deep_forest_open && old_diary_found"
+      }
+    },
+
+    {
+      "id": "day16_start",
+      "type": "dayStart",
+      "position": { "x": 2050, "y": 500 },
+      "data": { "label": "8月16日 - 静かな日々", "day": 16, "phase": "深化期" }
+    },
+    {
+      "id": "evt_d16_hina_absent",
+      "type": "event",
+      "position": { "x": 2100, "y": 850 },
+      "data": {
+        "label": "堤防 - ヒナ不在",
+        "description": "いつもの堤防にヒナがいない。風の音だけが聞こえる。なんだか物足りない夕方。",
+        "day": 16,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaAbsent",
+        "requires": "hina_travel_announced"
+      }
+    },
+    {
+      "id": "cond_hina_conversation",
+      "type": "condition",
+      "position": { "x": 2200, "y": 850 },
+      "data": {
+        "label": "ヒナと十分話した？",
+        "condition": "heroine_conversation >= 8",
+        "description": "ヒナとの会話回数が8回以上かどうかで、帰還後のイベントが変化する。"
+      }
+    },
+
+    {
+      "id": "day17_start",
+      "type": "dayStart",
+      "position": { "x": 2150, "y": 500 },
+      "data": { "label": "8月17日 - 探求", "day": 17, "phase": "深化期" }
+    },
+    {
+      "id": "evt_d17_hina_absent2",
+      "type": "event",
+      "position": { "x": 2200, "y": 850 },
+      "data": {
+        "label": "堤防 - まだ空っぽ",
+        "description": "今日も堤防は空。波の音を一人で聞く。",
+        "day": 17,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaAbsent"
+      }
+    },
+    {
+      "id": "evt_d17_deep_fishing",
+      "type": "event",
+      "position": { "x": 2250, "y": 550 },
+      "data": {
+        "label": "源じいと深場釣り",
+        "description": "源じいの船に乗せてもらい、沖合で釣りをする。大きな魚が釣れる。源じいが島の昔話をしてくれる。",
+        "day": 17,
+        "timePhase": "Morning",
+        "category": "sea",
+        "actionTag": "DeepFishing",
+        "requires": "has_fishing_rod && deep_shadow_seen"
+      }
+    },
+
+    {
+      "id": "day19_start",
+      "type": "dayStart",
+      "position": { "x": 2350, "y": 500 },
+      "data": { "label": "8月19日 - 待つ日", "day": 19, "phase": "深化期" }
+    },
+    {
+      "id": "evt_d19_hina_absent3",
+      "type": "event",
+      "position": { "x": 2400, "y": 850 },
+      "data": {
+        "label": "堤防 - 夕焼けだけ",
+        "description": "ヒナがいない最後の夕方。夕焼けがいつもより赤い気がする。明日帰ってくるかな…",
+        "day": 19,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaAbsent"
+      }
+    },
+    {
+      "id": "evt_d19_stone_tablet",
+      "type": "event",
+      "position": { "x": 2350, "y": 1000 },
+      "data": {
+        "label": "石碑の文字解読",
+        "description": "神社の石碑の草をすべて取り除き、文字が読めるようになる。『海と山の印を重ねし時、隠されし場所の扉開かん』",
+        "day": 19,
+        "timePhase": "Noon",
+        "category": "mystery",
+        "actionTag": "ReadTablet",
+        "setFlag": "tablet_read",
+        "requires": "shrine_clean_started && graffiti_1_found"
+      }
+    },
+
+
+    {
+      "id": "day20_start",
+      "type": "dayStart",
+      "position": { "x": 2550, "y": 500 },
+      "data": { "label": "8月20日 - 再会", "day": 20, "phase": "絆期" }
+    },
+    {
+      "id": "evt_d20_hina_return",
+      "type": "event",
+      "position": { "x": 2600, "y": 850 },
+      "data": {
+        "label": "ヒナ帰還",
+        "description": "夕方、堤防にヒナが戻っている。少し日焼けしている。『…ただいま。って、別にあなたに言ってるわけじゃ…帰ってきたよ』",
+        "day": 20,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaReturn",
+        "setFlag": "hina_returned"
+      }
+    },
+    {
+      "id": "evt_d20_golden_beetle",
+      "type": "event",
+      "position": { "x": 2600, "y": 700 },
+      "data": {
+        "label": "激レアカブト出現",
+        "description": "森の奥の大クヌギに、金色に輝くカブトムシが！ しかし近づくと飛んで逃げてしまう。タケシ『あれは伝説の…！』",
+        "day": 20,
+        "timePhase": "Night",
+        "category": "bug",
+        "actionTag": "GoldenBeetle1",
+        "setFlag": "golden_beetle_seen",
+        "requires": "deep_forest_open"
+      }
+    },
+
+    {
+      "id": "day21_start",
+      "type": "dayStart",
+      "position": { "x": 2700, "y": 500 },
+      "data": { "label": "8月21日 - 地図完成", "day": 21, "phase": "絆期" }
+    },
+    {
+      "id": "cond_graffiti_both",
+      "type": "condition",
+      "position": { "x": 2700, "y": 400 },
+      "data": {
+        "label": "落書き1+2を発見した？",
+        "condition": "graffiti_1_found && graffiti_2_found",
+        "description": "神社裏門の落書きと山頂の落書き、両方を見つけたかどうか。"
+      }
+    },
+    {
+      "id": "evt_d21_map_complete",
+      "type": "event",
+      "position": { "x": 2800, "y": 400 },
+      "data": {
+        "label": "地図完成→地図にない場所",
+        "description": "2つの落書きを重ね合わせると、島の地図が浮かび上がる。しかしその地図には、今の島の地図にはない場所が描かれている…",
+        "day": 21,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "MapComplete",
+        "setFlag": "map_complete",
+        "requires": "graffiti_1_found && graffiti_2_found"
+      }
+    },
+    {
+      "id": "evt_d21_hina_secret_place",
+      "type": "event",
+      "position": { "x": 2800, "y": 850 },
+      "data": {
+        "label": "ヒナ：秘密の場所の提案",
+        "description": "ヒナが『…私、この島で行きたい場所があるの。一緒に来てくれる？』と提案。条件を満たしていれば古井戸探索へ。",
+        "day": 21,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "HinaSecretProposal",
+        "setFlag": "heroine_conversation+1",
+        "requires": "hina_returned"
+      }
+    },
+
+    {
+      "id": "day22_start",
+      "type": "dayStart",
+      "position": { "x": 2850, "y": 500 },
+      "data": { "label": "8月22日 - 古井戸", "day": 22, "phase": "絆期" }
+    },
+    {
+      "id": "cond_hina_well",
+      "type": "condition",
+      "position": { "x": 2900, "y": 850 },
+      "data": {
+        "label": "ヒナとの親密度は十分？",
+        "condition": "heroine_conversation >= 8",
+        "description": "会話回数8以上なら古井戸探索イベントが発生する。"
+      }
+    },
+    {
+      "id": "evt_d22_old_well",
+      "type": "event",
+      "position": { "x": 3000, "y": 850 },
+      "data": {
+        "label": "古井戸探索（ヒナと）",
+        "description": "ヒナと二人で森の奥の古井戸を探索する。井戸の底に古いペンダントを発見。ヒナが涙ぐむ。『これ…お母さんの…』ヒナの過去が明らかになる。",
+        "day": 22,
+        "timePhase": "Noon",
+        "category": "heroine",
+        "actionTag": "OldWellExplore",
+        "setFlag": "old_well_explored && hina_past_revealed",
+        "requires": "heroine_conversation >= 8",
+        "item": "古いペンダント"
+      }
+    },
+    {
+      "id": "evt_d22_old_well_skip",
+      "type": "event",
+      "position": { "x": 3000, "y": 950 },
+      "data": {
+        "label": "ヒナ：普通の会話",
+        "description": "ヒナと堤防でいつもの会話。秘密の場所の話は出ない。",
+        "day": 22,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "note": "親密度不足の場合のフォールバック"
+      }
+    },
+
+    {
+      "id": "day24_start",
+      "type": "dayStart",
+      "position": { "x": 3000, "y": 500 },
+      "data": { "label": "8月24日 - 海底", "day": 24, "phase": "絆期" }
+    },
+    {
+      "id": "cond_sea_ruins",
+      "type": "condition",
+      "position": { "x": 3050, "y": 550 },
+      "data": {
+        "label": "海底遺構の条件を満たした？",
+        "condition": "sea_tunnel_found && map_complete",
+        "description": "海底トンネル発見済み＆地図完成済みなら、海底遺構に到達できる。"
+      }
+    },
+    {
+      "id": "evt_d24_sea_ruins",
+      "type": "event",
+      "position": { "x": 3150, "y": 550 },
+      "data": {
+        "label": "海底遺構発見",
+        "description": "海底トンネルの奥に、古代の遺構が眠っていた。石造りの壁、苔むした階段、そして中央に光る石。日記に書かれていた『海の底に光る場所』はここだった。",
+        "day": 24,
+        "timePhase": "Noon",
+        "category": "sea",
+        "actionTag": "SeaRuinsDiscover",
+        "setFlag": "sea_ruins_found",
+        "requires": "sea_tunnel_found && map_complete"
+      }
+    },
+    {
+      "id": "evt_d24_ruins_mystery",
+      "type": "event",
+      "position": { "x": 3200, "y": 1000 },
+      "data": {
+        "label": "遺構の謎解き",
+        "description": "遺構の壁に彫られた紋様は、石碑の文字と対応している。すべてのピースが繋がり始める。この島には昔、不思議な力を信じる人々が住んでいた。",
+        "day": 24,
+        "timePhase": "Noon",
+        "category": "mystery",
+        "actionTag": "RuinsMystery",
+        "setFlag": "ruins_mystery_solved",
+        "requires": "sea_ruins_found && tablet_read"
+      }
+    },
+
+    {
+      "id": "day25_start",
+      "type": "dayStart",
+      "position": { "x": 3150, "y": 500 },
+      "data": { "label": "8月25日 - 黄金", "day": 25, "phase": "絆期" }
+    },
+    {
+      "id": "evt_d25_golden_beetle_catch",
+      "type": "event",
+      "position": { "x": 3200, "y": 700 },
+      "data": {
+        "label": "激レアカブト再出現＆捕獲",
+        "description": "金色のカブトムシが再び現れる。今度こそ捕まえられるか？ 樹液トラップと忍耐で見事捕獲！ タケシ『すげえ…本当にいたんだ…』",
+        "day": 25,
+        "timePhase": "Night",
+        "category": "bug",
+        "actionTag": "GoldenBeetleCatch",
+        "setFlag": "golden_beetle_caught",
+        "requires": "golden_beetle_seen && has_sap_recipe"
+      }
+    },
+    {
+      "id": "evt_d25_hina_sunset",
+      "type": "event",
+      "position": { "x": 3200, "y": 850 },
+      "data": {
+        "label": "ヒナ：夕焼けの約束",
+        "description": "ヒナと特別な夕焼けを見る。『…夏が終わっても、この景色は忘れないよね？』",
+        "day": 25,
+        "timePhase": "Evening",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+
+    {
+      "id": "day27_start",
+      "type": "dayStart",
+      "position": { "x": 3350, "y": 500 },
+      "data": { "label": "8月27日 - 終わりの始まり", "day": 27, "phase": "終焉期" }
+    },
+    {
+      "id": "evt_d27_farewell_prep",
+      "type": "event",
+      "position": { "x": 3400, "y": 250 },
+      "data": {
+        "label": "お別れの準備",
+        "description": "おばさんが帰りの荷物をまとめ始める。『もう少しゆっくりしていけたらいいのにねえ』残りの日々を大切に過ごそう。",
+        "day": 27,
+        "timePhase": "Morning",
+        "category": "interaction",
+        "actionTag": "FarewellPrep"
+      }
+    },
+    {
+      "id": "evt_d27_takeshi_gift",
+      "type": "event",
+      "position": { "x": 3450, "y": 700 },
+      "data": {
+        "label": "タケシからの贈り物",
+        "description": "タケシが手作りの虫かごをプレゼントしてくれる。『これで街でも虫取れるだろ…また来いよな』",
+        "day": 27,
+        "timePhase": "Noon",
+        "category": "bug",
+        "actionTag": "TakeshiGift",
+        "item": "手作りの虫かご"
+      }
+    },
+    {
+      "id": "evt_d27_genji_farewell",
+      "type": "event",
+      "position": { "x": 3450, "y": 550 },
+      "data": {
+        "label": "源じいとの最後の釣り",
+        "description": "源じいと最後の釣りをする。『坊主、いい夏だったな。海はいつでもここにおる。お前もいつでも来い』",
+        "day": 27,
+        "timePhase": "Evening",
+        "category": "sea",
+        "actionTag": "GenjiFarewell"
+      }
+    },
+
+    {
+      "id": "day29_start",
+      "type": "dayStart",
+      "position": { "x": 3550, "y": 500 },
+      "data": { "label": "8月29日 - 最後の夜", "day": 29, "phase": "終焉期" }
+    },
+    {
+      "id": "evt_d29_last_radio",
+      "type": "event",
+      "position": { "x": 3600, "y": 100 },
+      "data": {
+        "label": "最後のラジオ体操",
+        "description": "最後のラジオ体操。スタンプカードが埋まる。おばさんが『皆勤賞だよ！』とご褒美をくれる（条件付き）。",
+        "day": 29,
+        "timePhase": "Morning",
+        "category": "routine",
+        "actionTag": "LastRadioExercise"
+      }
+    },
+    {
+      "id": "evt_d29_summer_festival",
+      "type": "event",
+      "position": { "x": 3650, "y": 250 },
+      "data": {
+        "label": "夏祭り",
+        "description": "島の小さな夏祭り。屋台、花火、盆踊り。島のみんなが集まる最後の夜。",
+        "day": 29,
+        "timePhase": "Night",
+        "category": "interaction",
+        "actionTag": "SummerFestival"
+      }
+    },
+    {
+      "id": "evt_d29_hina_festival",
+      "type": "event",
+      "position": { "x": 3700, "y": 850 },
+      "data": {
+        "label": "ヒナ：花火の下で",
+        "description": "花火を見上げるヒナ。照らされた横顔。『…来年も来る？』小さな声で聞いてくる。",
+        "day": 29,
+        "timePhase": "Night",
+        "category": "heroine",
+        "actionTag": "TalkHeroine",
+        "setFlag": "heroine_conversation+1"
+      }
+    },
+
+    {
+      "id": "day30_start",
+      "type": "dayStart",
+      "position": { "x": 3750, "y": 500 },
+      "data": { "label": "8月30日 - さよなら夏の島", "day": 30, "phase": "終焉期" }
+    },
+    {
+      "id": "evt_d30_last_morning",
+      "type": "event",
+      "position": { "x": 3800, "y": 100 },
+      "data": {
+        "label": "最後の朝",
+        "description": "最後の朝。いつもの音、いつもの風、いつもの匂い。全部が愛おしい。",
+        "day": 30,
+        "timePhase": "Morning",
+        "category": "routine",
+        "actionTag": "LastMorning"
+      }
+    },
+    {
+      "id": "evt_d30_uncle_aunt",
+      "type": "event",
+      "position": { "x": 3850, "y": 250 },
+      "data": {
+        "label": "おじさん・おばさんとお別れ",
+        "description": "おじさんが肩を叩く。『大きくなったな』おばさんが泣きながらお弁当を渡す。『船の中で食べなさいね』",
+        "day": 30,
+        "timePhase": "Morning",
+        "category": "interaction",
+        "actionTag": "UncleAuntFarewell"
+      }
+    },
+    {
+      "id": "evt_d30_hina_last",
+      "type": "event",
+      "position": { "x": 3900, "y": 850 },
+      "data": {
+        "label": "ヒナとの最後の会話",
+        "description": "港でヒナが待っている。『…バカ。ちゃんと言いにきなさいよ、さよならくらい。…またね。絶対、またね』",
+        "day": 30,
+        "timePhase": "Morning",
+        "category": "heroine",
+        "actionTag": "HinaLastTalk",
+        "setFlag": "hina_farewell"
+      }
+    },
+    {
+      "id": "evt_d30_ferry_depart",
+      "type": "event",
+      "position": { "x": 3950, "y": 400 },
+      "data": {
+        "label": "フェリー出発",
+        "description": "フェリーが動き出す。島がどんどん小さくなっていく。手を振る人たちの姿。波の向こうに夏が遠ざかっていく。",
+        "day": 30,
+        "timePhase": "Noon",
+        "category": "exploration",
+        "actionTag": "FerryDepart"
+      }
+    },
+
+    {
+      "id": "cond_true_end",
+      "type": "condition",
+      "position": { "x": 3950, "y": 1000 },
+      "data": {
+        "label": "全ての謎を解いた？",
+        "condition": "ruins_mystery_solved && old_well_explored && golden_beetle_caught",
+        "description": "海底遺構の謎解き完了、古井戸探索完了、激レアカブト捕獲の3条件。"
+      }
+    },
+    {
+      "id": "cond_heroine_end",
+      "type": "condition",
+      "position": { "x": 3950, "y": 1075 },
+      "data": {
+        "label": "ヒナと親密？",
+        "condition": "heroine_conversation >= 8 && hina_past_revealed",
+        "description": "ヒナとの会話回数8以上かつ過去が明らかになっている。"
+      }
+    },
+
+    {
+      "id": "ending_true",
+      "type": "ending",
+      "position": { "x": 4100, "y": 1000 },
+      "data": {
+        "label": "トゥルーエンド：夏の島の全て",
+        "description": "フェリーの上で、すべての思い出が走馬灯のように蘇る。海底遺構の光、ヒナの涙、金色のカブトムシ。ポケットの中の古いペンダントに触れる。島の全てを知った、最高の夏だった。エンドロール後、大人になった主人公が再び島を訪れる特別シーンが流れる。",
+        "endingType": "true",
+        "condition": "ruins_mystery_solved && old_well_explored && golden_beetle_caught"
+      }
+    },
+    {
+      "id": "ending_heroine",
+      "type": "ending",
+      "position": { "x": 4100, "y": 1075 },
+      "data": {
+        "label": "ヒロインエンド：またね",
+        "description": "フェリーの上で、ヒナとの日々を思い返す。堤防の夕焼け、貝殻、スケッチブック、花火。手紙を書こうと決める。『ヒナへ。今年の夏は…』エンドロール後、翌年の夏、再び島のフェリー乗り場にヒナの姿が映るシーンが流れる。",
+        "endingType": "heroine",
+        "condition": "heroine_conversation >= 8 && hina_past_revealed"
+      }
+    },
+    {
+      "id": "ending_normal",
+      "type": "ending",
+      "position": { "x": 4100, "y": 1150 },
+      "data": {
+        "label": "ノーマルエンド：夏の思い出",
+        "description": "フェリーの上で島を振り返る。楽しかった夏。でもまだ知らないことがたくさんあった気がする。『…来年、また来よう。今度はもっと色んなところに行くんだ』エンドロール。スタッフロールの背景に、まだ見つけていないイベントのシルエットが映る。",
+        "endingType": "normal",
+        "condition": "default"
       }
     }
   ],
+
   "edges": [
-    { "id": "e1", "source": "day1_start", "target": "evt_radio_1", "data": { "label": "朝" } },
-    { "id": "e2", "source": "day1_start", "target": "evt_heroine_1", "data": { "label": "夕方" } }
+    { "id": "e_day1_2", "source": "day1_start", "target": "day2_start", "data": { "label": "翌日" } },
+    { "id": "e_day2_3", "source": "day2_start", "target": "day3_start", "data": { "label": "翌日" } },
+    { "id": "e_day3_4", "source": "day3_start", "target": "day4_start", "data": { "label": "翌日" } },
+    { "id": "e_day4_5", "source": "day4_start", "target": "day5_start", "data": { "label": "翌日" } },
+    { "id": "e_day5_6", "source": "day5_start", "target": "day6_start", "data": { "label": "翌日" } },
+    { "id": "e_day6_7", "source": "day6_start", "target": "day7_start", "data": { "label": "翌日" } },
+    { "id": "e_day7_8", "source": "day7_start", "target": "day8_start", "data": { "label": "翌日" } },
+    { "id": "e_day8_10", "source": "day8_start", "target": "day10_start", "data": { "label": "2日後" } },
+    { "id": "e_day10_12", "source": "day10_start", "target": "day12_start", "data": { "label": "2日後" } },
+    { "id": "e_day12_14", "source": "day12_start", "target": "day14_start", "data": { "label": "2日後" } },
+    { "id": "e_day14_15", "source": "day14_start", "target": "day15_start", "data": { "label": "翌日" } },
+    { "id": "e_day15_16", "source": "day15_start", "target": "day16_start", "data": { "label": "翌日" } },
+    { "id": "e_day16_17", "source": "day16_start", "target": "day17_start", "data": { "label": "翌日" } },
+    { "id": "e_day17_19", "source": "day17_start", "target": "day19_start", "data": { "label": "2日後" } },
+    { "id": "e_day19_20", "source": "day19_start", "target": "day20_start", "data": { "label": "翌日" } },
+    { "id": "e_day20_21", "source": "day20_start", "target": "day21_start", "data": { "label": "翌日" } },
+    { "id": "e_day21_22", "source": "day21_start", "target": "day22_start", "data": { "label": "翌日" } },
+    { "id": "e_day22_24", "source": "day22_start", "target": "day24_start", "data": { "label": "2日後" } },
+    { "id": "e_day24_25", "source": "day24_start", "target": "day25_start", "data": { "label": "翌日" } },
+    { "id": "e_day25_27", "source": "day25_start", "target": "day27_start", "data": { "label": "2日後" } },
+    { "id": "e_day27_29", "source": "day27_start", "target": "day29_start", "data": { "label": "2日後" } },
+    { "id": "e_day29_30", "source": "day29_start", "target": "day30_start", "data": { "label": "翌日" } },
+
+    { "id": "e_d1_arrival", "source": "day1_start", "target": "evt_d1_arrival", "data": { "label": "昼" } },
+    { "id": "e_d1_radio_explain", "source": "evt_d1_arrival", "target": "evt_d1_radio_explain", "data": { "label": "説明を受ける" } },
+    { "id": "e_d1_explore", "source": "day1_start", "target": "evt_d1_explore_village", "data": { "label": "午後" } },
+    { "id": "e_d1_hina", "source": "day1_start", "target": "evt_d1_hina_meet", "data": { "label": "夕方" } },
+    { "id": "e_d1_dinner", "source": "evt_d1_hina_meet", "target": "evt_d1_dinner", "data": { "label": "夜" } },
+
+    { "id": "e_d2_radio", "source": "day2_start", "target": "evt_d2_radio_first", "data": { "label": "朝" } },
+    { "id": "e_d2_bugnet", "source": "evt_d2_radio_first", "target": "evt_d2_bug_net", "data": { "label": "体操後" } },
+    { "id": "e_d2_explore", "source": "day2_start", "target": "evt_d2_free_explore", "data": { "label": "昼" } },
+    { "id": "e_d2_hina", "source": "day2_start", "target": "evt_d2_hina_levee", "data": { "label": "夕方" } },
+
+    { "id": "e_d3_radio", "source": "day3_start", "target": "evt_d3_radio", "data": { "label": "朝" } },
+    { "id": "e_d3_fisherman", "source": "day3_start", "target": "evt_d3_fisherman", "data": { "label": "昼" } },
+    { "id": "e_d3_shrine", "source": "day3_start", "target": "evt_d3_shrine_clean", "data": { "label": "昼" } },
+    { "id": "e_d3_hina", "source": "day3_start", "target": "evt_d3_hina_talk", "data": { "label": "夜" } },
+
+    { "id": "e_d4_delivery", "source": "day4_start", "target": "evt_d4_delivery", "data": { "label": "朝" } },
+    { "id": "e_d4_cat", "source": "evt_d4_delivery", "target": "evt_d4_cat", "data": { "label": "配達中" } },
+    { "id": "e_d4_bug", "source": "day4_start", "target": "evt_d4_bug_hunt", "data": { "label": "昼" } },
+
+    { "id": "e_d5_bento", "source": "day5_start", "target": "evt_d5_bento", "data": { "label": "朝" } },
+    { "id": "e_d5_net", "source": "day5_start", "target": "evt_d5_net_pull", "data": { "label": "朝" } },
+    { "id": "e_d5_hina", "source": "day5_start", "target": "evt_d5_hina_shell", "data": { "label": "夕方" } },
+
+    { "id": "e_d6_base", "source": "day6_start", "target": "evt_d6_secret_base_start", "data": { "label": "朝" } },
+    { "id": "e_d6_hina", "source": "day6_start", "target": "evt_d6_hina_drawing", "data": { "label": "夕方" } },
+
+    { "id": "e_d7_rod", "source": "day7_start", "target": "evt_d7_fishing_rod", "data": { "label": "朝" } },
+    { "id": "e_d7_base", "source": "day7_start", "target": "evt_d7_secret_base_progress", "data": { "label": "昼" } },
+    { "id": "e_d7_cooking", "source": "day7_start", "target": "evt_d7_cooking", "data": { "label": "夕方" } },
+
+    { "id": "e_d8_sap", "source": "day8_start", "target": "evt_d8_sap_recipe", "data": { "label": "朝" } },
+    { "id": "e_d8_shadow", "source": "day8_start", "target": "evt_d8_deep_shadow", "data": { "label": "昼" } },
+    { "id": "e_d8_hina", "source": "day8_start", "target": "evt_d8_hina_past", "data": { "label": "夕方" } },
+
+    { "id": "e_d10_tree", "source": "day10_start", "target": "evt_d10_fallen_tree", "data": { "label": "朝" } },
+    { "id": "e_d10_base_done", "source": "day10_start", "target": "evt_d10_secret_base_done", "data": { "label": "昼" } },
+    { "id": "e_d10_rarebug", "source": "evt_d10_fallen_tree", "target": "evt_d10_rare_bug", "data": { "label": "森の奥開放後" } },
+
+    { "id": "e_d12_diary", "source": "day12_start", "target": "evt_d12_old_diary", "data": { "label": "昼" } },
+    { "id": "e_d12_backgate", "source": "day12_start", "target": "evt_d12_shrine_backgate", "data": { "label": "昼" } },
+    { "id": "e_d12_hina", "source": "evt_d12_old_diary", "target": "evt_d12_hina_diary", "data": { "label": "日記発見後" } },
+
+    { "id": "e_d14_hina", "source": "day14_start", "target": "evt_d14_hina_announce", "data": { "label": "夕方" } },
+    { "id": "e_d14_mountain", "source": "day14_start", "target": "evt_d14_mountain_top", "data": { "label": "昼" } },
+
+    { "id": "e_d15_bottle", "source": "day15_start", "target": "evt_d15_bottle_message", "data": { "label": "朝" } },
+    { "id": "e_d15_tunnel", "source": "evt_d15_bottle_message", "target": "evt_d15_sea_tunnel", "data": { "label": "瓶のヒント" } },
+    { "id": "e_d15_fireflies", "source": "day15_start", "target": "evt_d15_fireflies", "data": { "label": "夜" } },
+
+    { "id": "e_d16_absent", "source": "day16_start", "target": "evt_d16_hina_absent", "data": { "label": "夕方" } },
+    { "id": "e_d16_cond", "source": "evt_d16_hina_absent", "target": "cond_hina_conversation", "data": { "label": "内部判定" } },
+
+    { "id": "e_d17_absent", "source": "day17_start", "target": "evt_d17_hina_absent2", "data": { "label": "夕方" } },
+    { "id": "e_d17_fishing", "source": "day17_start", "target": "evt_d17_deep_fishing", "data": { "label": "朝" } },
+
+    { "id": "e_d19_absent", "source": "day19_start", "target": "evt_d19_hina_absent3", "data": { "label": "夕方" } },
+    { "id": "e_d19_tablet", "source": "day19_start", "target": "evt_d19_stone_tablet", "data": { "label": "昼" } },
+
+    { "id": "e_d20_return", "source": "day20_start", "target": "evt_d20_hina_return", "data": { "label": "夕方" } },
+    { "id": "e_d20_beetle", "source": "day20_start", "target": "evt_d20_golden_beetle", "data": { "label": "夜" } },
+
+    { "id": "e_d21_cond", "source": "day21_start", "target": "cond_graffiti_both", "data": { "label": "判定" } },
+    { "id": "e_d21_map_true", "source": "cond_graffiti_both", "target": "evt_d21_map_complete", "sourceHandle": "true", "data": { "label": "両方発見済み" } },
+    { "id": "e_d21_hina_secret", "source": "day21_start", "target": "evt_d21_hina_secret_place", "data": { "label": "夕方" } },
+
+    { "id": "e_d22_cond", "source": "day22_start", "target": "cond_hina_well", "data": { "label": "判定" } },
+    { "id": "e_d22_well_true", "source": "cond_hina_well", "target": "evt_d22_old_well", "sourceHandle": "true", "data": { "label": "親密度十分" } },
+    { "id": "e_d22_well_false", "source": "cond_hina_well", "target": "evt_d22_old_well_skip", "sourceHandle": "false", "data": { "label": "親密度不足" } },
+
+    { "id": "e_d24_cond", "source": "day24_start", "target": "cond_sea_ruins", "data": { "label": "判定" } },
+    { "id": "e_d24_ruins_true", "source": "cond_sea_ruins", "target": "evt_d24_sea_ruins", "sourceHandle": "true", "data": { "label": "条件達成" } },
+    { "id": "e_d24_mystery", "source": "evt_d24_sea_ruins", "target": "evt_d24_ruins_mystery", "data": { "label": "遺構の奥へ" } },
+
+    { "id": "e_d25_beetle", "source": "day25_start", "target": "evt_d25_golden_beetle_catch", "data": { "label": "夜" } },
+    { "id": "e_d25_hina", "source": "day25_start", "target": "evt_d25_hina_sunset", "data": { "label": "夕方" } },
+
+    { "id": "e_d27_farewell", "source": "day27_start", "target": "evt_d27_farewell_prep", "data": { "label": "朝" } },
+    { "id": "e_d27_takeshi", "source": "day27_start", "target": "evt_d27_takeshi_gift", "data": { "label": "昼" } },
+    { "id": "e_d27_genji", "source": "day27_start", "target": "evt_d27_genji_farewell", "data": { "label": "夕方" } },
+
+    { "id": "e_d29_radio", "source": "day29_start", "target": "evt_d29_last_radio", "data": { "label": "朝" } },
+    { "id": "e_d29_festival", "source": "day29_start", "target": "evt_d29_summer_festival", "data": { "label": "夜" } },
+    { "id": "e_d29_hina", "source": "evt_d29_summer_festival", "target": "evt_d29_hina_festival", "data": { "label": "花火の時間" } },
+
+    { "id": "e_d30_morning", "source": "day30_start", "target": "evt_d30_last_morning", "data": { "label": "朝" } },
+    { "id": "e_d30_uncle", "source": "day30_start", "target": "evt_d30_uncle_aunt", "data": { "label": "朝" } },
+    { "id": "e_d30_hina", "source": "day30_start", "target": "evt_d30_hina_last", "data": { "label": "出発前" } },
+    { "id": "e_d30_ferry", "source": "evt_d30_hina_last", "target": "evt_d30_ferry_depart", "data": { "label": "港へ" } },
+
+    { "id": "e_ferry_cond_true", "source": "evt_d30_ferry_depart", "target": "cond_true_end", "data": { "label": "エンディング判定" } },
+    { "id": "e_cond_true_yes", "source": "cond_true_end", "target": "ending_true", "sourceHandle": "true", "data": { "label": "全条件達成" } },
+    { "id": "e_cond_true_no", "source": "cond_true_end", "target": "cond_heroine_end", "sourceHandle": "false", "data": { "label": "未達成" } },
+    { "id": "e_cond_heroine_yes", "source": "cond_heroine_end", "target": "ending_heroine", "sourceHandle": "true", "data": { "label": "ヒロイン条件達成" } },
+    { "id": "e_cond_heroine_no", "source": "cond_heroine_end", "target": "ending_normal", "sourceHandle": "false", "data": { "label": "通常" } },
+
+    { "id": "e_chain_shrine_backgate", "source": "evt_d3_shrine_clean", "target": "evt_d12_shrine_backgate", "data": { "label": "掃除継続→裏門発見" } },
+    { "id": "e_chain_backgate_graffiti1", "source": "evt_d12_shrine_backgate", "target": "cond_graffiti_both", "data": { "label": "落書き1→地図判定" } },
+    { "id": "e_chain_tree_mountain", "source": "evt_d10_fallen_tree", "target": "evt_d14_mountain_top", "data": { "label": "倒木撤去→山頂解放" } },
+    { "id": "e_chain_mountain_graffiti2", "source": "evt_d14_mountain_top", "target": "cond_graffiti_both", "data": { "label": "落書き2→地図判定" } },
+    { "id": "e_chain_map_hidden", "source": "evt_d21_map_complete", "target": "cond_sea_ruins", "data": { "label": "地図完成→海底遺構条件" } },
+    { "id": "e_chain_tunnel_ruins", "source": "evt_d15_sea_tunnel", "target": "cond_sea_ruins", "data": { "label": "トンネル→海底遺構条件" } },
+
+    { "id": "e_heroine_chain_meet", "source": "evt_d1_hina_meet", "target": "evt_d2_hina_levee", "data": { "label": "ヒロインの流れ" } },
+    { "id": "e_heroine_chain_2_3", "source": "evt_d2_hina_levee", "target": "evt_d3_hina_talk", "data": { "label": "日常" } },
+    { "id": "e_heroine_chain_3_5", "source": "evt_d3_hina_talk", "target": "evt_d5_hina_shell", "data": { "label": "日常" } },
+    { "id": "e_heroine_chain_5_6", "source": "evt_d5_hina_shell", "target": "evt_d6_hina_drawing", "data": { "label": "日常" } },
+    { "id": "e_heroine_chain_6_8", "source": "evt_d6_hina_drawing", "target": "evt_d8_hina_past", "data": { "label": "日常" } },
+    { "id": "e_heroine_chain_8_12", "source": "evt_d8_hina_past", "target": "evt_d12_hina_diary", "data": { "label": "深まる" } },
+    { "id": "e_heroine_chain_12_14", "source": "evt_d12_hina_diary", "target": "evt_d14_hina_announce", "data": { "label": "予告" } },
+    { "id": "e_heroine_chain_14_16", "source": "evt_d14_hina_announce", "target": "evt_d16_hina_absent", "data": { "label": "不在開始" } },
+    { "id": "e_heroine_chain_16_17", "source": "evt_d16_hina_absent", "target": "evt_d17_hina_absent2", "data": { "label": "不在" } },
+    { "id": "e_heroine_chain_17_19", "source": "evt_d17_hina_absent2", "target": "evt_d19_hina_absent3", "data": { "label": "不在" } },
+    { "id": "e_heroine_chain_19_20", "source": "evt_d19_hina_absent3", "target": "evt_d20_hina_return", "data": { "label": "帰還" } },
+    { "id": "e_heroine_chain_20_21", "source": "evt_d20_hina_return", "target": "evt_d21_hina_secret_place", "data": { "label": "秘密の場所" } },
+    { "id": "e_heroine_chain_21_22", "source": "evt_d21_hina_secret_place", "target": "cond_hina_well", "data": { "label": "古井戸判定" } },
+    { "id": "e_heroine_chain_25", "source": "evt_d22_old_well", "target": "evt_d25_hina_sunset", "data": { "label": "夕焼けの約束" } },
+    { "id": "e_heroine_chain_25_29", "source": "evt_d25_hina_sunset", "target": "evt_d29_hina_festival", "data": { "label": "花火" } },
+    { "id": "e_heroine_chain_29_30", "source": "evt_d29_hina_festival", "target": "evt_d30_hina_last", "data": { "label": "最後の会話" } },
+
+    { "id": "e_mystery_diary_tablet", "source": "evt_d12_old_diary", "target": "evt_d19_stone_tablet", "data": { "label": "日記→石碑解読" } },
+    { "id": "e_mystery_tablet_ruins", "source": "evt_d19_stone_tablet", "target": "evt_d24_ruins_mystery", "data": { "label": "石碑→遺構の謎" } }
   ]
 }

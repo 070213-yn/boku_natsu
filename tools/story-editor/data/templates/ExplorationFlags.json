@@ -1,6 +1,458 @@
 {
-  "version": "1.0",
-  "lastModified": "",
-  "boolFlags": [],
-  "intCounters": []
+  "version": "1.0.0",
+  "lastModified": "2026-03-01",
+  "boolFlags": [
+    {
+      "key": "unlock_shrine_back_gate",
+      "displayName": "神社裏門",
+      "description": "神社の掃除を3回以上行うと、神主さんが裏門の鍵を開けてくれる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "intValue",
+        "key": "shrine_clean_count",
+        "operator": ">=",
+        "value": 3
+      },
+      "unlocksArea": "神社裏手の森"
+    },
+    {
+      "key": "unlock_fallen_tree",
+      "displayName": "倒木撤去",
+      "description": "Day10以降、テツさんが森の倒木を撤去してくれて奥に進めるようになる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 10
+      },
+      "unlocksArea": "森の奥"
+    },
+    {
+      "key": "unlock_old_well",
+      "displayName": "古井戸",
+      "description": "ヒロインとの会話が8回以上かつ秘密の場所イベント完了で、古井戸の探索が可能になる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "intValue",
+            "key": "heroine_conversation",
+            "operator": ">=",
+            "value": 8
+          },
+          {
+            "type": "flag",
+            "key": "secret_place_event",
+            "value": true
+          }
+        ]
+      },
+      "unlocksArea": "古井戸内部"
+    },
+    {
+      "key": "unlock_sea_tunnel",
+      "displayName": "海底トンネル",
+      "description": "素潜り5回以上かつDay15以降で、海底トンネルを発見できる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "intValue",
+            "key": "diving_count",
+            "operator": ">=",
+            "value": 5
+          },
+          {
+            "type": "day",
+            "operator": ">=",
+            "value": 15
+          }
+        ]
+      },
+      "unlocksArea": "海底洞窟"
+    },
+    {
+      "key": "unlock_mountain_shortcut",
+      "displayName": "山頂ショートカット",
+      "description": "倒木撤去後、森の奥を探索すると山頂への近道が見つかる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "flag",
+        "key": "unlock_fallen_tree",
+        "value": true
+      },
+      "unlocksArea": "山頂展望台"
+    },
+    {
+      "key": "unlock_sea_ruins",
+      "displayName": "海底遺構",
+      "description": "海底トンネル解放済みかつ地図の断片を所持していると、海底遺構に到達できる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "flag",
+            "key": "unlock_sea_tunnel",
+            "value": true
+          },
+          {
+            "type": "flag",
+            "key": "found_map_fragment",
+            "value": true
+          }
+        ]
+      },
+      "unlocksArea": "海底遺構"
+    },
+    {
+      "key": "unlock_night_dive",
+      "displayName": "夜潜水",
+      "description": "Day10以降、素潜り3回以上、テツさんの許可を得ると夜の海に潜れる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "day",
+            "operator": ">=",
+            "value": 10
+          },
+          {
+            "type": "intValue",
+            "key": "diving_count",
+            "operator": ">=",
+            "value": 3
+          },
+          {
+            "type": "flag",
+            "key": "faint_event_done",
+            "value": true
+          }
+        ]
+      },
+      "unlocksArea": "夜の海"
+    },
+    {
+      "key": "unlock_secret_base",
+      "displayName": "秘密基地",
+      "description": "Day7以降、森で特定の場所を発見すると秘密基地を作れるようになる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 7
+      },
+      "unlocksArea": "秘密基地"
+    },
+    {
+      "key": "unlock_hidden_place",
+      "displayName": "地図にない場所",
+      "description": "2つの落書きを組み合わせて完成した地図が示す場所に行ける",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "flag",
+        "key": "found_map_fragment",
+        "value": true
+      },
+      "unlocksArea": "地図にない場所"
+    },
+    {
+      "key": "found_old_diary",
+      "displayName": "古い日記発見",
+      "description": "森の奥が解放済みかつDay12以降で、古い日記を発見できる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "flag",
+            "key": "unlock_fallen_tree",
+            "value": true
+          },
+          {
+            "type": "day",
+            "operator": ">=",
+            "value": 12
+          }
+        ]
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "found_graffiti_1",
+      "displayName": "落書き1発見",
+      "description": "神社裏門が解放されると、裏手の森で不思議な落書きを見つけられる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "flag",
+        "key": "unlock_shrine_back_gate",
+        "value": true
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "found_graffiti_2",
+      "displayName": "落書き2発見",
+      "description": "山頂ショートカット解放後、山頂付近でもう一つの落書きを見つけられる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "flag",
+        "key": "unlock_mountain_shortcut",
+        "value": true
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "found_map_fragment",
+      "displayName": "地図の断片",
+      "description": "落書き1と落書き2を両方見つけると、組み合わせて地図が完成する",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "flag",
+            "key": "found_graffiti_1",
+            "value": true
+          },
+          {
+            "type": "flag",
+            "key": "found_graffiti_2",
+            "value": true
+          }
+        ]
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "found_bottle_message",
+      "displayName": "ガラス瓶メッセージ",
+      "description": "Day15以降、浜辺でガラス瓶に入った手紙を見つけることができる",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 15
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "secret_place_event",
+      "displayName": "秘密の場所イベント完了",
+      "description": "特定のストーリー進行で発生する秘密の場所イベントが完了したフラグ",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "composite",
+        "logic": "AND",
+        "conditions": [
+          {
+            "type": "flag",
+            "key": "unlock_hidden_place",
+            "value": true
+          },
+          {
+            "type": "intValue",
+            "key": "heroine_conversation",
+            "operator": ">=",
+            "value": 5
+          }
+        ]
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "has_sap_recipe",
+      "displayName": "樹液レシピ所持",
+      "description": "おじさんから樹液の作り方を教わった",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 3
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "has_fishing_rod",
+      "displayName": "釣り竿所持",
+      "description": "おじさんから古い釣り竿をもらった",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 2
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "has_bug_net",
+      "displayName": "虫取り網所持",
+      "description": "おじさんから虫取り網をもらった",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "day",
+        "operator": ">=",
+        "value": 2
+      },
+      "unlocksArea": ""
+    },
+    {
+      "key": "faint_event_done",
+      "displayName": "失神イベント完了",
+      "description": "海で息が続かず気を失い、テツさんに助けられたイベントが完了した",
+      "defaultValue": false,
+      "unlockCondition": {
+        "type": "intValue",
+        "key": "diving_count",
+        "operator": ">=",
+        "value": 3
+      },
+      "unlocksArea": ""
+    }
+  ],
+  "intCounters": [
+    {
+      "key": "radio_stamp_count",
+      "displayName": "ラジオ体操スタンプ",
+      "defaultValue": 0,
+      "maxValue": 30,
+      "rewards": [
+        {
+          "threshold": 5,
+          "reward": "タオル"
+        },
+        {
+          "threshold": 15,
+          "reward": "水筒"
+        },
+        {
+          "threshold": 25,
+          "reward": "特別スタンプ"
+        }
+      ]
+    },
+    {
+      "key": "cat_friendship",
+      "displayName": "猫なつき度",
+      "defaultValue": 0,
+      "maxValue": 10,
+      "rewards": [
+        {
+          "threshold": 3,
+          "reward": "猫がついてくる"
+        },
+        {
+          "threshold": 7,
+          "reward": "猫が甘える"
+        },
+        {
+          "threshold": 10,
+          "reward": "猫が膝に乗る"
+        }
+      ]
+    },
+    {
+      "key": "heroine_conversation",
+      "displayName": "ヒロイン会話回数",
+      "defaultValue": 0,
+      "maxValue": -1
+    },
+    {
+      "key": "shrine_clean_count",
+      "displayName": "神社掃除回数",
+      "defaultValue": 0,
+      "maxValue": -1
+    },
+    {
+      "key": "diving_count",
+      "displayName": "素潜り回数",
+      "defaultValue": 0,
+      "maxValue": -1
+    },
+    {
+      "key": "delivery_count",
+      "displayName": "配達回数",
+      "defaultValue": 0,
+      "maxValue": -1,
+      "rewards": [
+        {
+          "threshold": 5,
+          "reward": "常連認定"
+        },
+        {
+          "threshold": 10,
+          "reward": "特別な荷物"
+        }
+      ]
+    },
+    {
+      "key": "fishing_count",
+      "displayName": "釣り回数",
+      "defaultValue": 0,
+      "maxValue": -1,
+      "rewards": [
+        {
+          "threshold": 3,
+          "reward": "ゲンさんの昔話1"
+        },
+        {
+          "threshold": 10,
+          "reward": "大物ヒント"
+        }
+      ]
+    },
+    {
+      "key": "bug_catch_count",
+      "displayName": "虫取り回数",
+      "defaultValue": 0,
+      "maxValue": -1
+    },
+    {
+      "key": "shell_count",
+      "displayName": "貝殻数",
+      "defaultValue": 0,
+      "maxValue": -1,
+      "rewards": [
+        {
+          "threshold": 5,
+          "reward": "きれいな貝殻"
+        },
+        {
+          "threshold": 10,
+          "reward": "星型の貝殻"
+        }
+      ]
+    },
+    {
+      "key": "money",
+      "displayName": "お財布",
+      "defaultValue": 0,
+      "maxValue": -1
+    },
+    {
+      "key": "secret_base_progress",
+      "displayName": "秘密基地進捗",
+      "defaultValue": 0,
+      "maxValue": 2,
+      "rewards": [
+        {
+          "threshold": 1,
+          "reward": "建設中"
+        },
+        {
+          "threshold": 2,
+          "reward": "完成"
+        }
+      ]
+    }
+  ]
 }
