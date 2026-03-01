@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 import {
   Trash2, Save, GitBranch, Sun, Flag, Diamond, LayoutGrid,
   Network, Grid3X3, Undo2, Redo2, HelpCircle, Users, MessageSquare,
+  Copy, AlignLeft,
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useEventFlowStore } from '../hooks/useStores';
@@ -35,9 +36,10 @@ import type {
   TimePhase,
 } from '../types';
 import { CATEGORY_CONFIG, TIME_PHASE_CONFIG } from '../types';
-import { autoLayoutNodes } from '../utils/autoLayout';
+import { autoLayoutNodes, horizontalDayLayout } from '../utils/autoLayout';
 import MonthlyOverview from '../components/eventflow/MonthlyOverview';
 import NodeDetailPanel from '../components/event-flow/panels/NodeDetailPanel';
+import PresetPanel, { type NodePreset } from '../components/event-flow/panels/PresetPanel';
 import MemoEdge from '../components/event-flow/edges/MemoEdge';
 
 // ================================================
@@ -427,6 +429,9 @@ function EventFlowEditor() {
   const [dayFilter, setDayFilter] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'flow' | 'monthly'>('flow');
 
+  // プリセットパネルの表示切替
+  const [showPresetPanel, setShowPresetPanel] = useState(false);
+
   // メモ編集ポップアップ
   const [memoEditor, setMemoEditor] = useState<MemoEditorState | null>(null);
   const memoInputRef = useRef<HTMLInputElement>(null);
@@ -447,7 +452,7 @@ function EventFlowEditor() {
     []
   );
 
-  // カスタムエッジタイプ（選択時緑色、ラベルクリック編集対応）
+  // カスタムエッジタイプ（選択時緑色、ラベルクリック編集対応、点線アニメーション）
   const edgeTypes: EdgeTypes = useMemo(
     () => ({
       memo: MemoEdge,
@@ -627,6 +632,27 @@ function EventFlowEditor() {
     [setNodes, markDirty, pushHistory]
   );
 
+  // プリセットからノードを追加
+  const handleAddPresetNode = useCallback(
+    (preset: NodePreset) => {
+      pushHistory(nodesRef.current, edgesRef.current);
+      const id = `node_${Date.now()}`;
+      const offsetX = Math.random() * 100 - 50;
+      const offsetY = Math.random() * 100 - 50;
+
+      const newNode: Node = {
+        id,
+        type: preset.nodeType,
+        position: { x: 400 + offsetX, y: 300 + offsetY },
+        data: { ...preset.nodeData },
+      };
+
+      setNodes((nds) => [...nds, newNode]);
+      markDirty();
+    },
+    [setNodes, markDirty, pushHistory]
+  );
+
   const handleDeleteSelected = useCallback(() => {
     if (selectedNodeIds.size === 0 && selectedEdgeIds.size === 0) return;
     pushHistory(nodesRef.current, edgesRef.current);
@@ -694,9 +720,18 @@ function EventFlowEditor() {
     save();
   }, [nodes, edges, update, save]);
 
+  // dagre自動整列
   const handleAutoLayout = useCallback(() => {
     pushHistory(nodesRef.current, edgesRef.current);
     const layoutedNodes = autoLayoutNodes(nodes, edges);
+    setNodes(layoutedNodes);
+    markDirty();
+  }, [nodes, edges, setNodes, markDirty, pushHistory]);
+
+  // 横一直線レイアウト（日付ごとに1行）
+  const handleHorizontalLayout = useCallback(() => {
+    pushHistory(nodesRef.current, edgesRef.current);
+    const layoutedNodes = horizontalDayLayout(nodes, edges);
     setNodes(layoutedNodes);
     markDirty();
   }, [nodes, edges, setNodes, markDirty, pushHistory]);
@@ -735,6 +770,15 @@ function EventFlowEditor() {
     () => (editingNodeId ? nodes.find((n) => n.id === editingNodeId) : null),
     [nodes, editingNodeId]
   );
+
+  // プリセットパネルに渡す「現在選択中のノード」情報
+  const currentNodeForPreset = useMemo(() => {
+    if (!editingNode) return null;
+    return {
+      type: editingNode.type || 'event',
+      data: editingNode.data as Record<string, unknown>,
+    };
+  }, [editingNode]);
 
   const miniMapNodeColor = useCallback((node: Node) => {
     switch (node.type) {
@@ -795,6 +839,22 @@ function EventFlowEditor() {
               {item.label}
             </motion.button>
           ))}
+
+          {/* プリセットボタン */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowPresetPanel(!showPresetPanel)}
+            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors shadow-sm ${
+              showPresetPanel
+                ? 'bg-ocean-500 text-white'
+                : 'bg-gray-500 text-white hover:bg-gray-600'
+            }`}
+            title="プリセット一覧"
+          >
+            <Copy size={16} />
+            プリセット
+          </motion.button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -845,10 +905,19 @@ function EventFlowEditor() {
             ))}
           </select>
 
+          {/* レイアウトボタン2種 */}
+          <button
+            onClick={handleHorizontalLayout}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-ocean-100 hover:bg-ocean-200 text-ocean-700 transition-colors"
+            title="日付ごとに横一直線に整列"
+          >
+            <AlignLeft size={14} />
+            横一直線
+          </button>
           <button
             onClick={handleAutoLayout}
             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-            title="ノードを自動整列する"
+            title="dagre自動整列"
           >
             <LayoutGrid size={14} />
             自動整列
@@ -959,7 +1028,16 @@ function EventFlowEditor() {
             />
           </ReactFlow>
 
-          {/* ノード詳細パネル */}
+          {/* プリセットパネル（左側スライドイン） */}
+          {showPresetPanel && (
+            <PresetPanel
+              onAddPreset={handleAddPresetNode}
+              onClose={() => setShowPresetPanel(false)}
+              currentNodeData={currentNodeForPreset}
+            />
+          )}
+
+          {/* ノード詳細パネル（右側スライドイン） */}
           {editingNode && (
             <NodeDetailPanel
               node={editingNode}

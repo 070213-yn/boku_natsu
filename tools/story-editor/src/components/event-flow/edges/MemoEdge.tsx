@@ -4,9 +4,9 @@ import { BaseEdge, getBezierPath, EdgeLabelRenderer, type EdgeProps } from '@xyf
  * カスタムエッジコンポーネント（メモ付き遷移ライン）
  *
  * - 選択中は緑色、非選択時はグレー
+ * - 点線が流れるアニメーション付き
  * - メモ（ラベル）があれば中央に表示
  * - ラベルクリックでメモ編集を発火（カスタムイベント）
- * - 右クリックメモ追加はEventFlowEditor側で処理
  */
 export default function MemoEdge({
   id,
@@ -33,7 +33,7 @@ export default function MemoEdge({
 
   return (
     <>
-      {/* エッジのパス（選択中は緑色、太さも変更） */}
+      {/* エッジのパス（選択中は緑色、点線アニメーション付き） */}
       <BaseEdge
         id={id}
         path={edgePath}
@@ -41,7 +41,8 @@ export default function MemoEdge({
         style={{
           stroke: selected ? '#22C55E' : '#94A3B8',
           strokeWidth: selected ? 3 : 2,
-          strokeDasharray: 5,
+          strokeDasharray: '8 4',
+          animation: 'memo-edge-flow 0.8s linear infinite',
         }}
         interactionWidth={20}
       />

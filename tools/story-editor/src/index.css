@@ -71,6 +71,12 @@ body {
   100% { transform: scale(2.5); opacity: 0; }
 }
 
+/* 遷移ラインの点線アニメーション */
+@keyframes memo-edge-flow {
+  from { stroke-dashoffset: 12; }
+  to { stroke-dashoffset: 0; }
+}
+
 /* スクロールバーカスタマイズ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
