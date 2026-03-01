@@ -1,646 +1,250 @@
 {
   "version": "1.0",
-  "lastModified": "2026-03-01T00:00:00Z",
+  "lastModified": "2026-03-01",
   "events": [
     {
-      "id": "evt_radio_exercise",
+      "id": "radio_exercise",
       "name": "ラジオ体操",
-      "description": "毎朝広場で行われるラジオ体操。参加するとスタンプがもらえる。",
+      "description": "毎朝広場で行われるラジオ体操。カズさんが号令をかけてくれる。スタンプカードにハンコがもらえる。",
       "category": "routine",
       "triggers": [
-        { "type": "timePhase", "timePhase": "Morning" },
-        { "type": "always" }
+        {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "おじさん",
+          "speakerName": "カズさん",
           "dialogueLines": [
-            "おっ、よく起きたな！",
-            "さあ、みんなで体操するぞ。",
-            "いち、に、さん、し！"
+            "おはよう！今日も元気にラジオ体操だ！",
+            "はい、腕を大きく回してー！いち、に、さん、しっ！",
+            "よくできました！はい、スタンプカードにハンコ押すよ。"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_radio_exercise"
-        },
-        {
           "type": "incrementInt",
-          "intKey": "radio_stamp",
+          "intKey": "radio_stamp_count",
           "intValue": 1
         },
         {
-          "type": "dialogue",
-          "speakerName": "おじさん",
-          "dialogueLines": [
-            "よし、今日もスタンプ押しとくぞ！"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "radio_exercise_done"
+          "actionTag": "RadioExercise"
         }
       ],
-      "scriptName": "RadioExercise",
-      "isRepeatable": true,
-      "priority": 100,
-      "enabled": true,
-      "timeAdvanceMinutes": 30
-    },
-    {
-      "id": "evt_evening_chime",
-      "name": "夕方チャイム",
-      "description": "夕方になると島中にチャイムが鳴り響く。帰る時間のお知らせ。",
-      "category": "routine",
-      "triggers": [
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "always" }
-      ],
-      "actions": [
-        {
-          "type": "playSound",
-          "soundId": "sfx_evening_chime"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "カーン…カーン…カーン…",
-            "夕焼けが島を赤く染めていく。",
-            "そろそろ帰る時間だ。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "evening_chime_heard"
-        }
-      ],
-      "scriptName": "EveningChime",
-      "isRepeatable": true,
-      "priority": 90,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_delivery_job",
-      "name": "配達バイト",
-      "description": "商店のおばちゃんから頼まれる配達のお手伝い。お駄賃がもらえる。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "day", "day": 4, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Noon" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "商店のおばちゃん",
-          "dialogueLines": [
-            "あら、ちょうどいいところに！",
-            "この荷物、港のテツさんに届けてくれない？",
-            "お駄賃あげるからさ。"
-          ]
-        },
-        {
-          "type": "movePlayer",
-          "targetLocation": "loc_harbor"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "おう、届けてくれたか。ありがとな。"
-          ]
-        },
-        {
-          "type": "incrementInt",
-          "intKey": "money",
-          "intValue": 50
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "お駄賃として50円もらった！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "delivery_job_done"
-        }
-      ],
-      "scriptName": "DeliveryJob",
-      "isRepeatable": true,
-      "priority": 50,
-      "enabled": true,
-      "timeAdvanceMinutes": 60
-    },
-    {
-      "id": "evt_net_pulling",
-      "name": "漁師の網引き",
-      "description": "テツさんの漁のお手伝い。朝早く港で網を引く。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "day", "day": 5, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Morning" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "おう、手伝ってくれるか！",
-            "この網、二人で引っ張るぞ。",
-            "せーの…よいしょっ！"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_net_pull"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "おお、大漁だ！ お前のおかげだな。",
-            "ほら、これバイト代だ。"
-          ]
-        },
-        {
-          "type": "incrementInt",
-          "intKey": "money",
-          "intValue": 100
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "お駄賃として100円もらった！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "net_pulling_done"
-        }
-      ],
-      "scriptName": "NetPulling",
-      "isRepeatable": true,
-      "priority": 55,
-      "enabled": true,
-      "timeAdvanceMinutes": 90
-    },
-    {
-      "id": "evt_shrine_clean",
-      "name": "神社掃除",
-      "description": "神社の境内を掃除するお手伝い。何度もやると裏門が開く。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "day", "day": 3, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Morning" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "神主さん",
-          "dialogueLines": [
-            "おや、掃除してくれるのかい？",
-            "ありがたいねえ。ほうきはそこにあるよ。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_sweeping"
-        },
-        {
-          "type": "incrementInt",
-          "intKey": "shrine_clean_count",
-          "intValue": 1
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "神主さん",
-          "dialogueLines": [
-            "きれいになったねえ。ありがとう。",
-            "神様もきっと喜んでるよ。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "shrine_clean_done"
-        }
-      ],
-      "scriptName": "ShrineClean",
-      "isRepeatable": true,
-      "priority": 50,
-      "enabled": true,
-      "timeAdvanceMinutes": 45
-    },
-    {
-      "id": "evt_cat_feeding",
-      "name": "猫にごはん",
-      "description": "夜になると現れる野良猫にごはんをあげる。なつくと何かいいことが。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "day", "day": 4, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Night" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "あ、あの猫だ。",
-            "今日も来てたんだな。ごはん、あげよう。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_cat_meow"
-        },
-        {
-          "type": "incrementInt",
-          "intKey": "cat_friendship",
-          "intValue": 1
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "猫がうれしそうに食べている。",
-            "ちょっとだけ近くに来てくれた気がする。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "cat_fed"
-        }
-      ],
-      "scriptName": "CatFeeding",
-      "isRepeatable": true,
-      "priority": 40,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_fishing",
-      "name": "防波堤で釣り",
-      "description": "防波堤でのんびり釣りをする。何が釣れるかはお楽しみ。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "day", "day": 3, "dayOperator": ">=" },
-        { "type": "always" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "竿を海に垂らした。",
-            "波の音を聞きながら、じっと待つ…。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_fishing_cast"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "…おっ、何かかかった！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "fishing_done"
-        }
-      ],
-      "scriptName": "Fishing",
+      "scriptName": "Event_RadioExercise",
       "isRepeatable": true,
       "priority": 30,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_bug_catch",
-      "name": "虫取り",
-      "description": "虫取り網を持って虫を捕まえるアクティビティ。",
-      "category": "interaction",
+      "id": "morning_greeting",
+      "name": "朝の挨拶",
+      "description": "タツヤおじさんとの毎朝の会話。今日の予定や島の天気について教えてくれる。",
+      "category": "routine",
       "triggers": [
-        { "type": "always" },
-        { "type": "timePhase", "timePhase": "Noon" },
-        { "type": "flag", "flagKey": "has_bug_net", "flagValue": true }
+        {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "タツヤおじさん",
           "dialogueLines": [
-            "虫取り網をにぎりしめた。",
-            "どこかに虫はいないかな…？"
+            "おはよう！よく眠れたか？",
+            "今日もいい天気だなあ。島を探検するにはもってこいだ。",
+            "ラジオ体操には行ったか？毎日行くといいことあるぞ。"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_bug_catch"
-        },
-        {
           "type": "logAction",
-          "actionTag": "bug_catch_done"
+          "actionTag": "MorningGreeting"
         }
       ],
-      "scriptName": "BugCatch",
+      "scriptName": "Event_MorningGreeting",
       "isRepeatable": true,
-      "priority": 30,
+      "priority": 20,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 10
     },
     {
-      "id": "evt_candy_shop",
-      "name": "駄菓子屋で買い物",
-      "description": "島に一つだけある駄菓子屋。色々なお菓子が並んでいる。",
-      "category": "interaction",
+      "id": "evening_return",
+      "name": "帰宅",
+      "description": "夕方に家に戻ると、ミツコおばさんが夕食の準備をしている。今日あったことを話す。",
+      "category": "routine",
       "triggers": [
-        { "type": "always" },
-        { "type": "timePhase", "timePhase": "Noon" }
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "駄菓子屋のおばあちゃん",
+          "speakerName": "ミツコおばさん",
           "dialogueLines": [
-            "いらっしゃい。",
-            "今日は何にする？ ゆっくり選んでいいよ。"
+            "あら、おかえりなさい。今日はどこで遊んできたの？",
+            "もうすぐごはんができるからね。手を洗っておいで。",
+            "今日はカレーよ。たくさん食べなさいね。"
           ]
         },
         {
           "type": "logAction",
-          "actionTag": "candy_shop_visited"
+          "actionTag": "EveningReturn"
         }
       ],
-      "scriptName": "CandyShop",
-      "isRepeatable": true,
-      "priority": 25,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_shell_collect",
-      "name": "貝殻集め",
-      "description": "浜辺に落ちている色々な貝殻を拾い集める。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "always" },
-        { "type": "timePhase", "timePhase": "Noon" }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "波打ちぎわに貝殻がいっぱい落ちてる。",
-            "きれいなのを探そう。"
-          ]
-        },
-        {
-          "type": "incrementInt",
-          "intKey": "shell_count",
-          "intValue": 1
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "きれいな貝殻を見つけた！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "shell_collected"
-        }
-      ],
-      "scriptName": "ShellCollect",
+      "scriptName": "Event_EveningReturn",
       "isRepeatable": true,
       "priority": 25,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_cooking_help",
-      "name": "おばさんの料理手伝い",
-      "description": "おばさんの夕飯の準備を手伝う。",
+      "id": "get_bug_net",
+      "name": "虫取り網をもらう",
+      "description": "2日目にタツヤおじさんから虫取り網をもらう。これで虫取りができるようになる。",
       "category": "interaction",
       "triggers": [
-        { "type": "day", "day": 6, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Evening" }
-      ],
-      "actions": [
         {
-          "type": "dialogue",
-          "speakerName": "おばさん",
-          "dialogueLines": [
-            "あら、手伝ってくれるの？ うれしいわ。",
-            "じゃあ、このお野菜洗ってちょうだい。"
-          ]
+          "type": "day",
+          "day": 2,
+          "dayOperator": "=="
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_cooking"
+          "type": "timePhase",
+          "timePhase": "Morning"
         },
         {
-          "type": "dialogue",
-          "speakerName": "おばさん",
-          "dialogueLines": [
-            "上手ねえ。助かるわあ。",
-            "今日の晩ごはん、楽しみにしててね。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "cooking_help_done"
+          "type": "flag",
+          "flagKey": "has_bug_net",
+          "flagValue": false
         }
       ],
-      "scriptName": "CookingHelp",
-      "isRepeatable": true,
-      "priority": 45,
-      "enabled": true,
-      "timeAdvanceMinutes": 30
-    },
-    {
-      "id": "evt_uncle_breakfast",
-      "name": "おじさんとの朝食会話",
-      "description": "毎朝の食卓でおじさんと話す。日替わりで色々なことを教えてくれる。",
-      "category": "interaction",
-      "triggers": [
-        { "type": "timePhase", "timePhase": "Morning" },
-        { "type": "always" }
-      ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "おじさん",
+          "speakerName": "タツヤおじさん",
           "dialogueLines": [
-            "おはよう。よく寝たか？",
-            "今日もいい天気だな。いっぱい遊んでこい。",
-            "ほら、ごはん食べちまえ。"
+            "おう、そうだ。これを持っていけ。",
+            "昔おじさんが使ってた虫取り網だ。まだまだ使えるぞ。",
+            "この島にはいろんな虫がいるからな。いっぱい捕まえてこい！"
           ]
         },
         {
-          "type": "logAction",
-          "actionTag": "uncle_breakfast_talk"
-        }
-      ],
-      "scriptName": "UncleBreakfast",
-      "isRepeatable": true,
-      "priority": 95,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_shrine_gate_open",
-      "name": "神社裏門解放",
-      "description": "神社の掃除を3回以上すると、神主さんが裏門を開けてくれる。",
-      "category": "exploration",
-      "triggers": [
-        { "type": "intValue", "intKey": "shrine_clean_count", "intOperator": ">=", "intValue": 3 },
-        { "type": "flag", "flagKey": "unlock_shrine_back", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "神主さん",
-          "dialogueLines": [
-            "よく手伝ってくれたねえ。",
-            "お礼に、裏の門を開けてあげよう。",
-            "昔はあの先に道があったんだよ。"
-          ]
+          "type": "giveItem",
+          "itemId": "bug_net"
         },
         {
           "type": "setFlag",
-          "flagKey": "unlock_shrine_back",
+          "flagKey": "has_bug_net",
           "flagValue": true
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_gate_open"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ギギギ…と音を立てて、古い門が開いた。",
-            "門の向こうに草に埋もれた小道が見える。"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "shrine_back_unlocked"
+          "actionTag": "GetBugNet"
         }
       ],
-      "scriptName": "ShrineGateOpen",
-      "isRepeatable": false,
-      "priority": 80,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_fallen_tree",
-      "name": "倒木撤去",
-      "description": "台風で倒れた木が撤去され、森の奥への道が開ける。",
-      "category": "exploration",
-      "triggers": [
-        { "type": "day", "day": 10, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "unlock_fallen_tree", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "おじさん",
-          "dialogueLines": [
-            "おう、あの倒れた木な。",
-            "今朝、村の人たちで片付けたぞ。",
-            "これで奥まで行けるようになったな。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "unlock_fallen_tree",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "森の奥へ続く道が開けた！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "fallen_tree_cleared"
-        }
-      ],
-      "scriptName": "FallenTree",
-      "isRepeatable": false,
-      "priority": 75,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_mountain_shortcut",
-      "name": "山頂ショートカット",
-      "description": "倒木が撤去された後、山頂への近道を発見する。",
-      "category": "exploration",
-      "triggers": [
-        { "type": "flag", "flagKey": "unlock_fallen_tree", "flagValue": true },
-        { "type": "flag", "flagKey": "unlock_mountain_shortcut", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "あれ？ こんなところに道がある。",
-            "登ってみたら…山のてっぺんに出た！",
-            "ここからなら島が全部見える！"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "unlock_mountain_shortcut",
-          "flagValue": true
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_discover"
-        },
-        {
-          "type": "logAction",
-          "actionTag": "mountain_shortcut_found"
-        }
-      ],
-      "scriptName": "MountainShortcut",
+      "scriptName": "Event_GetBugNet",
       "isRepeatable": false,
       "priority": 70,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 10
     },
     {
-      "id": "evt_sap_recipe",
-      "name": "樹液レシピ入手",
-      "description": "森の奥で樹液を集めるコツを覚える。虫取りに役立つ。",
-      "category": "exploration",
+      "id": "get_fishing_rod",
+      "name": "釣り竿をもらう",
+      "description": "7日目にタツヤおじさんから釣り竿をもらう。海で素潜りや釣りができるようになる。",
+      "category": "interaction",
       "triggers": [
-        { "type": "day", "day": 8, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "has_sap_recipe", "flagValue": false }
+        {
+          "type": "day",
+          "day": 7,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        },
+        {
+          "type": "flag",
+          "flagKey": "has_fishing_rod",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "タツヤおじさん",
           "dialogueLines": [
-            "大きなクヌギの木から、あまい匂いがする。",
-            "樹液がたくさん出てる…。",
-            "ここに塗っておけば、虫が集まってきそうだ！"
+            "もう一週間か。だいぶ島にも慣れてきたな。",
+            "よし、これもやろう。おじさんの釣り竿だ。",
+            "海に行ったら使ってみろ。テツさんに教えてもらうといい。"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "itemId": "fishing_rod"
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "has_fishing_rod",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "GetFishingRod"
+        }
+      ],
+      "scriptName": "Event_GetFishingRod",
+      "isRepeatable": false,
+      "priority": 70,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "get_sap_recipe",
+      "name": "樹液レシピ",
+      "description": "Day3以降、タツヤおじさんから樹液トラップの作り方を教えてもらう。虫取りの幅が広がる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 3,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "has_bug_net",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "has_sap_recipe",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "タツヤおじさん",
+          "dialogueLines": [
+            "虫取り、楽しんでるか？もっとたくさん捕まえたいだろ？",
+            "いいこと教えてやる。樹液トラップってのがあるんだ。",
+            "砂糖水とバナナの皮を混ぜて、木に塗っておくんだ。夜になるとカブトムシやクワガタが集まってくるぞ。",
+            "ミツコおばさんに材料をもらってこい。"
           ]
         },
         {
@@ -649,144 +253,886 @@
           "flagValue": true
         },
         {
-          "type": "giveItem",
-          "itemId": "item_sap_recipe"
+          "type": "logAction",
+          "actionTag": "GetSapRecipe"
+        }
+      ],
+      "scriptName": "Event_GetSapRecipe",
+      "isRepeatable": false,
+      "priority": 50,
+      "enabled": true,
+      "timeAdvanceMinutes": 15
+    },
+    {
+      "id": "get_lunch_box",
+      "name": "お弁当",
+      "description": "5日目にミツコおばさんからお弁当をもらう。遠出のお供に最適。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 5,
+          "dayOperator": "=="
         },
         {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        }
+      ],
+      "actions": [
+        {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "ミツコおばさん",
           "dialogueLines": [
-            "「樹液のあつめかた」をおぼえた！"
+            "今日はちょっと遠くまで行くんでしょ？",
+            "はい、お弁当作っておいたわよ。おにぎりとたまご焼き。",
+            "暑いから水分もちゃんと取るのよ。気をつけてね。"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "itemId": "lunch_box"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "GetLunchBox"
+        }
+      ],
+      "scriptName": "Event_GetLunchBox",
+      "isRepeatable": false,
+      "priority": 45,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "delivery_job",
+      "name": "配達バイト",
+      "description": "ヨシエさんのお店の配達を手伝う。島のいろんな場所に届け物をしてお駄賃がもらえる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Noon"
+        },
+        {
+          "type": "always"
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ヨシエさん",
+          "dialogueLines": [
+            "あら、手伝ってくれるの？助かるわあ。",
+            "この荷物をね、港の方まで届けてほしいの。",
+            "ありがとう！はい、おだちん。ジュースでも買いなさいな。"
+          ]
+        },
+        {
+          "type": "incrementInt",
+          "intKey": "delivery_count",
+          "intValue": 1
+        },
+        {
+          "type": "incrementInt",
+          "intKey": "money",
+          "intValue": 100
+        },
+        {
+          "type": "logAction",
+          "actionTag": "DeliveryJob"
+        }
+      ],
+      "scriptName": "Event_DeliveryJob",
+      "isRepeatable": true,
+      "priority": 25,
+      "enabled": true,
+      "timeAdvanceMinutes": 40
+    },
+    {
+      "id": "shrine_cleaning",
+      "name": "神社掃除",
+      "description": "神主さんのお手伝いで神社の掃除をする。掃除するたびに神主さんとの仲が深まる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        },
+        {
+          "type": "always"
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "神主さん",
+          "dialogueLines": [
+            "おや、今日も手伝いに来てくれたのかい。ありがたいねえ。",
+            "この神社は古くてね、手入れが大変なんだよ。",
+            "よし、よくやってくれた。ほら、お賽銭箱の横にラムネ置いてあるから飲みなさい。"
+          ]
+        },
+        {
+          "type": "incrementInt",
+          "intKey": "shrine_clean_count",
+          "intValue": 1
+        },
+        {
+          "type": "logAction",
+          "actionTag": "ShrineCleaning"
+        }
+      ],
+      "scriptName": "Event_ShrineCleaning",
+      "isRepeatable": true,
+      "priority": 25,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "net_pulling",
+      "name": "網引き手伝い",
+      "description": "テツさんの漁の網引きを手伝う。力仕事だけど、終わったあとの魚は最高。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Morning"
+        },
+        {
+          "type": "always"
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "テツさん",
+          "dialogueLines": [
+            "おう、坊主！今日も手伝ってくれるか！",
+            "せーの！よいしょ！よいしょ！…おお、今日は大漁だ！",
+            "よくやった！ほら、この魚持って帰りな。おばさんに焼いてもらえ。"
+          ]
+        },
+        {
+          "type": "incrementInt",
+          "intKey": "fishing_count",
+          "intValue": 1
+        },
+        {
+          "type": "giveItem",
+          "itemId": "fresh_fish"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "NetPulling"
+        }
+      ],
+      "scriptName": "Event_NetPulling",
+      "isRepeatable": true,
+      "priority": 25,
+      "enabled": true,
+      "timeAdvanceMinutes": 45
+    },
+    {
+      "id": "cooking_help",
+      "name": "料理手伝い",
+      "description": "ミツコおばさんの夕食作りを手伝う。島の食材を使った料理を教えてもらえる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "always"
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ミツコおばさん",
+          "dialogueLines": [
+            "あら、手伝ってくれるの？嬉しいわ。",
+            "じゃあ、このお野菜を洗ってちょうだい。今日は島のお魚で煮付けを作るわよ。",
+            "上手にできたわね！お母さんに自慢できるわよ。"
           ]
         },
         {
           "type": "logAction",
-          "actionTag": "sap_recipe_obtained"
+          "actionTag": "CookingHelp"
         }
       ],
-      "scriptName": "SapRecipe",
+      "scriptName": "Event_CookingHelp",
+      "isRepeatable": true,
+      "priority": 20,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "gen_old_story_1",
+      "name": "ゲンさんの昔話1",
+      "description": "7日目以降にゲンさんが島の昔話を聞かせてくれる。島の歴史を少し知ることができる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 7,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "gen_story_1_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ゲンさん",
+          "dialogueLines": [
+            "坊主、この島のこと、もっと知りたいか？",
+            "ワシが子どもの頃はな、この島にはもっと人がおったんじゃ。",
+            "学校もあってな、子どもたちが毎日走り回っとった。",
+            "今は静かになっちまったが…この島には、まだ誰も知らん秘密があるんじゃよ。",
+            "そのうち教えてやるから、また来い。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "gen_story_1_done",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "GenOldStory1"
+        }
+      ],
+      "scriptName": "Event_GenOldStory1",
+      "isRepeatable": false,
+      "priority": 45,
+      "enabled": true,
+      "timeAdvanceMinutes": 20
+    },
+    {
+      "id": "gen_old_story_2",
+      "name": "ゲンさんの昔話2",
+      "description": "15日目以降にゲンさんが島の過去の不思議な出来事について語る。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 15,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "gen_story_1_done",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "gen_story_2_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ゲンさん",
+          "dialogueLines": [
+            "おう、坊主。前の話の続き、聞きたいか。",
+            "昔な、この島の海で不思議なことがあったんじゃ。",
+            "嵐の夜に、海の底が光ったんじゃよ。青白い、きれいな光がな。",
+            "漁師たちはみんな怖がって近づかんかったが、ワシのじいさんだけは見に行った。",
+            "じいさんが何を見たか…それはまた今度な。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "gen_story_2_done",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "GenOldStory2"
+        }
+      ],
+      "scriptName": "Event_GenOldStory2",
+      "isRepeatable": false,
+      "priority": 50,
+      "enabled": true,
+      "timeAdvanceMinutes": 20
+    },
+    {
+      "id": "gen_shadow_story",
+      "name": "巨大影の話",
+      "description": "Day20以降、ゲンさんが海に住む巨大な何かについて語る。島の言い伝えに迫る。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 20,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "gen_story_2_done",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "gen_shadow_story_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ゲンさん",
+          "dialogueLines": [
+            "坊主…おまえ、海で何か大きいもん見なかったか？",
+            "ワシのじいさんがな、あの光る海の底で見たもの…それは巨大な影じゃった。",
+            "クジラよりでかい、とてつもない影が、海の底をゆっくり動いとったそうじゃ。",
+            "島の古い言い伝えでは、あれは海の守り神だと言われとる。",
+            "ワシも一度だけ見たことがある…あれは忘れられんよ。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "gen_shadow_story_done",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "GenShadowStory"
+        }
+      ],
+      "scriptName": "Event_GenShadowStory",
       "isRepeatable": false,
       "priority": 60,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_secret_base_1",
-      "name": "秘密基地づくり1日目",
-      "description": "森の中に秘密基地を作り始める。",
-      "category": "exploration",
+      "id": "uncle_evening_chat",
+      "name": "おじさんとの夕食後の会話",
+      "description": "夜、縁側でタツヤおじさんと語り合う。おじさんの少年時代の思い出や島のことを聞ける。",
+      "category": "interaction",
       "triggers": [
-        { "type": "day", "day": 7, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Noon" },
-        { "type": "flag", "flagKey": "secret_base_started", "flagValue": false }
+        {
+          "type": "timePhase",
+          "timePhase": "Night"
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "タツヤおじさん",
           "dialogueLines": [
-            "ここ、秘密基地にしたらいいかも！",
-            "木の板とか、使えそうなもの集めて…。",
-            "よし、作るぞ！"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_building"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "secret_base_started",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "だいぶ形になってきた。",
-            "でも、まだ完成じゃないな。また明日やろう。"
+            "いい風だなあ。こうして縁側で涼むのが一番だ。",
+            "おじさんもな、子どもの頃はこの島で毎日遊んでたんだ。",
+            "虫取り、魚釣り、山探検…お前と同じだよ。",
+            "夏休みってのは一生の宝物になるからな。いっぱい遊べよ。"
           ]
         },
         {
           "type": "logAction",
-          "actionTag": "secret_base_day1"
+          "actionTag": "UncleEveningChat"
         }
       ],
-      "scriptName": "SecretBase1",
-      "isRepeatable": false,
-      "priority": 55,
+      "scriptName": "Event_UncleEveningChat",
+      "isRepeatable": true,
+      "priority": 15,
       "enabled": true,
-      "timeAdvanceMinutes": 60
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_secret_base_2",
-      "name": "秘密基地完成",
-      "description": "秘密基地がついに完成する。",
-      "category": "exploration",
+      "id": "kazu_stamp_5",
+      "name": "スタンプ5日報酬",
+      "description": "ラジオ体操のスタンプが5日分たまった。カズさんからタオルがもらえる。",
+      "category": "interaction",
       "triggers": [
-        { "type": "flag", "flagKey": "secret_base_started", "flagValue": true },
-        { "type": "flag", "flagKey": "secret_base_complete", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "radio_stamp_count",
+          "intOperator": ">=",
+          "intValue": 5
+        },
+        {
+          "type": "flag",
+          "flagKey": "stamp_reward_5",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "カズさん",
           "dialogueLines": [
-            "よし、昨日の続きだ！",
-            "屋根もつけて…入り口にはカーテンもつけた。"
+            "おお、もう5日もラジオ体操来てるのか！えらいぞ！",
+            "ご褒美だ。このタオルをやろう。汗拭きに使えよ！",
+            "この調子で続けような！"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_building_complete"
+          "type": "giveItem",
+          "itemId": "towel"
         },
         {
           "type": "setFlag",
-          "flagKey": "secret_base_complete",
+          "flagKey": "stamp_reward_5",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "やったー！ 秘密基地、完成だ！",
-            "ここはぼくだけの特別な場所だ。"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "secret_base_complete"
+          "actionTag": "StampReward5"
         }
       ],
-      "scriptName": "SecretBase2",
+      "scriptName": "Event_KazuStamp5",
       "isRepeatable": false,
       "priority": 55,
       "enabled": true,
-      "timeAdvanceMinutes": 60
+      "timeAdvanceMinutes": 10
     },
     {
-      "id": "evt_sunset_spot",
-      "name": "夕焼けの絶景スポット発見",
-      "description": "山頂から見る夕焼けが圧倒的に美しい。",
-      "category": "exploration",
+      "id": "kazu_stamp_15",
+      "name": "スタンプ15日報酬",
+      "description": "ラジオ体操のスタンプが15日分たまった。カズさんから水筒がもらえる。",
+      "category": "interaction",
       "triggers": [
-        { "type": "flag", "flagKey": "unlock_mountain_shortcut", "flagValue": true },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "sunset_spot_found", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "radio_stamp_count",
+          "intOperator": ">=",
+          "intValue": 15
+        },
+        {
+          "type": "flag",
+          "flagKey": "stamp_reward_15",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "カズさん",
+          "dialogueLines": [
+            "15日！すごいな、半分以上だぞ！",
+            "ほら、特別な水筒だ。冷たいお茶を入れて持ち歩けるぞ。",
+            "あと少しで皆勤賞だ、頑張れよ！"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "itemId": "water_bottle"
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "stamp_reward_15",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "StampReward15"
+        }
+      ],
+      "scriptName": "Event_KazuStamp15",
+      "isRepeatable": false,
+      "priority": 60,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "kazu_stamp_25",
+      "name": "スタンプ25日報酬",
+      "description": "ラジオ体操のスタンプが25日分たまった。カズさんから金のスタンプという最高の報酬がもらえる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "intValue",
+          "intKey": "radio_stamp_count",
+          "intOperator": ">=",
+          "intValue": 25
+        },
+        {
+          "type": "flag",
+          "flagKey": "stamp_reward_25",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "カズさん",
+          "dialogueLines": [
+            "25日！おまえは本当にすごいやつだな！",
+            "これは特別中の特別だ。金のスタンプだ！",
+            "おじさんが子どもの頃、これをもらえたのはクラスで一人だけだったんだぞ。",
+            "胸を張れ！おまえは立派だ！"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "itemId": "golden_stamp"
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "stamp_reward_25",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "StampReward25"
+        }
+      ],
+      "scriptName": "Event_KazuStamp25",
+      "isRepeatable": false,
+      "priority": 70,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "feed_cat",
+      "name": "猫にごはん",
+      "description": "島にいる野良猫にごはんをあげる。仲良くなるとついてきてくれるようになる。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "…すごい。",
-            "海が夕日でオレンジ色に光ってる。",
-            "こんなにきれいな夕焼け、初めて見た。"
+            "あ、猫だ。おなかすいてるのかな。",
+            "ほら、これあげるよ。……もぐもぐ食べてる。",
+            "猫がゴロゴロ言ってる。ちょっとなついてくれたかも。"
           ]
         },
         {
+          "type": "incrementInt",
+          "intKey": "cat_friendship",
+          "intValue": 1
+        },
+        {
+          "type": "logAction",
+          "actionTag": "FeedCat"
+        }
+      ],
+      "scriptName": "Event_FeedCat",
+      "isRepeatable": true,
+      "priority": 10,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "hana_old_story",
+      "name": "ハナさんの昔話",
+      "description": "12日目以降にハナさんが駄菓子屋で昔の島の子どもたちの話をしてくれる。宝探しの伝説も。",
+      "category": "interaction",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 12,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "hana_old_story_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ハナさん",
+          "dialogueLines": [
+            "あら、いらっしゃい。今日は何にする？",
+            "…ねえ、あんた、この写真見てごらん。昔のこの島の子どもたちだよ。",
+            "みんな夏になるとこの店に来てね、アイス食べながら宝探しの相談してたんだよ。",
+            "この島のどこかに宝物が隠されてるって、みんな信じてたんだ。",
+            "結局見つかったのかねえ…ふふ、あんたも探してみたらどうだい？"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "hana_old_story_done",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "HanaOldStory"
+        }
+      ],
+      "scriptName": "Event_HanaOldStory",
+      "isRepeatable": false,
+      "priority": 40,
+      "enabled": true,
+      "timeAdvanceMinutes": 15
+    },
+    {
+      "id": "shrine_gate_open",
+      "name": "神社裏門解放",
+      "description": "神社掃除を3回以上すると、神主さんが裏門の鍵を開けてくれる。森の奥への道が開く。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "intValue",
+          "intKey": "shrine_clean_count",
+          "intOperator": ">=",
+          "intValue": 3
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_shrine_back_gate",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "神主さん",
+          "dialogueLines": [
+            "いやあ、何度も手伝ってくれてありがとうねえ。",
+            "お礼に…特別にこの裏門を開けてあげよう。",
+            "この先は森の奥につながっとるんだ。昔は子どもたちの遊び場だったよ。",
+            "ただし、暗くなる前には帰ってくるんだよ。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_shrine_back_gate",
+          "flagValue": true
+        },
+        {
           "type": "playSound",
-          "soundId": "sfx_wind_gentle"
+          "soundId": "gate_open"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "ShrineGateOpen"
+        }
+      ],
+      "scriptName": "Event_ShrineGateOpen",
+      "isRepeatable": false,
+      "priority": 65,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "fallen_tree_clear",
+      "name": "倒木撤去",
+      "description": "Day10以降、山道をふさいでいた倒木をタツヤおじさんと一緒に撤去する。山の奥へ行けるようになる。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 10,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_fallen_tree",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "タツヤおじさん",
+          "dialogueLines": [
+            "ああ、この倒木か。前の台風で倒れたんだ。",
+            "よし、一緒にどかすか。せーの！",
+            "よし、通れるようになったぞ。この先は山の奥だ。",
+            "気をつけて行けよ。迷ったら来た道を戻れば大丈夫だからな。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_fallen_tree",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "FallenTreeClear"
+        }
+      ],
+      "scriptName": "Event_FallenTreeClear",
+      "isRepeatable": false,
+      "priority": 60,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "find_secret_base_spot",
+      "name": "秘密基地発見",
+      "description": "Day7以降、神社裏門を解放した後に、森の中で秘密基地にぴったりの場所を見つける。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 7,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_shrine_back_gate",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_secret_base",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "わあ、ここすごい！大きな木の根元に空間がある！",
+            "ここなら雨もしのげるし、秘密基地にぴったりだ！",
+            "材料を集めて、もっとかっこいい基地にしよう！"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_secret_base",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "FindSecretBaseSpot"
+        }
+      ],
+      "scriptName": "Event_FindSecretBaseSpot",
+      "isRepeatable": false,
+      "priority": 55,
+      "enabled": true,
+      "timeAdvanceMinutes": 15
+    },
+    {
+      "id": "build_secret_base",
+      "name": "秘密基地建設",
+      "description": "秘密基地を少しずつ作り上げていく。繰り返し行うことでどんどん立派な基地になっていく。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "flag",
+          "flagKey": "unlock_secret_base",
+          "flagValue": true
+        },
+        {
+          "type": "always"
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "よし、今日も秘密基地を作るぞ！",
+            "板を運んで…釘を打って…よし、だんだん形になってきた！",
+            "もっと材料を集めたら、もっとすごい基地になるぞ！"
+          ]
+        },
+        {
+          "type": "incrementInt",
+          "intKey": "secret_base_progress",
+          "intValue": 1
+        },
+        {
+          "type": "logAction",
+          "actionTag": "BuildSecretBase"
+        }
+      ],
+      "scriptName": "Event_BuildSecretBase",
+      "isRepeatable": true,
+      "priority": 20,
+      "enabled": true,
+      "timeAdvanceMinutes": 45
+    },
+    {
+      "id": "mountain_shortcut",
+      "name": "山頂ショートカット発見",
+      "description": "倒木撤去後に山道を進むと、草に隠れた山頂への近道を発見する。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "flag",
+          "flagKey": "unlock_fallen_tree",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_mountain_shortcut",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "あれ？こっちに道がある！草に隠れてたけど…",
+            "この道、すごい急だけど…登ってみよう！",
+            "やった！山頂に出た！ここからだとすごく早く来れるんだ！",
+            "うわあ、島が全部見える！海がキラキラしてる！"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_mountain_shortcut",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "MountainShortcut"
+        }
+      ],
+      "scriptName": "Event_MountainShortcut",
+      "isRepeatable": false,
+      "priority": 55,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "sunset_spot",
+      "name": "夕焼けスポット発見",
+      "description": "夕方に山の途中で、最高の夕焼けが見られる特別な場所を見つける。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_fallen_tree",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "sunset_spot_found",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "…うわあ。",
+            "すごい…空が全部オレンジ色だ。",
+            "海に夕日が映って、キラキラ光ってる。",
+            "こんなきれいな夕焼け、初めて見た…。",
+            "ここは特別な場所だ。また来よう。"
+          ]
         },
         {
           "type": "setFlag",
@@ -794,87 +1140,150 @@
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ここを「夕焼けの丘」って名前にしよう。"
-          ]
+          "type": "playSound",
+          "soundId": "evening_chime"
         },
         {
           "type": "logAction",
-          "actionTag": "sunset_spot_discovered"
+          "actionTag": "SunsetSpot"
         }
       ],
-      "scriptName": "SunsetSpot",
+      "scriptName": "Event_SunsetSpot",
       "isRepeatable": false,
-      "priority": 65,
+      "priority": 50,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_letter_home",
-      "name": "お家への手紙",
-      "description": "夜、部屋でお母さんへの手紙を書く。",
+      "id": "old_well_explore",
+      "name": "古井戸探索",
+      "description": "ヒナとの会話を重ね秘密の場所イベントを経た後に、森の奥にある古井戸を二人で探索する。",
       "category": "exploration",
       "triggers": [
-        { "type": "day", "day": 10, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Night" },
-        { "type": "flag", "flagKey": "letter_home_written", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "heroine_conversation",
+          "intOperator": ">=",
+          "intValue": 8
+        },
+        {
+          "type": "flag",
+          "flagKey": "secret_place_event",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_old_well",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "ヒナ",
           "dialogueLines": [
-            "…お母さん、元気ですか。",
-            "ぼくは元気です。毎日たのしいです。",
-            "…でも、ちょっとだけさみしいです。"
+            "ねえ、この前言ってた古井戸、見に行ってみない？",
+            "おばあちゃんが言ってたの。この井戸には昔、誰かが大切なものを隠したって。",
+            "…覗いてみよう。あ、何か光ってる！",
+            "すごい…こんなところに秘密があったんだ。"
           ]
         },
         {
           "type": "setFlag",
-          "flagKey": "letter_home_written",
+          "flagKey": "unlock_old_well",
           "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "OldWellExplore"
+        }
+      ],
+      "scriptName": "Event_OldWellExplore",
+      "isRepeatable": false,
+      "priority": 65,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "letter_home",
+      "name": "お家への手紙",
+      "description": "Day15以降、ミツコおばさんに勧められてお母さんへの手紙を書く。島での思い出を綴る特別なイベント。",
+      "category": "exploration",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 15,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "letter_home_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "ミツコおばさん",
+          "dialogueLines": [
+            "ねえ、お母さんに手紙書いた？きっと寂しがってるわよ。",
+            "はい、便せんと封筒。ここに座って書きなさい。"
+          ]
         },
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "手紙を封筒に入れた。明日、ポストに出そう。"
+            "お母さんへ。ぼくは元気です。",
+            "島はすごく楽しいよ。海で泳いだり、虫を捕ったり、毎日冒険してる。",
+            "友達もできたよ。ヒナっていう女の子で、すごく元気な子なんだ。",
+            "…もうちょっとだけ、ここにいたいな。"
           ]
         },
         {
+          "type": "setFlag",
+          "flagKey": "letter_home_done",
+          "flagValue": true
+        },
+        {
           "type": "logAction",
-          "actionTag": "letter_home_written"
+          "actionTag": "LetterHome"
         }
       ],
-      "scriptName": "LetterHome",
+      "scriptName": "Event_LetterHome",
       "isRepeatable": false,
-      "priority": 60,
+      "priority": 40,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_shallow_dive",
-      "name": "浅瀬で素潜り",
-      "description": "浅瀬で素潜りをする。潜るたびにどんどん上手くなる。",
+      "id": "shallow_dive",
+      "name": "素潜り",
+      "description": "昼間に海で素潜りをする。きれいなサンゴや魚たちの世界を楽しめる。",
       "category": "sea",
       "triggers": [
-        { "type": "always" },
-        { "type": "timePhase", "timePhase": "Noon" }
+        {
+          "type": "timePhase",
+          "timePhase": "Noon"
+        },
+        {
+          "type": "flag",
+          "flagKey": "has_fishing_rod",
+          "flagValue": true
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "よし、潜るぞ！",
-            "息を大きく吸って…ザブン！"
+            "よし、海に潜るぞ！",
+            "うわあ、きれい！青い魚が泳いでる！サンゴもいっぱいだ！",
+            "…ぷはっ！すごかった！もっと深く潜れるようになりたいな。"
           ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_splash"
         },
         {
           "type": "incrementInt",
@@ -882,47 +1291,216 @@
           "intValue": 1
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "水の中はきれいだなあ。",
-            "魚がたくさん泳いでる。"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "shallow_dive_done"
+          "actionTag": "ShallowDive"
         }
       ],
-      "scriptName": "ShallowDive",
+      "scriptName": "Event_ShallowDive",
       "isRepeatable": true,
-      "priority": 35,
+      "priority": 25,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 30
     },
     {
-      "id": "evt_deep_shadow",
-      "name": "深場で巨大影目撃",
-      "description": "素潜りを重ねた末、海の深いところで巨大な影を目撃する。",
+      "id": "faint_rescue",
+      "name": "失神→救出",
+      "description": "素潜りを繰り返すうちに無理をしてしまい、テツさんに助けられる。海の怖さと安全について学ぶ重要イベント。",
       "category": "sea",
       "triggers": [
-        { "type": "intValue", "intKey": "diving_count", "intOperator": ">=", "intValue": 3 },
-        { "type": "day", "day": 8, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "deep_shadow_seen", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "diving_count",
+          "intOperator": ">=",
+          "intValue": 3
+        },
+        {
+          "type": "flag",
+          "flagKey": "faint_event_done",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "今日はちょっと深くまで潜れた。",
-            "…えっ？ あれは…！？",
-            "暗い海の底に、とてつもなく大きな影が見えた。"
+            "もうちょっと深く…もうちょっと…",
+            "…あれ、息が…くるしい……"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_deep_rumble"
+          "type": "dialogue",
+          "speakerName": "テツさん",
+          "dialogueLines": [
+            "おい、坊主！大丈夫か！？しっかりしろ！",
+            "…ふう、よかった。目が覚めたか。",
+            "バカ野郎、無茶するんじゃねえ！海をなめたら死ぬぞ！",
+            "……まあ、気持ちはわかる。もっと上手に潜りたいんだろ？",
+            "よし、俺が教えてやる。ちゃんとした潜り方をな。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "faint_event_done",
+          "flagValue": true
+        },
+        {
+          "type": "movePlayer",
+          "targetLocation": "beach_rest_area"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "FaintRescue"
+        }
+      ],
+      "scriptName": "Event_FaintRescue",
+      "isRepeatable": false,
+      "priority": 80,
+      "enabled": true,
+      "timeAdvanceMinutes": 60
+    },
+    {
+      "id": "night_dive_unlock",
+      "name": "夜潜水解禁",
+      "description": "Day10以降、素潜りを十分に経験し失神イベントを乗り越えた後、テツさんが夜の海への潜水を許可してくれる。",
+      "category": "sea",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 10,
+          "dayOperator": ">="
+        },
+        {
+          "type": "intValue",
+          "intKey": "diving_count",
+          "intOperator": ">=",
+          "intValue": 3
+        },
+        {
+          "type": "flag",
+          "flagKey": "faint_event_done",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_night_dive",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "テツさん",
+          "dialogueLines": [
+            "おう坊主、だいぶ上手くなったじゃねえか。",
+            "…よし、特別に夜の海に連れてってやる。",
+            "夜の海はな、昼とは全然違うんだ。怖いけど、すげえきれいだぞ。",
+            "ただし、俺と一緒の時だけだ。絶対に一人で行くなよ。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_night_dive",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "NightDiveUnlock"
+        }
+      ],
+      "scriptName": "Event_NightDiveUnlock",
+      "isRepeatable": false,
+      "priority": 65,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "night_dive",
+      "name": "夜潜水",
+      "description": "テツさんと一緒に夜の海に潜る。夜光虫や不思議な生き物たちの幻想的な世界が広がる。",
+      "category": "sea",
+      "triggers": [
+        {
+          "type": "timePhase",
+          "timePhase": "Night"
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_night_dive",
+          "flagValue": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "テツさん",
+          "dialogueLines": [
+            "よし、行くぞ。ライト持ったか？俺のそばから離れるなよ。"
+          ]
+        },
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "…すごい。海が光ってる。夜光虫だ！",
+            "昼間とは全然違う…なんだか別の世界みたいだ。",
+            "あ、あそこに大きな魚が！…きれいだなあ。"
+          ]
+        },
+        {
+          "type": "dialogue",
+          "speakerName": "テツさん",
+          "dialogueLines": [
+            "な？すげえだろ。これが夜の海だ。",
+            "海はな、知れば知るほど好きになるもんだ。"
+          ]
+        },
+        {
+          "type": "logAction",
+          "actionTag": "NightDive"
+        }
+      ],
+      "scriptName": "Event_NightDive",
+      "isRepeatable": true,
+      "priority": 35,
+      "enabled": true,
+      "timeAdvanceMinutes": 45
+    },
+    {
+      "id": "deep_shadow",
+      "name": "巨大影目撃",
+      "description": "素潜りを5回以上重ねDay20以降に、海の深いところでとてつもなく巨大な影を目撃する衝撃的なイベント。",
+      "category": "sea",
+      "triggers": [
+        {
+          "type": "intValue",
+          "intKey": "diving_count",
+          "intOperator": ">=",
+          "intValue": 5
+        },
+        {
+          "type": "day",
+          "day": 20,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "deep_shadow_seen",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "今日はいつもより深く潜れた。もうちょっと先に…",
+            "……え？",
+            "な、なんだあれ…！海の底に、すごく大きな影が…！",
+            "ゆっくり動いてる…クジラ？いや、もっと大きい…",
+            "…こっちを見た気がする。",
+            "…ぷはっ！い、今のなんだったんだ…！？"
+          ]
         },
         {
           "type": "setFlag",
@@ -930,545 +1508,413 @@
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "あれ、なんだったんだろう…。",
-            "こわいけど…気になる。"
-          ]
+          "type": "playSound",
+          "soundId": "deep_rumble"
         },
         {
           "type": "logAction",
-          "actionTag": "deep_shadow_witnessed"
+          "actionTag": "DeepShadow"
         }
       ],
-      "scriptName": "DeepShadow",
+      "scriptName": "Event_DeepShadow",
       "isRepeatable": false,
       "priority": 75,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 30
     },
     {
-      "id": "evt_faint_rescue",
-      "name": "息切れ失神→救出",
-      "description": "深く潜りすぎて気を失い、テツさんに助けられる。",
+      "id": "sea_tunnel_discover",
+      "name": "海底トンネル発見",
+      "description": "素潜りを5回以上しDay15以降に、海底の岩の隙間にトンネルを発見する。",
       "category": "sea",
       "triggers": [
-        { "type": "intValue", "intKey": "diving_count", "intOperator": ">=", "intValue": 2 },
-        { "type": "day", "day": 7, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "faint_rescue_done", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "diving_count",
+          "intOperator": ">=",
+          "intValue": 5
+        },
+        {
+          "type": "day",
+          "day": 15,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_sea_tunnel",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "もうちょっと…もうちょっとだけ…。",
-            "…あれ、息が…。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_heartbeat"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "………。"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "おい！ 大丈夫か！",
-            "…ったく、無茶しやがって。",
-            "海はなあ、ぜったいに油断しちゃいけないんだ。"
-          ]
-        },
-        {
-          "type": "movePlayer",
-          "targetLocation": "loc_tetsu_house"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "faint_rescue_done",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "今日はもう休め。",
-            "もっと上手くなりたいなら…俺が教えてやるよ。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "faint_rescue_event"
-        }
-      ],
-      "scriptName": "FaintRescue",
-      "isRepeatable": false,
-      "priority": 85,
-      "enabled": true,
-      "timeAdvanceMinutes": 60
-    },
-    {
-      "id": "evt_night_dive_unlock",
-      "name": "夜潜水解放",
-      "description": "テツさんから夜の潜水の許可をもらう。",
-      "category": "sea",
-      "triggers": [
-        { "type": "day", "day": 10, "dayOperator": ">=" },
-        { "type": "intValue", "intKey": "diving_count", "intOperator": ">=", "intValue": 3 },
-        { "type": "flag", "flagKey": "night_dive_unlocked", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "だいぶ上手くなったな。",
-            "…よし。夜の海、見てみたいか？",
-            "俺がそばにいてやるから、潜ってみるか。"
+            "あれ、岩の隙間に穴がある…トンネルみたいだ。",
+            "中を覗いてみると…奥の方が青白く光ってる！",
+            "ここ、通れるかも。でも一人じゃ怖いな…",
+            "今度テツさんに相談してみよう。"
           ]
         },
         {
           "type": "setFlag",
-          "flagKey": "night_dive_unlocked",
+          "flagKey": "unlock_sea_tunnel",
           "flagValue": true
         },
         {
-          "type": "giveItem",
-          "itemId": "item_underwater_light"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "テツさん",
-          "dialogueLines": [
-            "これ、水中ライトだ。大事に使えよ。"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "night_dive_unlocked"
+          "actionTag": "SeaTunnelDiscover"
         }
       ],
-      "scriptName": "NightDiveUnlock",
+      "scriptName": "Event_SeaTunnelDiscover",
       "isRepeatable": false,
       "priority": 70,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_night_dive",
-      "name": "夜潜水",
-      "description": "夜の海に潜る。昼とはまったく違う世界が広がっている。",
+      "id": "sea_ruins",
+      "name": "海底遺構到達",
+      "description": "海底トンネルを通り、完成した地図を手がかりに、古代の海底遺構にたどり着く。島の最大の謎に迫る。",
       "category": "sea",
       "triggers": [
-        { "type": "flag", "flagKey": "night_dive_unlocked", "flagValue": true },
-        { "type": "timePhase", "timePhase": "Night" }
-      ],
-      "actions": [
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "水中ライトを持って、夜の海に潜る。",
-            "暗い水の中、ライトの光だけが頼りだ。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_underwater_night"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "夜光虫がキラキラ光ってる…。",
-            "昼間とは全然ちがう海だ。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "night_dive_done"
-        }
-      ],
-      "scriptName": "NightDive",
-      "isRepeatable": true,
-      "priority": 40,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_sea_tunnel",
-      "name": "海底トンネル発見",
-      "description": "素潜りを極めた先に、岩の間に海底トンネルを見つける。",
-      "category": "sea",
-      "triggers": [
-        { "type": "intValue", "intKey": "diving_count", "intOperator": ">=", "intValue": 5 },
-        { "type": "day", "day": 15, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "sea_tunnel_found", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "岩のすき間に…穴がある？",
-            "こわいけど、入ってみよう…。",
-            "トンネルだ！ 海の底にトンネルがあった！"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_underwater_echo"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "sea_tunnel_found",
+          "type": "flag",
+          "flagKey": "unlock_sea_tunnel",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "この先に何があるんだろう…。"
-          ]
+          "type": "flag",
+          "flagKey": "found_map_fragment",
+          "flagValue": true
         },
         {
-          "type": "logAction",
-          "actionTag": "sea_tunnel_discovered"
+          "type": "flag",
+          "flagKey": "unlock_sea_ruins",
+          "flagValue": false
         }
-      ],
-      "scriptName": "SeaTunnel",
-      "isRepeatable": false,
-      "priority": 80,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_sea_ruins",
-      "name": "海底遺構発見",
-      "description": "海底トンネルの先に、謎の遺構を発見する。",
-      "category": "sea",
-      "triggers": [
-        { "type": "flag", "flagKey": "sea_tunnel_found", "flagValue": true },
-        { "type": "flag", "flagKey": "map_fragment_found", "flagValue": true },
-        { "type": "flag", "flagKey": "sea_ruins_found", "flagValue": false }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "",
+          "speakerName": "テツさん",
           "dialogueLines": [
-            "地図の通りに泳いだら…。",
-            "石で作られた建物…？ 海の底にこんなものが…。",
-            "誰が、いつ作ったんだろう。"
+            "地図にこんな場所が…よし、行ってみるか。ついてこい。"
           ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_mystery"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "sea_ruins_found",
-          "flagValue": true
         },
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "壁に何か文字が書いてある…。",
-            "でも、もう息が続かない。また来よう。"
+            "トンネルを抜けると…うわあ！",
+            "石の柱が何本も立ってる！海の底にこんなものがあるなんて！",
+            "壁に何か模様が彫ってある…これ、地図と同じ模様だ！",
+            "ここは昔の人が作ったものなのかな…すごい…"
           ]
         },
         {
+          "type": "setFlag",
+          "flagKey": "unlock_sea_ruins",
+          "flagValue": true
+        },
+        {
+          "type": "playSound",
+          "soundId": "mysterious_echo"
+        },
+        {
           "type": "logAction",
-          "actionTag": "sea_ruins_discovered"
+          "actionTag": "SeaRuins"
         }
       ],
-      "scriptName": "SeaRuins",
+      "scriptName": "Event_SeaRuins",
       "isRepeatable": false,
-      "priority": 90,
+      "priority": 85,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 45
     },
     {
-      "id": "evt_bug_intro",
-      "name": "虫取り入門",
-      "description": "おじさんから虫取り網をもらい、虫取りの世界へ。",
+      "id": "bug_catch",
+      "name": "虫取り",
+      "description": "虫取り網を使って虫を捕まえる。昼や夕方の時間帯にいろんな虫が見つかる。",
       "category": "bug",
       "triggers": [
-        { "type": "day", "day": 2, "dayOperator": "=" },
-        { "type": "flag", "flagKey": "has_bug_net", "flagValue": false }
-      ],
-      "actions": [
         {
-          "type": "dialogue",
-          "speakerName": "おじさん",
-          "dialogueLines": [
-            "おう、そうだ。これやるよ。",
-            "虫取り網。昔、おじさんが使ってたやつだ。",
-            "この島にはいろんな虫がいるからな。探してみろ。"
-          ]
+          "type": "timePhase",
+          "timePhase": "Noon"
         },
         {
-          "type": "giveItem",
-          "itemId": "item_bug_net"
-        },
-        {
-          "type": "setFlag",
+          "type": "flag",
           "flagKey": "has_bug_net",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "虫取り網をもらった！",
-            "どんな虫がいるか、ワクワクする！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "bug_intro_done"
+          "type": "always"
         }
-      ],
-      "scriptName": "BugIntro",
-      "isRepeatable": false,
-      "priority": 85,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_rare_beetle_1",
-      "name": "激レアカブト出現",
-      "description": "真夏の夜、伝説のオオクワガタが姿を現す。",
-      "category": "bug",
-      "triggers": [
-        { "type": "day", "day": 20, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "rare_beetle_1_caught", "flagValue": false }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "…あ…あれは！",
-            "すごく大きなオオクワガタだ！",
-            "島の子がうわさしてたやつだ…！"
+            "あ、あそこに虫がいる！そーっと近づいて…",
+            "えいっ！……やった！捕まえた！",
+            "きれいな色だなあ。虫かごに入れておこう。"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_rare_bug"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "rare_beetle_1_caught",
-          "flagValue": true
-        },
-        {
-          "type": "giveItem",
-          "itemId": "item_rare_beetle_1"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "つ、つかまえた…！ 手がふるえる…！"
-          ]
+          "type": "incrementInt",
+          "intKey": "bug_catch_count",
+          "intValue": 1
         },
         {
           "type": "logAction",
-          "actionTag": "rare_beetle_1_caught"
+          "actionTag": "BugCatch"
         }
       ],
-      "scriptName": "RareBeetle1",
-      "isRepeatable": false,
-      "priority": 80,
+      "scriptName": "Event_BugCatch",
+      "isRepeatable": true,
+      "priority": 20,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_rare_beetle_2",
-      "name": "激レアカブト再出現",
-      "description": "さらにレアな黄金カブトムシが出現する。",
+      "id": "sap_trap_set",
+      "name": "樹液トラップ設置",
+      "description": "樹液レシピを使って夕方にトラップを仕掛ける。翌朝にカブトムシやクワガタが集まっているかもしれない。",
       "category": "bug",
       "triggers": [
-        { "type": "day", "day": 25, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "rare_beetle_2_caught", "flagValue": false }
+        {
+          "type": "flag",
+          "flagKey": "has_sap_recipe",
+          "flagValue": true
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "なんだあの光…？",
-            "金色のカブトムシ…！？ うそだろ！",
-            "こんなの図鑑にも載ってないぞ…！"
+            "よし、おじさんに教えてもらった通りにやるぞ。",
+            "砂糖水とバナナの皮を混ぜて…この木に塗って…",
+            "できた！明日の朝が楽しみだな！",
+            "カブトムシ来てるかなあ…"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_rare_bug_golden"
-        },
-        {
           "type": "setFlag",
-          "flagKey": "rare_beetle_2_caught",
+          "flagKey": "sap_trap_active",
           "flagValue": true
         },
         {
-          "type": "giveItem",
-          "itemId": "item_rare_beetle_2"
+          "type": "logAction",
+          "actionTag": "SapTrapSet"
+        }
+      ],
+      "scriptName": "Event_SapTrapSet",
+      "isRepeatable": true,
+      "priority": 35,
+      "enabled": true,
+      "timeAdvanceMinutes": 20
+    },
+    {
+      "id": "rare_beetle",
+      "name": "激レアカブトムシ",
+      "description": "虫取りを10回以上しDay20以降に、森の奥で伝説の金色カブトムシに遭遇する。",
+      "category": "bug",
+      "triggers": [
+        {
+          "type": "intValue",
+          "intKey": "bug_catch_count",
+          "intOperator": ">=",
+          "intValue": 10
         },
+        {
+          "type": "day",
+          "day": 20,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "rare_beetle_caught",
+          "flagValue": false
+        }
+      ],
+      "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "やった…！ これ、とんでもないぞ…！"
+            "あ…あそこに何かいる…！",
+            "うそ…！金色のカブトムシ！？こんなの見たことない！",
+            "手が震える…落ち着け…そーっと…",
+            "…やった！！捕まえた！！金色のカブトムシだ！！",
+            "すごい！これ絶対すごいやつだ！おじさんに見せなきゃ！"
           ]
         },
         {
+          "type": "giveItem",
+          "itemId": "golden_beetle"
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "rare_beetle_caught",
+          "flagValue": true
+        },
+        {
+          "type": "playSound",
+          "soundId": "rare_catch"
+        },
+        {
           "type": "logAction",
-          "actionTag": "rare_beetle_2_caught"
+          "actionTag": "RareBeetle"
         }
       ],
-      "scriptName": "RareBeetle2",
+      "scriptName": "Event_RareBeetle",
       "isRepeatable": false,
-      "priority": 80,
+      "priority": 75,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_sell_bugs",
+      "id": "sell_bugs",
       "name": "虫を売る",
-      "description": "駄菓子屋で捕まえた虫を売ってお小遣いにする。",
+      "description": "ハナさんの駄菓子屋で捕まえた虫を売る。お小遣いが手に入る。",
       "category": "bug",
       "triggers": [
-        { "type": "flag", "flagKey": "has_bugs_to_sell", "flagValue": true },
-        { "type": "always" }
+        {
+          "type": "flag",
+          "flagKey": "has_bug_net",
+          "flagValue": true
+        },
+        {
+          "type": "intValue",
+          "intKey": "bug_catch_count",
+          "intOperator": ">=",
+          "intValue": 1
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "駄菓子屋のおばあちゃん",
+          "speakerName": "ハナさん",
           "dialogueLines": [
-            "あら、虫を持ってきたの？",
-            "うちの孫がよろこぶわ。買い取るよ。"
+            "あら、虫を持ってきたのかい。どれどれ…",
+            "おお、立派なのが捕れたねえ。よし、買い取ってあげよう。",
+            "はい、おだちん。また捕まえてきなさいな。"
           ]
         },
         {
           "type": "incrementInt",
           "intKey": "money",
-          "intValue": 30
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "虫を売って30円もらった！"
-          ]
+          "intValue": 50
         },
         {
           "type": "logAction",
-          "actionTag": "bugs_sold"
+          "actionTag": "SellBugs"
         }
       ],
-      "scriptName": "SellBugs",
+      "scriptName": "Event_SellBugs",
       "isRepeatable": true,
-      "priority": 25,
+      "priority": 15,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 10
     },
     {
-      "id": "evt_heroine_first",
-      "name": "ヒロインとの出会い",
-      "description": "夕暮れの防波堤で、同い年くらいの女の子と出会う。",
+      "id": "heroine_first_meet",
+      "name": "ヒロインと初めて会う",
+      "description": "Day1の夕方、堤防の先で夕日を眺める女の子ヒナと運命の出会いを果たす。夏の物語が始まる瞬間。",
       "category": "heroine",
       "triggers": [
-        { "type": "day", "day": 1, "dayOperator": "=" },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "heroine_met", "flagValue": false }
+        {
+          "type": "day",
+          "day": 1,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "met_heroine",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "防波堤の先に、誰かいる。",
-            "女の子だ。ぼくと同じくらいの。"
+            "堤防の先に誰かいる…女の子だ。",
+            "夕日を見てる。声をかけてみようかな…"
           ]
         },
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "…あ。",
-            "…だれ？ この島の子じゃないよね。"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ぼく、夏休みの間だけ来てるんだ。"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "ヒナ",
-          "dialogueLines": [
-            "ふーん。…わたしはヒナ。",
-            "ここ、わたしのお気に入りの場所なんだ。",
-            "…まあ、いいけど。"
+            "…え？あ、びっくりした。",
+            "誰？見ない顔だね。もしかして、夏休みに来た子？",
+            "へえー、タツヤさんの甥っ子なんだ。あたし、ヒナ。よろしくね。",
+            "あたしね、この堤防が好きなの。夕日がすっごくきれいでしょ？",
+            "ねえ、明日も来る？…来てくれたら嬉しいな。"
           ]
         },
         {
           "type": "setFlag",
-          "flagKey": "heroine_met",
+          "flagKey": "met_heroine",
           "flagValue": true
         },
         {
-          "type": "setInt",
-          "intKey": "heroine_conversation",
-          "intValue": 1
+          "type": "playSound",
+          "soundId": "gentle_breeze"
         },
         {
           "type": "logAction",
-          "actionTag": "heroine_first_meeting"
+          "actionTag": "HeroineFirstMeet"
         }
       ],
-      "scriptName": "HeroineFirst",
+      "scriptName": "Event_HeroineFirstMeet",
       "isRepeatable": false,
-      "priority": 95,
+      "priority": 90,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_heroine_daily",
-      "name": "ヒロイン日常会話",
-      "description": "夕方の防波堤でヒナと話す。日を重ねるごとに打ち解けていく。",
+      "id": "heroine_daily",
+      "name": "ヒロインとの日常会話",
+      "description": "夕方に堤防でヒナと会話する。会うたびに少しずつ仲が深まっていく。",
       "category": "heroine",
       "triggers": [
-        { "type": "flag", "flagKey": "heroine_met", "flagValue": true },
-        { "type": "day", "day": 2, "dayOperator": ">=" },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "heroine_absent", "flagValue": false }
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "met_heroine",
+          "flagValue": true
+        },
+        {
+          "type": "always"
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "あ、来た。",
-            "今日はね、おもしろいもの見つけたんだ。",
-            "ほら、この貝。耳にあてると海の音がするんだよ。"
+            "あ、来た！待ってたよ。",
+            "今日は何してたの？へえー、楽しそう！",
+            "ねえ、知ってる？この島の海の底にね、不思議なものがあるんだって。",
+            "…あ、もうこんな時間。また明日ね！"
           ]
         },
         {
@@ -1477,137 +1923,161 @@
           "intValue": 1
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ヒナと少しだけ仲良くなった気がする。"
-          ]
-        },
-        {
           "type": "logAction",
-          "actionTag": "heroine_daily_talk"
+          "actionTag": "TalkHeroine"
         }
       ],
-      "scriptName": "HeroineDaily",
+      "scriptName": "Event_HeroineDaily",
       "isRepeatable": true,
-      "priority": 70,
+      "priority": 40,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_heroine_trip_notice",
-      "name": "旅行予告",
-      "description": "ヒナが家族旅行でしばらく島を離れることを告げる。",
+      "id": "heroine_trip_notice",
+      "name": "ヒロイン旅行告知",
+      "description": "Day14にヒナが数日間島を離れることを告げる。少し切ない別れの予感。",
       "category": "heroine",
       "triggers": [
-        { "type": "day", "day": 14, "dayOperator": "=" },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "heroine_trip_noticed", "flagValue": false }
+        {
+          "type": "day",
+          "day": 14,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "met_heroine",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "heroine_trip_told",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "あのね、あさってから家族旅行なんだ。",
-            "ちょっとだけ、島いなくなるけど…。",
-            "…すぐ帰ってくるから。"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ヒナがいない日が来るのか…。",
-            "ちょっとだけ、さみしいな。"
+            "あのね…ちょっと言いにくいことがあるんだけど。",
+            "明後日からね、おばあちゃんと本島に行かなきゃいけないの。",
+            "病院の検査があるんだって。5日くらいいないかも。",
+            "…寂しい？ふふ、嘘でもそう言ってくれると嬉しいな。",
+            "戻ったらまたここに来るから、待っててね。"
           ]
         },
         {
           "type": "setFlag",
-          "flagKey": "heroine_trip_noticed",
+          "flagKey": "heroine_trip_told",
           "flagValue": true
         },
         {
           "type": "logAction",
-          "actionTag": "heroine_trip_notice"
+          "actionTag": "HeroineTripNotice"
         }
       ],
-      "scriptName": "HeroineTripNotice",
+      "scriptName": "Event_HeroineTripNotice",
       "isRepeatable": false,
-      "priority": 85,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_heroine_absence",
-      "name": "ヒロイン不在",
-      "description": "ヒナが旅行中で防波堤に誰もいない。",
-      "category": "heroine",
-      "triggers": [
-        { "type": "day", "day": 16, "dayOperator": ">=" },
-        { "type": "day", "day": 19, "dayOperator": "<=" },
-        { "type": "timePhase", "timePhase": "Evening" }
-      ],
-      "actions": [
-        {
-          "type": "setFlag",
-          "flagKey": "heroine_absent",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "防波堤に来てみたけど…誰もいない。",
-            "波の音だけが聞こえる。",
-            "…ヒナ、いつ帰ってくるのかな。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_waves_lonely"
-        },
-        {
-          "type": "logAction",
-          "actionTag": "heroine_absent"
-        }
-      ],
-      "scriptName": "HeroineAbsence",
-      "isRepeatable": true,
       "priority": 75,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 20
     },
     {
-      "id": "evt_heroine_return",
-      "name": "ヒロイン帰還",
-      "description": "ヒナが旅行から帰ってくる。",
+      "id": "heroine_absence",
+      "name": "ヒロイン不在",
+      "description": "Day16-19の間、夕方に堤防へ行くとヒナがいない。波の音だけが聞こえる寂しい時間。",
       "category": "heroine",
       "triggers": [
-        { "type": "day", "day": 20, "dayOperator": "=" },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "heroine_returned", "flagValue": false }
+        {
+          "type": "day",
+          "day": 16,
+          "dayOperator": ">="
+        },
+        {
+          "type": "day",
+          "day": 19,
+          "dayOperator": "<="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "heroine_trip_told",
+          "flagValue": true
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "防波堤に…あ！"
+            "堤防に来たけど…誰もいない。",
+            "ヒナがいないと、なんだか夕日もいつもと違って見える。",
+            "…早く帰ってこないかな。"
+          ]
+        },
+        {
+          "type": "logAction",
+          "actionTag": "HeroineAbsence"
+        }
+      ],
+      "scriptName": "Event_HeroineAbsence",
+      "isRepeatable": true,
+      "priority": 45,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "heroine_return",
+      "name": "ヒロイン帰還",
+      "description": "Day20の夕方、ヒナが島に戻ってくる。堤防での嬉しい再会。",
+      "category": "heroine",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 20,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "heroine_trip_told",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "heroine_returned",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "あ…堤防に誰かいる！"
           ]
         },
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "ただいまー！",
-            "えへへ、おみやげ買ってきたよ。",
-            "はい、これ。きれいな石。"
+            "ただいま！",
+            "あはは、すごい走ってきたね。そんなに会いたかった？",
+            "…うん、あたしもだよ。",
+            "検査はね、大丈夫だったよ。心配してくれてありがとう。",
+            "ねえ、いない間に何かあった？全部聞かせて！"
           ]
-        },
-        {
-          "type": "giveItem",
-          "itemId": "item_pretty_stone"
         },
         {
           "type": "setFlag",
@@ -1615,507 +2085,510 @@
           "flagValue": true
         },
         {
-          "type": "setFlag",
-          "flagKey": "heroine_absent",
-          "flagValue": false
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ヒナが帰ってきた！ よかった。"
-          ]
+          "type": "playSound",
+          "soundId": "reunion_theme"
         },
         {
           "type": "logAction",
-          "actionTag": "heroine_returned"
+          "actionTag": "HeroineReturn"
         }
       ],
-      "scriptName": "HeroineReturn",
-      "isRepeatable": false,
-      "priority": 90,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_heroine_secret",
-      "name": "秘密の場所提案",
-      "description": "ヒナが秘密の場所に連れて行ってくれると言う。",
-      "category": "heroine",
-      "triggers": [
-        { "type": "intValue", "intKey": "heroine_conversation", "intOperator": ">=", "intValue": 8 },
-        { "type": "flag", "flagKey": "heroine_secret_proposed", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "ヒナ",
-          "dialogueLines": [
-            "ねえ…わたし、誰にも教えてない場所があるの。",
-            "…見せてあげようか？",
-            "でも、ぜったい誰にも言っちゃダメだよ。"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "ヒナが秘密の場所を教えてくれるみたいだ。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "heroine_secret_proposed",
-          "flagValue": true
-        },
-        {
-          "type": "logAction",
-          "actionTag": "heroine_secret_proposed"
-        }
-      ],
-      "scriptName": "HeroineSecret",
+      "scriptName": "Event_HeroineReturn",
       "isRepeatable": false,
       "priority": 85,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 25
     },
     {
-      "id": "evt_old_well",
-      "name": "古井戸探索",
-      "description": "ヒナと一緒に古井戸を探索する。岩を二人で押して先に進む。",
+      "id": "heroine_secret_place",
+      "name": "秘密の場所イベント",
+      "description": "ヒナとの会話を8回以上重ねると、ヒナだけが知る秘密の洞窟へ連れて行ってくれる。二人だけの特別な場所。",
       "category": "heroine",
       "triggers": [
-        { "type": "flag", "flagKey": "heroine_secret_proposed", "flagValue": true },
-        { "type": "flag", "flagKey": "old_well_explored", "flagValue": false }
+        {
+          "type": "intValue",
+          "intKey": "heroine_conversation",
+          "intOperator": ">=",
+          "intValue": 8
+        },
+        {
+          "type": "flag",
+          "flagKey": "met_heroine",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "secret_place_event",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "ここだよ。見て、古い井戸。",
-            "でもね、この岩がじゃまで中に入れないの。",
-            "二人で押してみよう？"
+            "ねえ、今日はちょっと付き合ってくれない？",
+            "あたしだけが知ってる秘密の場所があるの。",
+            "ついてきて…こっちだよ。"
           ]
+        },
+        {
+          "type": "movePlayer",
+          "targetLocation": "secret_cave"
+        },
+        {
+          "type": "dialogue",
+          "speakerName": "ヒナ",
+          "dialogueLines": [
+            "ここ。洞窟の奥に小さな泉があるの。",
+            "光が差し込んで水面がキラキラして…きれいでしょ？",
+            "ここはね、あたしの秘密の場所。誰にも教えたことないんだ。",
+            "…でも、あんたには教えたかったの。なんでだろ。",
+            "ふふ、これであたしたちだけの秘密だね。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "secret_place_event",
+          "flagValue": true
         },
         {
           "type": "playSound",
-          "soundId": "sfx_rock_push"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "せーの…！ ……動いた！"
-          ]
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "ヒナ",
-          "dialogueLines": [
-            "やった！ 中に階段がある…！",
-            "降りてみよう…こわいけど、一緒なら大丈夫。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "old_well_explored",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "井戸の底に、古い箱があった。",
-            "中に地図のかけらが入っていた…。"
-          ]
-        },
-        {
-          "type": "giveItem",
-          "itemId": "item_map_fragment"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "map_fragment_found",
-          "flagValue": true
+          "soundId": "water_drip"
         },
         {
           "type": "logAction",
-          "actionTag": "old_well_explored"
+          "actionTag": "HeroineSecretPlace"
         }
       ],
-      "scriptName": "OldWell",
+      "scriptName": "Event_HeroineSecretPlace",
       "isRepeatable": false,
-      "priority": 85,
+      "priority": 80,
       "enabled": true,
       "timeAdvanceMinutes": 30
     },
     {
-      "id": "evt_heroine_last",
-      "name": "最後の会話",
-      "description": "夏の終わり。ヒナとの最後の会話。",
+      "id": "heroine_last_day",
+      "name": "最後の日",
+      "description": "Day30の夕方。夏休み最後の日。ヒナとの別れの時間。忘れられない夕焼け。",
       "category": "heroine",
       "triggers": [
-        { "type": "day", "day": 30, "dayOperator": "=" },
-        { "type": "timePhase", "timePhase": "Evening" },
-        { "type": "flag", "flagKey": "heroine_last_talk", "flagValue": false }
+        {
+          "type": "day",
+          "day": 30,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Evening"
+        },
+        {
+          "type": "flag",
+          "flagKey": "met_heroine",
+          "flagValue": true
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "ヒナ",
-          "dialogueLines": [
-            "…明日、帰っちゃうんだよね。"
-          ]
-        },
-        {
-          "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "…うん。"
+            "明日、この島を出る。最後の夕日だ。",
+            "堤防に行こう…ヒナがいるかもしれない。"
           ]
         },
         {
           "type": "dialogue",
           "speakerName": "ヒナ",
           "dialogueLines": [
-            "…この夏、楽しかったね。",
-            "わたし、ずっと覚えてるよ。この夏のこと。",
-            "…ぜったい忘れないから。"
+            "…来てくれると思ってた。",
+            "明日帰っちゃうんだよね。",
+            "…あのさ。この夏、すっごく楽しかった。",
+            "虫取りも、海も、探検も…全部、あんたがいたから楽しかったんだと思う。",
+            "…泣いてないよ。夕日が眩しいだけ。",
+            "…また来てね。絶対だよ。約束。",
+            "…ありがとう。この夏のこと、ずっと忘れないから。"
           ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_waves_gentle"
         },
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
             "夕日が海に沈んでいく。",
-            "二人で並んで、ずっとそれを見ていた。",
-            "この景色を、ぼくもぜったいに忘れない。"
+            "オレンジ色の光が、二人の影を長く伸ばしていた。",
+            "この夏を、ぼくはきっと一生忘れない。"
           ]
         },
         {
-          "type": "setFlag",
-          "flagKey": "heroine_last_talk",
-          "flagValue": true
+          "type": "playSound",
+          "soundId": "last_sunset"
         },
         {
           "type": "logAction",
-          "actionTag": "heroine_last_conversation"
+          "actionTag": "HeroineLastDay"
         }
       ],
-      "scriptName": "HeroineLast",
+      "scriptName": "Event_HeroineLastDay",
       "isRepeatable": false,
       "priority": 100,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 30
     },
     {
-      "id": "evt_old_diary",
-      "name": "古い日記発見",
-      "description": "森の奥で、誰かが残した古い日記を見つける。",
+      "id": "find_graffiti_1",
+      "name": "落書き1発見",
+      "description": "神社裏門解放後、神社の裏にある石壁に古い落書きを発見する。地図の一部が刻まれている。",
       "category": "mystery",
       "triggers": [
-        { "type": "day", "day": 12, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "unlock_fallen_tree", "flagValue": true },
-        { "type": "flag", "flagKey": "old_diary_found", "flagValue": false }
+        {
+          "type": "flag",
+          "flagKey": "unlock_shrine_back_gate",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_graffiti_1",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "木のうろに何か入ってる…。",
-            "古いノート？ 日記みたいだ。",
-            "「8月10日 今日、あの場所をみつけた」…？"
+            "あれ？この石壁に何か彫ってある…",
+            "落書き…じゃない。なんか地図みたいだ。",
+            "島の形と…ここに×印がある。何かの目印かな？",
+            "写真撮っておこう。他にもこういうのがあるかもしれない。"
           ]
         },
         {
-          "type": "giveItem",
-          "itemId": "item_old_diary"
-        },
-        {
           "type": "setFlag",
-          "flagKey": "old_diary_found",
+          "flagKey": "found_graffiti_1",
           "flagValue": true
         },
+        {
+          "type": "logAction",
+          "actionTag": "FindGraffiti1"
+        }
+      ],
+      "scriptName": "Event_FindGraffiti1",
+      "isRepeatable": false,
+      "priority": 55,
+      "enabled": true,
+      "timeAdvanceMinutes": 15
+    },
+    {
+      "id": "find_graffiti_2",
+      "name": "落書き2発見",
+      "description": "山頂ショートカット解放後、山頂付近の岩に刻まれた2つ目の落書きを発見する。",
+      "category": "mystery",
+      "triggers": [
+        {
+          "type": "flag",
+          "flagKey": "unlock_mountain_shortcut",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_graffiti_2",
+          "flagValue": false
+        }
+      ],
+      "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "これ、いつの日記なんだろう…。",
-            "「あの場所」って、どこのことだ？"
+            "この岩にも何か彫ってある！",
+            "前に神社の裏で見たのと似てる…地図の続きだ！",
+            "海の方にもう一つ×印がある。これは…海底のどこかを指してる？",
+            "2つを合わせたら、何かわかるかもしれない。"
           ]
         },
         {
+          "type": "setFlag",
+          "flagKey": "found_graffiti_2",
+          "flagValue": true
+        },
+        {
           "type": "logAction",
-          "actionTag": "old_diary_found"
+          "actionTag": "FindGraffiti2"
         }
       ],
-      "scriptName": "OldDiary",
+      "scriptName": "Event_FindGraffiti2",
+      "isRepeatable": false,
+      "priority": 55,
+      "enabled": true,
+      "timeAdvanceMinutes": 15
+    },
+    {
+      "id": "map_complete",
+      "name": "地図完成",
+      "description": "2つの落書きを合わせると島全体と海底の道が描かれた地図が完成する。海底の謎の場所が明らかになる。",
+      "category": "mystery",
+      "triggers": [
+        {
+          "type": "flag",
+          "flagKey": "found_graffiti_1",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_graffiti_2",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_map_fragment",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "2つの落書きを写したものを並べてみよう…",
+            "こうやって重ねると…地図になった！",
+            "島の全体と、海底の道が描いてある！",
+            "この×印は…海底トンネルの先にある場所だ！",
+            "これはすごい発見だ！誰がこんなものを残したんだろう…"
+          ]
+        },
+        {
+          "type": "giveItem",
+          "itemId": "completed_map"
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "found_map_fragment",
+          "flagValue": true
+        },
+        {
+          "type": "playSound",
+          "soundId": "discovery_chime"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "MapComplete"
+        }
+      ],
+      "scriptName": "Event_MapComplete",
       "isRepeatable": false,
       "priority": 75,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_graffiti_1",
-      "name": "謎の落書き1",
-      "description": "神社の裏で壁に刻まれた不思議な記号を見つける。",
-      "category": "mystery",
-      "triggers": [
-        { "type": "flag", "flagKey": "unlock_shrine_back", "flagValue": true },
-        { "type": "flag", "flagKey": "graffiti_1_found", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "神社の裏の壁に、何か彫ってある。",
-            "三角と丸と…波みたいな線？",
-            "落書き…？ でも、すごく古そうだ。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "graffiti_1_found",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "何かの記号みたいだけど…意味がわからない。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "graffiti_1_found"
-        }
-      ],
-      "scriptName": "Graffiti1",
-      "isRepeatable": false,
-      "priority": 65,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_graffiti_2",
-      "name": "謎の落書き2",
-      "description": "山頂の岩にも同じような記号が彫られている。",
-      "category": "mystery",
-      "triggers": [
-        { "type": "flag", "flagKey": "unlock_mountain_shortcut", "flagValue": true },
-        { "type": "flag", "flagKey": "graffiti_2_found", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "山のてっぺんの岩にも、同じ記号がある！",
-            "四角と…矢印？ 何かを指してるみたいだ。",
-            "神社の裏にあったやつと関係ありそうだ…。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "graffiti_2_found",
-          "flagValue": true
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "二つ合わせたら、何かわかるのかな…。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "graffiti_2_found"
-        }
-      ],
-      "scriptName": "Graffiti2",
-      "isRepeatable": false,
-      "priority": 65,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_combine_graffiti",
-      "name": "落書き組み合わせ",
-      "description": "二つの落書きを組み合わせると、島の地図が完成する。",
-      "category": "mystery",
-      "triggers": [
-        { "type": "flag", "flagKey": "graffiti_1_found", "flagValue": true },
-        { "type": "flag", "flagKey": "graffiti_2_found", "flagValue": true },
-        { "type": "flag", "flagKey": "graffiti_map_complete", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "神社の記号と、山の記号…。",
-            "並べてみたら…あ！ 地図だ！",
-            "この島の形になってる…！ そしてここに×印が…。"
-          ]
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "graffiti_map_complete",
-          "flagValue": true
-        },
-        {
-          "type": "giveItem",
-          "itemId": "item_graffiti_map"
-        },
-        {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "×印の場所…地図にない場所だ。",
-            "行ってみたい…！"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "graffiti_map_completed"
-        }
-      ],
-      "scriptName": "CombineGraffiti",
-      "isRepeatable": false,
-      "priority": 80,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_hidden_place",
+      "id": "hidden_place",
       "name": "地図にない場所",
-      "description": "落書きの地図が示す、誰も知らない場所へたどり着く。",
+      "description": "完成した地図を頼りに岬の先端へ向かうと、外からは見えない秘密の入り江を発見する。",
       "category": "mystery",
       "triggers": [
-        { "type": "flag", "flagKey": "graffiti_map_complete", "flagValue": true },
-        { "type": "flag", "flagKey": "hidden_place_found", "flagValue": false }
-      ],
-      "actions": [
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "地図の通りに歩いてきた。",
-            "草をかき分けると…洞窟の入口？",
-            "中に入ると、壁一面に絵が描いてあった。"
-          ]
-        },
-        {
-          "type": "playSound",
-          "soundId": "sfx_cave_echo"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "hidden_place_found",
+          "type": "flag",
+          "flagKey": "found_map_fragment",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "海と山と…人の絵。すごく昔の人が描いたみたいだ。",
-            "この島には、ぼくの知らない歴史があるんだ…。"
-          ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "hidden_place_discovered"
+          "type": "flag",
+          "flagKey": "unlock_hidden_place",
+          "flagValue": false
         }
-      ],
-      "scriptName": "HiddenPlace",
-      "isRepeatable": false,
-      "priority": 90,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_bottle_message",
-      "name": "海辺のガラス瓶メッセージ",
-      "description": "浜辺に流れ着いたガラス瓶の中に手紙が入っている。",
-      "category": "mystery",
-      "triggers": [
-        { "type": "day", "day": 15, "dayOperator": ">=" },
-        { "type": "flag", "flagKey": "bottle_message_found", "flagValue": false }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "あれ、波打ちぎわにガラス瓶が落ちてる。",
-            "中に紙が入ってる…手紙だ！"
+            "地図の×印の場所に来た…ここは岬の先端だ。",
+            "あれ、岩の隙間に道がある…普通なら気づかない。",
+            "入ってみよう…"
+          ]
+        },
+        {
+          "type": "movePlayer",
+          "targetLocation": "hidden_place"
+        },
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "…ここは！",
+            "小さな入り江だ。周りを岩に囲まれて、外からは見えない。",
+            "砂浜がキラキラ光ってる…貝殻じゃない、何か別のもの…",
+            "昔の人がここに何かを隠したんだ。この島の秘密の場所…",
+            "ハナさんが言ってた宝物って、これのことだったのかな。"
+          ]
+        },
+        {
+          "type": "setFlag",
+          "flagKey": "unlock_hidden_place",
+          "flagValue": true
+        },
+        {
+          "type": "playSound",
+          "soundId": "wonder_theme"
+        },
+        {
+          "type": "logAction",
+          "actionTag": "HiddenPlace"
+        }
+      ],
+      "scriptName": "Event_HiddenPlace",
+      "isRepeatable": false,
+      "priority": 85,
+      "enabled": true,
+      "timeAdvanceMinutes": 30
+    },
+    {
+      "id": "find_old_diary",
+      "name": "古い日記発見",
+      "description": "倒木撤去後Day12以降に、山道の奥の木の根元で古い日記を見つける。かつてこの島で夏を過ごした誰かの記録。",
+      "category": "mystery",
+      "triggers": [
+        {
+          "type": "flag",
+          "flagKey": "unlock_fallen_tree",
+          "flagValue": true
+        },
+        {
+          "type": "day",
+          "day": 12,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_old_diary",
+          "flagValue": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "dialogue",
+          "speakerName": "",
+          "dialogueLines": [
+            "あ、木の根元に何か挟まってる…本だ。",
+            "すごく古い…日記みたいだ。ページが黄色くなってる。",
+            "「8月3日。今日も海底の光を見た。あの影は何なのだろう」",
+            "「8月15日。地図を完成させた。二つに分けて隠しておく」",
+            "「8月28日。この島の秘密を守るのは、次にこの日記を見つけた子の役目だ」",
+            "…この日記を書いた人も、この島で夏休みを過ごしたんだ。"
           ]
         },
         {
           "type": "giveItem",
-          "itemId": "item_bottle_message"
+          "itemId": "old_diary"
         },
         {
           "type": "setFlag",
-          "flagKey": "bottle_message_found",
+          "flagKey": "found_old_diary",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "「この手紙を見つけたあなたへ。」",
-            "「いつかこの島で会えたらいいな。」",
-            "…誰が書いたんだろう。いつの手紙なんだろう。"
-          ]
+          "type": "playSound",
+          "soundId": "page_turn"
         },
         {
           "type": "logAction",
-          "actionTag": "bottle_message_found"
+          "actionTag": "FindOldDiary"
         }
       ],
-      "scriptName": "BottleMessage",
+      "scriptName": "Event_FindOldDiary",
       "isRepeatable": false,
-      "priority": 60,
+      "priority": 65,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 15
     },
     {
-      "id": "evt_stargazing",
-      "name": "星空観察",
-      "description": "山頂で満天の星空を見上げる。",
+      "id": "bottle_message",
+      "name": "ガラス瓶メッセージ",
+      "description": "Day15以降、浜辺に流れ着いたガラス瓶の中に温かい手紙が入っている。",
       "category": "mystery",
       "triggers": [
-        { "type": "flag", "flagKey": "unlock_mountain_shortcut", "flagValue": true },
-        { "type": "timePhase", "timePhase": "Night" },
-        { "type": "flag", "flagKey": "stargazing_done", "flagValue": false }
+        {
+          "type": "day",
+          "day": 15,
+          "dayOperator": ">="
+        },
+        {
+          "type": "flag",
+          "flagKey": "found_bottle_message",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "山のてっぺんに寝転がって、空を見上げた。"
+            "あ、砂浜にガラス瓶が落ちてる。中に紙が入ってる！",
+            "割らないように慎重に…取れた！",
+            "「この手紙を見つけたあなたへ。海の底の秘密を、どうか大切にしてください」",
+            "「あの場所は、この島が覚えている一番古い記憶です」",
+            "「いつか夏が終わっても、あの海の光を忘れないで」",
+            "…誰が書いたんだろう。でも、なんだかあたたかい気持ちになった。"
           ]
         },
         {
-          "type": "playSound",
-          "soundId": "sfx_night_insects"
+          "type": "giveItem",
+          "itemId": "bottle_letter"
         },
+        {
+          "type": "setFlag",
+          "flagKey": "found_bottle_message",
+          "flagValue": true
+        },
+        {
+          "type": "logAction",
+          "actionTag": "BottleMessage"
+        }
+      ],
+      "scriptName": "Event_BottleMessage",
+      "isRepeatable": false,
+      "priority": 50,
+      "enabled": true,
+      "timeAdvanceMinutes": 10
+    },
+    {
+      "id": "stargazing",
+      "name": "星空観察",
+      "description": "Day10以降の夜、山頂で満天の星空を観察する。天の川や流れ星に感動する特別な夜。",
+      "category": "mystery",
+      "triggers": [
+        {
+          "type": "day",
+          "day": 10,
+          "dayOperator": ">="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Night"
+        },
+        {
+          "type": "flag",
+          "flagKey": "unlock_mountain_shortcut",
+          "flagValue": true
+        },
+        {
+          "type": "flag",
+          "flagKey": "stargazing_done",
+          "flagValue": false
+        }
+      ],
+      "actions": [
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "…すごい。星がこんなにたくさん。",
-            "東京じゃ、こんなに見えないのに。",
-            "天の川まで見える…。きれいだなあ。"
+            "山頂に着いた。夜の島は静かだ。",
+            "…うわあ。",
+            "星が…すごい。こんなにたくさんの星、見たことない。",
+            "天の川が本当に川みたいに流れてる。",
+            "流れ星！あ、また！すごい、どんどん流れる！",
+            "…こんなに広い空の下にいると、自分がちっぽけに感じる。",
+            "でも、なんだか…それが気持ちいい。"
           ]
         },
         {
@@ -2124,161 +2597,116 @@
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "この星空のこと、ずっと覚えていたいな。"
-          ]
+          "type": "playSound",
+          "soundId": "night_insects"
         },
         {
           "type": "logAction",
-          "actionTag": "stargazing_completed"
+          "actionTag": "Stargazing"
         }
       ],
-      "scriptName": "Stargazing",
+      "scriptName": "Event_Stargazing",
       "isRepeatable": false,
-      "priority": 70,
+      "priority": 55,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 30
     },
     {
-      "id": "evt_stamp_5",
-      "name": "スタンプ5日報酬",
-      "description": "ラジオ体操のスタンプが5つたまった報酬。",
-      "category": "routine",
+      "id": "summer_festival",
+      "name": "夏祭り",
+      "description": "Day25に島で夏祭りが開催される。提灯、屋台、花火。島の住人全員が集まる夏の一大イベント。",
+      "category": "mystery",
       "triggers": [
-        { "type": "intValue", "intKey": "radio_stamp", "intOperator": ">=", "intValue": 5 },
-        { "type": "flag", "flagKey": "stamp_reward_5", "flagValue": false }
+        {
+          "type": "day",
+          "day": 25,
+          "dayOperator": "=="
+        },
+        {
+          "type": "timePhase",
+          "timePhase": "Night"
+        },
+        {
+          "type": "flag",
+          "flagKey": "summer_festival_done",
+          "flagValue": false
+        }
       ],
       "actions": [
         {
           "type": "dialogue",
-          "speakerName": "おじさん",
+          "speakerName": "タツヤおじさん",
           "dialogueLines": [
-            "おっ、もうスタンプ5つか！",
-            "えらいぞ。ごほうびだ！"
+            "今日は夏祭りだぞ！神社に行こう！"
           ]
         },
         {
-          "type": "giveItem",
-          "itemId": "item_towel"
-        },
-        {
-          "type": "setFlag",
-          "flagKey": "stamp_reward_5",
-          "flagValue": true
+          "type": "movePlayer",
+          "targetLocation": "shrine_festival"
         },
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "「なつのしまタオル」をもらった！"
+            "神社の参道に提灯がいっぱい並んでる！きれい！",
+            "焼きそば、たこ焼き、かき氷…いいにおいがする！",
+            "島のみんなが集まってる。ゲンさんもハナさんも、テツさんもいる。"
           ]
         },
-        {
-          "type": "logAction",
-          "actionTag": "stamp_reward_5_received"
-        }
-      ],
-      "scriptName": "StampReward5",
-      "isRepeatable": false,
-      "priority": 80,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_stamp_15",
-      "name": "スタンプ15日報酬",
-      "description": "ラジオ体操のスタンプが15たまった報酬。",
-      "category": "routine",
-      "triggers": [
-        { "type": "intValue", "intKey": "radio_stamp", "intOperator": ">=", "intValue": 15 },
-        { "type": "flag", "flagKey": "stamp_reward_15", "flagValue": false }
-      ],
-      "actions": [
         {
           "type": "dialogue",
-          "speakerName": "おじさん",
+          "speakerName": "ヒナ",
           "dialogueLines": [
-            "15日も続けたのか！ すごいな！",
-            "これ、おじさんからのプレゼントだ。"
+            "あ、いた！浴衣どう？似合う？",
+            "一緒に回ろうよ！あたし、金魚すくいやりたい！"
           ]
         },
         {
-          "type": "giveItem",
-          "itemId": "item_canteen"
+          "type": "dialogue",
+          "speakerName": "ゲンさん",
+          "dialogueLines": [
+            "ほう、坊主もヒナちゃんも楽しそうじゃな。",
+            "この祭りはな、海の神様に感謝する祭りなんじゃ。",
+            "島を守ってくれとる神様にな。"
+          ]
         },
         {
-          "type": "setFlag",
-          "flagKey": "stamp_reward_15",
-          "flagValue": true
+          "type": "dialogue",
+          "speakerName": "神主さん",
+          "dialogueLines": [
+            "さあ、花火が始まるよ。みんな空を見てごらん。"
+          ]
         },
         {
           "type": "dialogue",
           "speakerName": "",
           "dialogueLines": [
-            "「ぼうけん水筒」をもらった！",
-            "これがあれば遠くまで行けそうだ。"
+            "ドーン！パラパラパラ…",
+            "花火が夜空に咲いた。赤、青、金色…すごくきれい。",
+            "海に花火が映って、空が二つあるみたいだ。",
+            "ヒナが隣で花火を見てる。みんなの顔が花火の光に照らされてる。",
+            "…この景色を、ずっと覚えていたい。"
           ]
-        },
-        {
-          "type": "logAction",
-          "actionTag": "stamp_reward_15_received"
-        }
-      ],
-      "scriptName": "StampReward15",
-      "isRepeatable": false,
-      "priority": 80,
-      "enabled": true,
-      "timeAdvanceMinutes": 0
-    },
-    {
-      "id": "evt_stamp_25",
-      "name": "スタンプ25日報酬",
-      "description": "ラジオ体操のスタンプが25たまった最終報酬。",
-      "category": "routine",
-      "triggers": [
-        { "type": "intValue", "intKey": "radio_stamp", "intOperator": ">=", "intValue": 25 },
-        { "type": "flag", "flagKey": "stamp_reward_25", "flagValue": false }
-      ],
-      "actions": [
-        {
-          "type": "dialogue",
-          "speakerName": "おじさん",
-          "dialogueLines": [
-            "25日…！ ほぼ毎日じゃないか。",
-            "お前、本当にすごいよ。",
-            "特別なスタンプ、押してやるからな。"
-          ]
-        },
-        {
-          "type": "giveItem",
-          "itemId": "item_special_stamp"
         },
         {
           "type": "setFlag",
-          "flagKey": "stamp_reward_25",
+          "flagKey": "summer_festival_done",
           "flagValue": true
         },
         {
-          "type": "dialogue",
-          "speakerName": "",
-          "dialogueLines": [
-            "金色の特別スタンプをもらった！",
-            "スタンプ帳がキラキラ光ってる。",
-            "一生の宝物だ。"
-          ]
+          "type": "playSound",
+          "soundId": "fireworks"
         },
         {
           "type": "logAction",
-          "actionTag": "stamp_reward_25_received"
+          "actionTag": "SummerFestival"
         }
       ],
-      "scriptName": "StampReward25",
+      "scriptName": "Event_SummerFestival",
       "isRepeatable": false,
-      "priority": 80,
+      "priority": 95,
       "enabled": true,
-      "timeAdvanceMinutes": 0
+      "timeAdvanceMinutes": 60
     }
   ]
 }
